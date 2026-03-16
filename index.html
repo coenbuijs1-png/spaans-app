@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Español Diario - Jouw Complete Spaanse Cursus</title>
+    <title>DuoCoengo - Jouw Complete Spaanse Cursus</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --terracotta: #d4653f; --ochre: #e8a962; --deep-blue: #1a3a52;
-            --cream: #f9f5f0; --warm-white: #fefcf8; --shadow: rgba(26, 58, 82, 0.15);
+            --terracotta: #c0392b; --ochre: #e67e22; --deep-blue: #2c3e50;
+            --cream: #fdf6ec; --warm-white: #fffdf8; --shadow: rgba(44, 62, 80, 0.15);
+            --fiesta-yellow: #f1c40f; --verde: #27ae60;
         }
         body {
             font-family: 'Crimson Text', serif;
-            background: linear-gradient(135deg, var(--cream) 0%, #f0e9db 100%);
+            background: linear-gradient(135deg, var(--cream) 0%, #fce8d0 50%, #fdf2e0 100%);
             color: var(--deep-blue); line-height: 1.8; min-height: 100vh;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        header { text-align: center; padding: 2rem 0; margin-bottom: 2rem; }
+        header {
+            text-align: center; padding: 2rem 0; margin-bottom: 2rem;
+            background: linear-gradient(135deg, rgba(192,57,43,0.08) 0%, rgba(230,126,34,0.08) 50%, rgba(241,196,15,0.06) 100%);
+            border-radius: 16px; border-bottom: 4px solid var(--terracotta);
+            position: relative; overflow: hidden;
+        }
+        header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--terracotta), var(--ochre), var(--fiesta-yellow), var(--verde), var(--ochre), var(--terracotta));
+        }
         h1 {
             font-family: 'Playfair Display', serif; font-size: 3rem;
             font-weight: 900; color: var(--terracotta); margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0 rgba(230,126,34,0.15);
         }
         .subtitle { font-size: 1.2rem; color: var(--deep-blue); opacity: 0.8; }
         .progress-bar {
@@ -28,7 +39,7 @@
             border-radius: 6px; overflow: hidden; margin: 1rem 0;
         }
         .progress-fill {
-            height: 100%; background: linear-gradient(90deg, var(--terracotta) 0%, var(--ochre) 100%);
+            height: 100%; background: linear-gradient(90deg, var(--terracotta) 0%, var(--ochre) 50%, var(--fiesta-yellow) 100%);
             transition: width 0.5s ease;
         }
         .nav-tabs { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 3px solid var(--terracotta); }
@@ -73,7 +84,7 @@
         .day-button.active { background: var(--terracotta); color: var(--warm-white); transform: scale(1.08); }
         .day-button.completed::after {
             content: '✓'; position: absolute; top: -8px; right: -8px;
-            background: #8b9a5b; color: white; width: 24px; height: 24px;
+            background: var(--verde); color: white; width: 24px; height: 24px;
             border-radius: 50%; display: flex; align-items: center;
             justify-content: center; font-size: 14px;
         }
@@ -292,12 +303,40 @@
         .thema-btn .thema-icon { font-size: 1.8rem; display: block; margin-bottom: 0.4rem; }
         .thema-content { display: none; }
         .thema-content.active { display: block; }
+        /* Mini oefeningen */
+        .mini-oef-blok { margin-bottom: 1.5rem; padding: 1rem; background: rgba(232,169,98,0.06); border-radius: 8px; border: 1px solid rgba(232,169,98,0.2); }
+        .mini-oef-blok h4 { margin-top: 0; margin-bottom: 0.8rem; color: var(--terracotta); font-size: 1.1rem; }
+        .mini-mc-vraag { margin-bottom: 1rem; }
+        .mini-mc-zin { font-weight: 600; margin-bottom: 0.5rem; font-size: 1.05rem; }
+        .mini-mc-opts { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .mini-mc-opt { padding: 0.4rem 1rem; border: 2px solid var(--ochre); border-radius: 6px; background: var(--warm-white); cursor: pointer; font-family: inherit; font-size: 0.95rem; transition: all 0.2s; }
+        .mini-mc-opt:hover:not(:disabled) { background: var(--ochre); color: white; }
+        .mini-mc-opt.mc-correct { background: #2d7a3a; color: white; border-color: #2d7a3a; }
+        .mini-mc-opt.mc-fout { background: #c0392b; color: white; border-color: #c0392b; }
+        .mini-mc-fb { margin-top: 0.3rem; font-size: 0.9rem; font-weight: 600; }
+        .mini-mc-fb.ok { color: #2d7a3a; }
+        .mini-mc-fb.nee { color: #c0392b; }
+        .koppel-container { display: flex; gap: 2rem; }
+        .koppel-col { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+        .koppel-item { padding: 0.5rem 1rem; border: 2px solid var(--ochre); border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.95rem; transition: all 0.2s; background: var(--warm-white); }
+        .koppel-item:hover:not(.koppel-done) { background: rgba(232,169,98,0.2); }
+        .koppel-selected { background: var(--ochre) !important; color: white; }
+        .koppel-done { background: #2d7a3a !important; color: white; border-color: #2d7a3a; cursor: default; opacity: 0.8; }
+        .koppel-wrong { background: #c0392b !important; color: white; border-color: #c0392b; }
+        .koppel-score { margin-top: 0.5rem; font-weight: 600; }
+        .mini-wz-vraag { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+        .mini-wz-hint { font-weight: 600; min-width: 120px; }
+        .mini-wz-input { padding: 0.3rem 0.6rem; border: 1px solid var(--ochre); border-radius: 4px; font-family: inherit; font-size: 0.95rem; width: 150px; }
+        .mini-wz-fb { font-size: 0.9rem; font-weight: 600; }
+        .mini-wz-fb.ok { color: #2d7a3a; }
+        .mini-wz-fb.nee { color: #c0392b; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Español Diario</h1>
+            <div style="font-size: 2.5rem; margin-bottom: 0.3rem;">🇪🇸</div>
+            <h1>DuoCoengo</h1>
             <p class="subtitle">Jouw complete 20-daagse Spaanse cursus</p>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressBar" style="width: 0%"></div>
@@ -3669,6 +3708,675 @@
 <h3>✨ Samenvatting</h3>
 <p>Je hebt geleerd: bijwoorden vormen met -mente, het verschil tussen muy en mucho, de plaatsing van bijwoorden, en intensiteit uitdrukken.</p>
 `,
+21: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Twee manieren onderscheiden om de toekomst uit te drukken</li>
+<li>Ir a + infinitivo correct gebruiken voor nabije/geplande toekomst</li>
+<li>Futuro simple vervoegen voor regelmatige en onregelmatige werkwoorden</li>
+<li>Begrijpen wanneer welke toekomstvorm gepaster is</li>
+<li>Zinnen maken over plannen, voornemens en voorspellingen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Ir a + infinitivo (perifrastische toekomst)</h4>
+<div class="grammar-box">
+<p>De meest gebruikte toekomstvorm in gesproken Spaans. Structuur: <strong>ir (present) + a + infinitief</strong>.</p>
+<p>Gebruik: concrete plannen, intenties, nabije toekomst, iets wat bijna zeker gaat gebeuren.</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Ir</th><th>Voorbeeld</th></tr>
+<tr><td>yo</td><td><strong>voy</strong></td><td>voy a estudiar</td></tr>
+<tr><td>tú</td><td><strong>vas</strong></td><td>vas a comer</td></tr>
+<tr><td>él/ella</td><td><strong>va</strong></td><td>va a trabajar</td></tr>
+<tr><td>nosotros</td><td><strong>vamos</strong></td><td>vamos a viajar</td></tr>
+<tr><td>vosotros</td><td><strong>vais</strong></td><td>vais a salir</td></tr>
+<tr><td>ellos</td><td><strong>van</strong></td><td>van a vivir</td></tr>
+</table>
+
+<h4>2. Futuro simple — regelmatige vormen</h4>
+<div class="grammar-box">
+<p>Uitgangen worden toegevoegd aan de <strong>volledige infinitief</strong> (niet de stam). Alle accenten zijn verplicht behalve bij nosotros.</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Uitgang</th><th>Hablar</th><th>Comer</th><th>Vivir</th></tr>
+<tr><td>yo</td><td>-é</td><td>hablaré</td><td>comeré</td><td>viviré</td></tr>
+<tr><td>tú</td><td>-ás</td><td>hablarás</td><td>comerás</td><td>vivirás</td></tr>
+<tr><td>él/ella</td><td>-á</td><td>hablará</td><td>comerá</td><td>vivirá</td></tr>
+<tr><td>nosotros</td><td>-emos</td><td>hablaremos</td><td>comeremos</td><td>viviremos</td></tr>
+<tr><td>vosotros</td><td>-éis</td><td>hablaréis</td><td>comeréis</td><td>viviréis</td></tr>
+<tr><td>ellos</td><td>-án</td><td>hablarán</td><td>comerán</td><td>vivirán</td></tr>
+</table>
+
+<h4>3. Futuro simple — onregelmatige stammen</h4>
+<div class="grammar-box">
+<p>De uitgangen blijven hetzelfde, maar de stam verandert:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Infinitief</th><th>Stam futuro</th><th>Yo-vorm</th></tr>
+<tr><td>tener</td><td>tendr-</td><td>tendré</td></tr>
+<tr><td>venir</td><td>vendr-</td><td>vendré</td></tr>
+<tr><td>salir</td><td>saldr-</td><td>saldré</td></tr>
+<tr><td>poder</td><td>podr-</td><td>podré</td></tr>
+<tr><td>poner</td><td>pondr-</td><td>pondré</td></tr>
+<tr><td>saber</td><td>sabr-</td><td>sabré</td></tr>
+<tr><td>querer</td><td>querr-</td><td>querré</td></tr>
+<tr><td>hacer</td><td>har-</td><td>haré</td></tr>
+<tr><td>decir</td><td>dir-</td><td>diré</td></tr>
+</table>
+
+<h4>4. Ir a vs. futuro simple — wanneer welke?</h4>
+<div class="grammar-box">
+<table class="conjugation-table">
+<tr><th>Ir a + infinitivo</th><th>Futuro simple</th></tr>
+<tr><td>Concreet plan (vanavond, morgen)</td><td>Voorspelling op langere termijn</td></tr>
+<tr><td>Intentie/voornemen</td><td>Hypothese, veronderstelling</td></tr>
+<tr><td>Informele stijl</td><td>Formele context, geschreven taal</td></tr>
+<tr><td>Bijna zeker</td><td>Minder zeker, speculatief</td></tr>
+</table>
+</div>
+
+<h4>5. Futuro als uitdrukking van waarschijnlijkheid</h4>
+<div class="grammar-box">
+<p>Het futuro kan ook huidige onzekerheid uitdrukken:</p>
+<p><strong>¿Dónde estará María?</strong> = Waar zou María toch zijn?</p>
+<p><strong>Serán las tres.</strong> = Het zal wel drie uur zijn.</p>
+</div>
+
+<h4>Voorbeeldzinnen</h4>
+<div class="example-box">
+<div class="example-spanish">Voy a estudiar mañana.</div>
+<div>Ik ga morgen studeren. (plan)</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Mañana estudiaré si tengo tiempo.</div>
+<div>Morgen zal ik studeren als ik tijd heb. (voorwaardelijk)</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">El año que viene viajaremos a España.</div>
+<div>Volgend jaar zullen we naar Spanje reizen.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">¿Dónde estará María?</div>
+<div>Waar zou María toch zijn? (waarschijnlijkheid)</div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<h4>Werkwoorden</h4>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">planear</div><div class="vocab-meaning">plannen</div></div>
+<div class="vocab-item"><div class="vocab-word">esperar</div><div class="vocab-meaning">hopen/verwachten</div></div>
+<div class="vocab-item"><div class="vocab-word">intentar</div><div class="vocab-meaning">proberen</div></div>
+<div class="vocab-item"><div class="vocab-word">lograr</div><div class="vocab-meaning">bereiken/slagen</div></div>
+<div class="vocab-item"><div class="vocab-word">mejorar</div><div class="vocab-meaning">verbeteren</div></div>
+<div class="vocab-item"><div class="vocab-word">cambiar</div><div class="vocab-meaning">veranderen</div></div>
+<div class="vocab-item"><div class="vocab-word">crecer</div><div class="vocab-meaning">groeien</div></div>
+<div class="vocab-item"><div class="vocab-word">mudarse</div><div class="vocab-meaning">verhuizen</div></div>
+</div>
+<h4>Zelfstandige naamwoorden</h4>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">el futuro</div><div class="vocab-meaning">de toekomst</div></div>
+<div class="vocab-item"><div class="vocab-word">el plan</div><div class="vocab-meaning">het plan</div></div>
+<div class="vocab-item"><div class="vocab-word">el objetivo</div><div class="vocab-meaning">het doel</div></div>
+<div class="vocab-item"><div class="vocab-word">la meta</div><div class="vocab-meaning">het doel/de finish</div></div>
+<div class="vocab-item"><div class="vocab-word">el sueño</div><div class="vocab-meaning">de droom</div></div>
+<div class="vocab-item"><div class="vocab-word">la esperanza</div><div class="vocab-meaning">de hoop</div></div>
+<div class="vocab-item"><div class="vocab-word">el cambio</div><div class="vocab-meaning">de verandering</div></div>
+<div class="vocab-item"><div class="vocab-word">la oportunidad</div><div class="vocab-meaning">de kans</div></div>
+</div>
+<h4>Signaalwoorden</h4>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">mañana</div><div class="vocab-meaning">morgen</div></div>
+<div class="vocab-item"><div class="vocab-word">pasado mañana</div><div class="vocab-meaning">overmorgen</div></div>
+<div class="vocab-item"><div class="vocab-word">la semana que viene</div><div class="vocab-meaning">volgende week</div></div>
+<div class="vocab-item"><div class="vocab-word">dentro de poco</div><div class="vocab-meaning">binnenkort</div></div>
+<div class="vocab-item"><div class="vocab-word">algún día</div><div class="vocab-meaning">op een dag</div></div>
+<div class="vocab-item"><div class="vocab-word">pronto</div><div class="vocab-meaning">snel/binnenkort</div></div>
+</div>
+
+<h3>✍️ Oefeningen</h3>
+<h4>a. Vul in: ir a + infinitivo</h4>
+<ol>
+<li>Mañana yo ___ a estudiar español.</li>
+<li>Ella ___ a viajar a Madrid.</li>
+<li>Nosotros ___ a comer en un restaurante.</li>
+<li>¿Tú ___ a venir mañana?</li>
+<li>Ellos ___ a trabajar en el proyecto.</li>
+</ol>
+<h4>b. Vul in: futuro simple</h4>
+<ol>
+<li>El año que viene ___ en España. (vivir, yo)</li>
+<li>Ella ___ profesora. (ser)</li>
+<li>¿___ tiempo mañana? (tener, tú)</li>
+<li>Nosotros ___ juntos. (viajar)</li>
+<li>¿Qué ___ mañana? (hacer, ellos)</li>
+</ol>
+<h4>Antwoorden</h4>
+<div class="grammar-box">
+<p><strong>a.</strong> 1. voy, 2. va, 3. vamos, 4. vas, 5. van</p>
+<p><strong>b.</strong> 1. viviré, 2. será, 3. Tendrás, 4. viajaremos, 5. harán</p>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: twee manieren om over de toekomst te spreken (ir a + infinitivo voor plannen, futuro simple voor voorspellingen), regelmatige en onregelmatige futuro-stammen, en het futuro als uitdrukking van waarschijnlijkheid.</p>
+`,
+22: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Begrijpen wat de aanvoegende wijs grammaticaal is en wanneer die verplicht is</li>
+<li>Regelmatige werkwoorden in de subjuntivo presente vervoegen</li>
+<li>De meest voorkomende triggerconstructies herkennen</li>
+<li>Zinnen met wil, wens, twijfel en emotie correct maken</li>
+<li>Begrijpen waarom dit fundamenteel verschilt van de indicatief</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Wat is de subjuntivo?</h4>
+<div class="grammar-box">
+<p>De subjuntivo is een <strong>modus</strong> (geen tijd). Hij drukt uit dat de spreker de inhoud als niet-feitelijk, gewenst, betwijfeld of afhankelijk beschouwt. In het Nederlands bestaat dit grotendeels niet.</p>
+<p><strong>Kernregel:</strong> Twee subjecten + twee werkwoorden + verbindingswoord <em>que</em> → kans op subjuntivo.</p>
+</div>
+
+<h4>2. Vervoeging regelmatige werkwoorden</h4>
+<div class="grammar-box">
+<p>De vervoeging is als een "omgekeerde present indicatief": <strong>-ar</strong> krijgt <strong>-e</strong> uitgangen, <strong>-er/-ir</strong> krijgt <strong>-a</strong> uitgangen.</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>-ar (hablar)</th><th>-er (comer)</th><th>-ir (vivir)</th></tr>
+<tr><td>yo</td><td>habl<strong>e</strong></td><td>com<strong>a</strong></td><td>viv<strong>a</strong></td></tr>
+<tr><td>tú</td><td>habl<strong>es</strong></td><td>com<strong>as</strong></td><td>viv<strong>as</strong></td></tr>
+<tr><td>él/ella</td><td>habl<strong>e</strong></td><td>com<strong>a</strong></td><td>viv<strong>a</strong></td></tr>
+<tr><td>nosotros</td><td>habl<strong>emos</strong></td><td>com<strong>amos</strong></td><td>viv<strong>amos</strong></td></tr>
+<tr><td>vosotros</td><td>habl<strong>éis</strong></td><td>com<strong>áis</strong></td><td>viv<strong>áis</strong></td></tr>
+<tr><td>ellos</td><td>habl<strong>en</strong></td><td>com<strong>an</strong></td><td>viv<strong>an</strong></td></tr>
+</table>
+
+<h4>3. Onregelmatige werkwoorden in de subjuntivo</h4>
+<table class="conjugation-table">
+<tr><th>Werkwoord</th><th>Yo subj.</th><th>Ellos subj.</th></tr>
+<tr><td>tener</td><td>tenga</td><td>tengan</td></tr>
+<tr><td>hacer</td><td>haga</td><td>hagan</td></tr>
+<tr><td>poner</td><td>ponga</td><td>pongan</td></tr>
+<tr><td>venir</td><td>venga</td><td>vengan</td></tr>
+<tr><td>salir</td><td>salga</td><td>salgan</td></tr>
+<tr><td>ser</td><td>sea</td><td>sean</td></tr>
+<tr><td>estar</td><td>esté</td><td>estén</td></tr>
+<tr><td>ir</td><td>vaya</td><td>vayan</td></tr>
+<tr><td>saber</td><td>sepa</td><td>sepan</td></tr>
+<tr><td>dar</td><td>dé</td><td>den</td></tr>
+</table>
+
+<h4>4. Triggerconstructies — wanneer subjuntivo?</h4>
+<div class="grammar-box">
+<p><strong>(a) Wil, wens, verlangen:</strong></p>
+<ul>
+<li>querer que, desear que, esperar que, preferir que, pedir que, necesitar que</li>
+<li><em>Quiero que vengas.</em> (Ik wil dat jij komt.)</li>
+</ul>
+<p><strong>(b) Emotie:</strong></p>
+<ul>
+<li>alegrarse de que, tener miedo de que, sorprender que, molestar que</li>
+<li><em>Me alegra que estés aquí.</em> (Ik ben blij dat jij hier bent.)</li>
+</ul>
+<p><strong>(c) Twijfel, ontkenning:</strong></p>
+<ul>
+<li>dudar que, no creer que, no pensar que</li>
+<li><em>No creo que sea verdad.</em> (Ik geloof niet dat het waar is.)</li>
+<li>Let op: <strong>Creo que</strong> + indicatief vs. <strong>No creo que</strong> + subjuntivo</li>
+</ul>
+<p><strong>(d) Onpersoonlijke uitdrukkingen:</strong></p>
+<ul>
+<li>es importante que, es necesario que, es posible que, es mejor que</li>
+<li><em>Es importante que estudies.</em> (Het is belangrijk dat jij studeert.)</li>
+</ul>
+</div>
+
+<h4>5. Voegwoorden die altijd subjuntivo vereisen</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>para que</strong> (zodat)</li>
+<li><strong>antes de que</strong> (voordat)</li>
+<li><strong>a menos que</strong> (tenzij)</li>
+<li><strong>sin que</strong> (zonder dat)</li>
+<li><strong>con tal de que</strong> (op voorwaarde dat)</li>
+</ul>
+</div>
+
+<h4>Voorbeeldzinnen</h4>
+<div class="example-box">
+<div class="example-spanish">Quiero que vengas a la fiesta.</div>
+<div>Ik wil dat jij naar het feest komt.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Es importante que estudies todos los días.</div>
+<div>Het is belangrijk dat jij elke dag studeert.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">No creo que sea verdad.</div>
+<div>Ik geloof niet dat het waar is.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Te llamo antes de que salgas.</div>
+<div>Ik bel je voordat jij vertrekt.</div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<h4>Triggerwoorden</h4>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">querer que</div><div class="vocab-meaning">willen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">esperar que</div><div class="vocab-meaning">hopen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">pedir que</div><div class="vocab-meaning">vragen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">necesitar que</div><div class="vocab-meaning">nodig hebben dat</div></div>
+<div class="vocab-item"><div class="vocab-word">recomendar que</div><div class="vocab-meaning">aanbevelen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">dudar que</div><div class="vocab-meaning">betwijfelen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">temer que</div><div class="vocab-meaning">vrezen dat</div></div>
+<div class="vocab-item"><div class="vocab-word">prohibir que</div><div class="vocab-meaning">verbieden dat</div></div>
+</div>
+<h4>Onpersoonlijke uitdrukkingen</h4>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">es importante</div><div class="vocab-meaning">het is belangrijk</div></div>
+<div class="vocab-item"><div class="vocab-word">es necesario</div><div class="vocab-meaning">het is noodzakelijk</div></div>
+<div class="vocab-item"><div class="vocab-word">es posible</div><div class="vocab-meaning">het is mogelijk</div></div>
+<div class="vocab-item"><div class="vocab-word">es probable</div><div class="vocab-meaning">het is waarschijnlijk</div></div>
+<div class="vocab-item"><div class="vocab-word">es mejor</div><div class="vocab-meaning">het is beter</div></div>
+<div class="vocab-item"><div class="vocab-word">es una lástima</div><div class="vocab-meaning">het is jammer</div></div>
+</div>
+
+<h3>✍️ Oefeningen</h3>
+<h4>a. Vul de juiste subjuntivo-vorm in</h4>
+<ol>
+<li>Quiero que tú ___ aquí. (estar)</li>
+<li>Es importante que ___ la verdad. (decir, tú)</li>
+<li>No creo que ___ verdad. (ser)</li>
+<li>Espero que ___ bien. (estar, tú)</li>
+<li>Es necesario que ___ más. (estudiar, nosotros)</li>
+</ol>
+<h4>Antwoorden</h4>
+<div class="grammar-box">
+<p><strong>a.</strong> 1. estés, 2. digas, 3. sea, 4. estés, 5. estudiemos</p>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de subjuntivo presente als modus voor niet-feitelijke uitingen, regelmatige en onregelmatige vervoegingen, de vier triggergroepen (wil, emotie, twijfel, onpersoonlijk), en voegwoorden die altijd subjuntivo vereisen.</p>
+`,
+23: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De vier imperatiefvormen (tú, vosotros, usted, ustedes) correct vormen</li>
+<li>Onderscheid maken tussen bevestigende en ontkennende gebiedende wijs</li>
+<li>Objectvoornaamwoorden correct plaatsen bij de imperativo</li>
+<li>Beleefd vs. direct verzoeken formuleren</li>
+<li>Veelgebruikte vaste imperatiefuitdrukkingen kennen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Imperativo bevestigend — tú-vorm</h4>
+<div class="grammar-box">
+<p>De tú-vorm is identiek aan de <strong>derde persoon enkelvoud van de indicatief present</strong>:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Infinitief</th><th>Tú imperativo</th></tr>
+<tr><td>hablar</td><td><strong>habla</strong></td></tr>
+<tr><td>comer</td><td><strong>come</strong></td></tr>
+<tr><td>vivir</td><td><strong>vive</strong></td></tr>
+</table>
+
+<h4>Onregelmatige tú-vormen (uit het hoofd leren)</h4>
+<table class="conjugation-table">
+<tr><th>Werkwoord</th><th>Imperativo tú</th></tr>
+<tr><td>ser</td><td><strong>sé</strong></td></tr>
+<tr><td>ir</td><td><strong>ve</strong></td></tr>
+<tr><td>tener</td><td><strong>ten</strong></td></tr>
+<tr><td>hacer</td><td><strong>haz</strong></td></tr>
+<tr><td>poner</td><td><strong>pon</strong></td></tr>
+<tr><td>decir</td><td><strong>di</strong></td></tr>
+<tr><td>salir</td><td><strong>sal</strong></td></tr>
+<tr><td>venir</td><td><strong>ven</strong></td></tr>
+</table>
+
+<h4>2. Imperativo bevestigend — usted/ustedes</h4>
+<div class="grammar-box">
+<p>Identiek aan de subjuntivo presente (derde persoon):</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Infinitief</th><th>Usted</th><th>Ustedes</th></tr>
+<tr><td>hablar</td><td>hable</td><td>hablen</td></tr>
+<tr><td>comer</td><td>coma</td><td>coman</td></tr>
+<tr><td>ir</td><td>vaya</td><td>vayan</td></tr>
+<tr><td>ser</td><td>sea</td><td>sean</td></tr>
+</table>
+
+<h4>3. Imperativo negativo</h4>
+<div class="grammar-box">
+<p>Bij ontkenning: <strong>no + subjuntivovorm</strong> voor alle personen, inclusief tú:</p>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Bevestigend</th><th>Ontkennend</th></tr>
+<tr><td>tú</td><td>habla</td><td><strong>no hables</strong></td></tr>
+<tr><td>usted</td><td>hable</td><td><strong>no hable</strong></td></tr>
+</table>
+<p><strong>Veelste fout:</strong> ❌ <em>No habla</em> → ✅ <em>No hables</em></p>
+</div>
+
+<h4>4. Positie van objectvoornaamwoorden</h4>
+<div class="grammar-box">
+<p><strong>Bevestigend:</strong> voornaamwoord <strong>achter</strong> het werkwoord vastgeplakt</p>
+<ul>
+<li><em>Dímelo.</em> (Vertel het mij.)</li>
+<li><em>Llámame.</em> (Bel mij.)</li>
+</ul>
+<p><strong>Ontkennend:</strong> voornaamwoord <strong>vóór</strong> het werkwoord</p>
+<ul>
+<li><em>No me lo digas.</em> (Zeg het mij niet.)</li>
+</ul>
+</div>
+
+<h4>5. Vaste imperatiefuitdrukkingen</h4>
+<div class="grammar-box">
+<p>Mira, Oye, Escucha, Ven, Vamos, Espera, Perdona, Disculpa, Sigue, Para, Repite, Ayúdame, Dime, Cuéntame</p>
+</div>
+
+<h4>Voorbeeldzinnen</h4>
+<div class="example-box">
+<div class="example-spanish">¡Habla más despacio, por favor!</div>
+<div>Spreek langzamer, alsjeblieft!</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">¡No llegues tarde!</div>
+<div>Kom niet te laat!</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Dime la verdad.</div>
+<div>Vertel me de waarheid.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">¡No me lo digas!</div>
+<div>Zeg het me niet!</div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">la orden</div><div class="vocab-meaning">het bevel</div></div>
+<div class="vocab-item"><div class="vocab-word">la instrucción</div><div class="vocab-meaning">de instructie</div></div>
+<div class="vocab-item"><div class="vocab-word">la petición</div><div class="vocab-meaning">het verzoek</div></div>
+<div class="vocab-item"><div class="vocab-word">el consejo</div><div class="vocab-meaning">het advies</div></div>
+<div class="vocab-item"><div class="vocab-word">la receta</div><div class="vocab-meaning">het recept</div></div>
+<div class="vocab-item"><div class="vocab-word">el paso</div><div class="vocab-meaning">de stap</div></div>
+<div class="vocab-item"><div class="vocab-word">el ingrediente</div><div class="vocab-meaning">het ingrediënt</div></div>
+<div class="vocab-item"><div class="vocab-word">por favor</div><div class="vocab-meaning">alstublieft</div></div>
+</div>
+
+<h3>✍️ Oefeningen</h3>
+<h4>a. Geef de imperatief (tú, bevestigend)</h4>
+<ol>
+<li>___ la ventana. (abrir)</li>
+<li>___ la verdad. (decir)</li>
+<li>___ aquí. (venir)</li>
+<li>___ la tarea. (hacer)</li>
+<li>___ más despacio. (hablar)</li>
+</ol>
+<h4>Antwoorden</h4>
+<div class="grammar-box">
+<p><strong>a.</strong> 1. Abre, 2. Di, 3. Ven, 4. Haz, 5. Habla</p>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de tú-imperatiefvorm (inclusief onregelmatigen), de usted-vorm via subjuntivo, negatieve gebiedende wijs met subjuntivo, en de plaatsing van objectvoornaamwoorden.</p>
+`,
+24: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het pretérito perfecto vormen met haber + participio</li>
+<li>Het verschil begrijpen tussen pretérito perfecto en pretérito indefinido</li>
+<li>Onregelmatige participia herkennen en correct gebruiken</li>
+<li>Signaalwoorden voor het perfecto toepassen</li>
+<li>Begrijpen waarom dit onderscheid regionaal varieert</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Structuur: haber + participio pasado</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Haber</th><th>Voorbeeld</th></tr>
+<tr><td>yo</td><td><strong>he</strong></td><td>he hablado</td></tr>
+<tr><td>tú</td><td><strong>has</strong></td><td>has comido</td></tr>
+<tr><td>él/ella</td><td><strong>ha</strong></td><td>ha vivido</td></tr>
+<tr><td>nosotros</td><td><strong>hemos</strong></td><td>hemos trabajado</td></tr>
+<tr><td>vosotros</td><td><strong>habéis</strong></td><td>habéis salido</td></tr>
+<tr><td>ellos</td><td><strong>han</strong></td><td>han llegado</td></tr>
+</table>
+
+<h4>2. Participio pasado — regelmatig</h4>
+<table class="conjugation-table">
+<tr><th>Klasse</th><th>Uitgang</th><th>Voorbeeld</th></tr>
+<tr><td>-ar</td><td>-ado</td><td>hablado, trabajado, estudiado</td></tr>
+<tr><td>-er</td><td>-ido</td><td>comido, bebido, aprendido</td></tr>
+<tr><td>-ir</td><td>-ido</td><td>vivido, salido, recibido</td></tr>
+</table>
+
+<h4>3. Participio pasado — onregelmatig</h4>
+<table class="conjugation-table">
+<tr><th>Infinitief</th><th>Participio</th></tr>
+<tr><td>hacer</td><td><strong>hecho</strong></td></tr>
+<tr><td>decir</td><td><strong>dicho</strong></td></tr>
+<tr><td>poner</td><td><strong>puesto</strong></td></tr>
+<tr><td>volver</td><td><strong>vuelto</strong></td></tr>
+<tr><td>escribir</td><td><strong>escrito</strong></td></tr>
+<tr><td>ver</td><td><strong>visto</strong></td></tr>
+<tr><td>abrir</td><td><strong>abierto</strong></td></tr>
+<tr><td>morir</td><td><strong>muerto</strong></td></tr>
+<tr><td>romper</td><td><strong>roto</strong></td></tr>
+<tr><td>resolver</td><td><strong>resuelto</strong></td></tr>
+</table>
+
+<h4>4. Perfecto vs. indefinido</h4>
+<div class="grammar-box">
+<table class="conjugation-table">
+<tr><th>Pretérito perfecto</th><th>Pretérito indefinido</th></tr>
+<tr><td>Tijdperiode nog niet voorbij</td><td>Tijdperiode volledig voorbij</td></tr>
+<tr><td>Effect/relevantie in het heden</td><td>Volledig afgesloten verleden</td></tr>
+<tr><td>Hoy, esta semana, este año</td><td>Ayer, la semana pasada, en 2019</td></tr>
+<tr><td>He comido hoy.</td><td>Comí ayer.</td></tr>
+</table>
+<p><strong>Regionaal:</strong> In Latijns-Amerika wordt het indefinido gebruikt waar Spanje het perfecto zou gebruiken. <em>Hoy comí</em> (LA) = <em>Hoy he comido</em> (Spanje).</p>
+</div>
+
+<h4>5. Signaalwoorden perfecto</h4>
+<div class="grammar-box">
+<p>hoy, esta semana, este mes, este año, últimamente, recientemente, ya, todavía no, nunca, alguna vez, siempre, jamás</p>
+</div>
+
+<h4>Voorbeeldzinnen</h4>
+<div class="example-box">
+<div class="example-spanish">He aprendido mucho hoy.</div>
+<div>Ik heb vandaag veel geleerd.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">¿Has estado alguna vez en España?</div>
+<div>Ben jij ooit in Spanje geweest?</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Todavía no han resuelto el problema.</div>
+<div>Ze hebben het probleem nog niet opgelost.</div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">la experiencia</div><div class="vocab-meaning">de ervaring</div></div>
+<div class="vocab-item"><div class="vocab-word">el logro</div><div class="vocab-meaning">de prestatie</div></div>
+<div class="vocab-item"><div class="vocab-word">el éxito</div><div class="vocab-meaning">het succes</div></div>
+<div class="vocab-item"><div class="vocab-word">el fracaso</div><div class="vocab-meaning">de mislukking</div></div>
+<div class="vocab-item"><div class="vocab-word">el descubrimiento</div><div class="vocab-meaning">de ontdekking</div></div>
+<div class="vocab-item"><div class="vocab-word">el aprendizaje</div><div class="vocab-meaning">het leerproces</div></div>
+<div class="vocab-item"><div class="vocab-word">ya</div><div class="vocab-meaning">al/reeds</div></div>
+<div class="vocab-item"><div class="vocab-word">todavía no</div><div class="vocab-meaning">nog niet</div></div>
+<div class="vocab-item"><div class="vocab-word">alguna vez</div><div class="vocab-meaning">ooit</div></div>
+<div class="vocab-item"><div class="vocab-word">nunca</div><div class="vocab-meaning">nooit</div></div>
+</div>
+
+<h3>✍️ Oefeningen</h3>
+<h4>a. Vul in met haber + participio</h4>
+<ol>
+<li>Hoy yo ___ mucho. (aprender)</li>
+<li>¿Tú ___ alguna vez en México? (estar)</li>
+<li>Ella ya ___ la carta. (escribir)</li>
+<li>Nosotros ___ el examen. (aprobar)</li>
+<li>Todavía no ___ la película. (ver, ellos)</li>
+</ol>
+<h4>Antwoorden</h4>
+<div class="grammar-box">
+<p><strong>a.</strong> 1. he aprendido, 2. has estado, 3. ha escrito, 4. hemos aprobado, 5. han visto</p>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: het pretérito perfecto vormen met haber + participio, regelmatige en onregelmatige participia, het verschil met de indefinido, signaalwoorden, en het regionale verschil tussen Spanje en Latijns-Amerika.</p>
+`,
+25: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De conditionalis (condicional simple) vormen</li>
+<li>Beleefd verzoeken formuleren met de conditionalis</li>
+<li>Reële si-zinnen (type 1) correct maken</li>
+<li>Irreële si-zinnen (type 2) correct maken</li>
+<li>Het verschil begrijpen tussen reële en irreële hypotheses</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Condicional simple — regelmatige vormen</h4>
+<div class="grammar-box">
+<p>Net als het futuro: uitgangen op de volledige infinitief. Alle personen behalve nosotros hebben een accent op de -í.</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Uitgang</th><th>Hablar</th><th>Comer</th><th>Vivir</th></tr>
+<tr><td>yo</td><td>-ía</td><td>hablaría</td><td>comería</td><td>viviría</td></tr>
+<tr><td>tú</td><td>-ías</td><td>hablarías</td><td>comerías</td><td>vivirías</td></tr>
+<tr><td>él/ella</td><td>-ía</td><td>hablaría</td><td>comería</td><td>viviría</td></tr>
+<tr><td>nosotros</td><td>-íamos</td><td>hablaríamos</td><td>comeríamos</td><td>viviríamos</td></tr>
+<tr><td>vosotros</td><td>-íais</td><td>hablaríais</td><td>comeríais</td><td>viviríais</td></tr>
+<tr><td>ellos</td><td>-ían</td><td>hablarían</td><td>comerían</td><td>vivirían</td></tr>
+</table>
+
+<h4>2. Condicional — onregelmatige stammen</h4>
+<div class="grammar-box">
+<p>Identiek aan de futuro-stammen:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Infinitief</th><th>Stam</th><th>Yo condicionaal</th></tr>
+<tr><td>tener</td><td>tendr-</td><td>tendría</td></tr>
+<tr><td>venir</td><td>vendr-</td><td>vendría</td></tr>
+<tr><td>hacer</td><td>har-</td><td>haría</td></tr>
+<tr><td>decir</td><td>dir-</td><td>diría</td></tr>
+<tr><td>poder</td><td>podr-</td><td>podría</td></tr>
+<tr><td>saber</td><td>sabr-</td><td>sabría</td></tr>
+<tr><td>poner</td><td>pondr-</td><td>pondría</td></tr>
+<tr><td>salir</td><td>saldr-</td><td>saldría</td></tr>
+</table>
+
+<h4>3. Gebruik van de conditionalis</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>Beleefd verzoek:</strong> ¿Podría ayudarme? / Me gustaría... / Quisiera...</li>
+<li><strong>Hypothetisch advies:</strong> Yo que tú, estudiaría más.</li>
+<li><strong>Onderdeel van si-zinnen type 2</strong></li>
+</ul>
+</div>
+
+<h4>4. Si-zinnen type 1 — reële hypothese</h4>
+<div class="grammar-box">
+<p>Structuur: <strong>si + presente indicativo + futuro/presente/imperativo</strong></p>
+<p>Iets wat mogelijk en realistisch is:</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Si estudias, aprobarás.</div>
+<div>Als je studeert, zul je slagen.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Si tienes tiempo, llámame.</div>
+<div>Als je tijd hebt, bel me.</div>
+</div>
+
+<h4>5. Si-zinnen type 2 — irreële hypothese</h4>
+<div class="grammar-box">
+<p>Structuur: <strong>si + imperfecto subjuntivo + condicional</strong></p>
+<p>Iets wat niet werkelijk is, of onwaarschijnlijk:</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Si tuviera dinero, viajaría por el mundo.</div>
+<div>Als ik geld had, zou ik de wereld rondreizen.</div>
+</div>
+<div class="example-box">
+<div class="example-spanish">Si fuera presidente, cambiaría las leyes.</div>
+<div>Als ik president was, zou ik de wetten veranderen.</div>
+</div>
+
+<h4>6. Imperfecto subjuntivo — basisvormen</h4>
+<table class="conjugation-table">
+<tr><th>Werkwoord</th><th>Imp. subj. (yo)</th><th>Imp. subj. (él)</th></tr>
+<tr><td>tener</td><td>tuviera</td><td>tuviera</td></tr>
+<tr><td>ser</td><td>fuera</td><td>fuera</td></tr>
+<tr><td>estar</td><td>estuviera</td><td>estuviera</td></tr>
+<tr><td>poder</td><td>pudiera</td><td>pudiera</td></tr>
+<tr><td>hacer</td><td>hiciera</td><td>hiciera</td></tr>
+<tr><td>ir</td><td>fuera</td><td>fuera</td></tr>
+</table>
+
+<h4>7. Ojalá + subjuntivo</h4>
+<div class="grammar-box">
+<p><strong>Ojalá</strong> (hopelijk — uit het Arabisch) vereist altijd subjuntivo:</p>
+<ul>
+<li><em>Ojalá que venga.</em> (Hopelijk komt hij.)</li>
+<li><em>Ojalá tuviera más tiempo.</em> (Ik had maar meer tijd.)</li>
+</ul>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">quisiera</div><div class="vocab-meaning">ik zou willen</div></div>
+<div class="vocab-item"><div class="vocab-word">me gustaría</div><div class="vocab-meaning">ik zou het leuk vinden</div></div>
+<div class="vocab-item"><div class="vocab-word">podría</div><div class="vocab-meaning">zou kunnen</div></div>
+<div class="vocab-item"><div class="vocab-word">debería</div><div class="vocab-meaning">zou moeten</div></div>
+<div class="vocab-item"><div class="vocab-word">la condición</div><div class="vocab-meaning">de voorwaarde</div></div>
+<div class="vocab-item"><div class="vocab-word">el sueño</div><div class="vocab-meaning">de droom</div></div>
+<div class="vocab-item"><div class="vocab-word">la realidad</div><div class="vocab-meaning">de werkelijkheid</div></div>
+<div class="vocab-item"><div class="vocab-word">la posibilidad</div><div class="vocab-meaning">de mogelijkheid</div></div>
+<div class="vocab-item"><div class="vocab-word">sin embargo</div><div class="vocab-meaning">echter</div></div>
+<div class="vocab-item"><div class="vocab-word">aunque</div><div class="vocab-meaning">hoewel</div></div>
+<div class="vocab-item"><div class="vocab-word">a pesar de</div><div class="vocab-meaning">ondanks</div></div>
+<div class="vocab-item"><div class="vocab-word">en cualquier caso</div><div class="vocab-meaning">in elk geval</div></div>
+</div>
+
+<h3>✍️ Oefeningen</h3>
+<h4>a. Vul de conditionalis in</h4>
+<ol>
+<li>Yo ___ más si tuviera tiempo. (estudiar)</li>
+<li>¿___ ayudarme? (poder, usted)</li>
+<li>Ella ___ a España. (viajar)</li>
+<li>Nosotros ___ una casa. (comprar)</li>
+<li>Me ___ un café, por favor. (gustar)</li>
+</ol>
+<h4>b. Vertaal de si-zinnen</h4>
+<ol>
+<li>Als je studeert, zul je slagen.</li>
+<li>Als ik geld had, zou ik reizen.</li>
+<li>Als het mooi weer is, gaan we naar het strand.</li>
+</ol>
+<h4>Antwoorden</h4>
+<div class="grammar-box">
+<p><strong>a.</strong> 1. estudiaría, 2. Podría, 3. viajaría, 4. compraríamos, 5. gustaría</p>
+<p><strong>b.</strong> 1. Si estudias, aprobarás. 2. Si tuviera dinero, viajaría. 3. Si hace buen tiempo, vamos a la playa.</p>
+</div>
+
+<h3>🌍 Cultuur</h3>
+<div class="grammar-box">
+<p>De conditionalis wordt in het Spaans veel gebruikt voor beleefdheid. In restaurants, winkels en formele situaties is <em>Quisiera...</em> of <em>Me gustaría...</em> standaard. <em>Quiero...</em> klinkt veel directer en kan als onbeleefd worden ervaren.</p>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de conditionalis vormen (regelmatig en onregelmatig), beleefd verzoeken formuleren, si-zinnen type 1 (reëel) en type 2 (irreëel), het imperfecto subjuntivo in basisvorm, en ojalá + subjuntivo.</p>
+`,
         };
 
         // Lesson titles for display
@@ -3692,7 +4400,12 @@
             17: "De pretérito indefinido - onregelmatige vormen",
             18: "Het imperfecto - gewoontes en beschrijvingen in het verleden",
             19: "Vergelijkingen en superlatieven",
-            20: "Bijwoorden en bijwoordelijke uitdrukkingen"
+            20: "Bijwoorden en bijwoordelijke uitdrukkingen",
+            21: "De toekomst: ir a + infinitivo en futuro simple",
+            22: "De aanvoegende wijs: subjuntivo presente",
+            23: "De gebiedende wijs: imperativo",
+            24: "Pretérito perfecto - voltooid tegenwoordige tijd",
+            25: "Conditionalis en hypothetische si-zinnen"
         };
 
         // Functions to make the app work
@@ -3718,7 +4431,7 @@
         function renderDaySelector() {
             const selector = document.getElementById('daySelector');
             selector.innerHTML = '';
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= 25; i++) {
                 const button = document.createElement('button');
                 button.className = 'day-button';
                 if (completedDays.has(i)) button.classList.add('completed');
@@ -3734,7 +4447,7 @@
         }
 
         function updateProgressBar() {
-            const progress = (completedDays.size / 20) * 100;
+            const progress = (completedDays.size / 25) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
         }
 
@@ -3790,13 +4503,13 @@
         function loadProgressOverview() {
             const content = document.getElementById('progressContent');
             const completed = completedDays.size;
-            const percentage = Math.round((completed / 20) * 100);
+            const percentage = Math.round((completed / 25) * 100);
 
             let html = `
                 <div style="background: var(--warm-white); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
                     <h3>Algemene voortgang</h3>
                     <p style="font-size: 1.8rem; color: var(--terracotta); font-weight: 600; margin: 1.5rem 0;">
-                        ${completed} / 20 lessen voltooid (${percentage}%)
+                        ${completed} / 25 lessen voltooid (${percentage}%)
                     </p>
                     <div class="progress-bar" style="height: 24px;">
                         <div class="progress-fill" style="width: ${percentage}%"></div>
@@ -3933,7 +4646,7 @@
         }
 
         function getAllDays() {
-            return Array.from({length: 18}, (_, i) => i + 1);
+            return Array.from({length: 25}, (_, i) => i + 1);
         }
 
         // =====================================================
@@ -4024,7 +4737,7 @@
                     <input type="checkbox" id="${prefix}-alle" ${defaultAll?'checked':''} onchange="toggleAlleCheck('${prefix}')"> Alle dagen
                 </label>
                 <div class="dag-filter" id="${prefix}-dagfilter" style="${defaultAll?'opacity:0.4;pointer-events:none;':''}">`;
-            for (let d = 1; d <= 18; d++) {
+            for (let d = 1; d <= 25; d++) {
                 html += `<label class="dag-check"><input type="checkbox" class="${prefix}-dagcb" value="${d}" checked> Dag ${d}</label>`;
             }
             html += `</div></div>`;
@@ -4194,6 +4907,8 @@
             `;
         }
 
+        let typFouten = []; // Track fouten voor overzicht
+
         function startTyp() {
             const dagen = getGekozenDagen('typ');
             if (dagen.length === 0) { alert('Selecteer minimaal 1 dag.'); return; }
@@ -4202,7 +4917,7 @@
                 document.getElementById('oef-sub').innerHTML = `<div class="lesson-card" style="margin-top:1.5rem;"><div class="empty-state"><span class="empty-icon">📭</span>Geen vocabulaire gevonden.</div></div>`;
                 return;
             }
-            typIndex = 0; typCorrect = 0; typGezien = 0; typBeantwoord = false;
+            typIndex = 0; typCorrect = 0; typGezien = 0; typBeantwoord = false; typFouten = [];
             renderTypVraag();
         }
 
@@ -4210,6 +4925,15 @@
             const sub = document.getElementById('oef-sub');
             if (typIndex >= typDeck.length) {
                 const acc = typGezien > 0 ? Math.round((typCorrect/typGezien)*100) : 0;
+                let foutenHTML = '';
+                if (typFouten.length > 0) {
+                    foutenHTML = `<div style="margin-top:1.5rem; padding-top:1.5rem; border-top:2px solid var(--ochre); text-align:left;">
+                        <h4 style="color:var(--terracotta); margin-bottom:0.8rem;">Fouten overzicht (${typFouten.length})</h4>
+                        ${typFouten.map(f => `<div style="margin-bottom:0.6rem; padding:0.5rem; background:rgba(192,57,43,0.06); border-radius:4px; border-left:3px solid #c0392b;">
+                            <span style="opacity:0.7;">🇳🇱 ${f.meaning}</span> → <strong style="color:#c0392b;">${f.jouweAntwoord || '(leeg)'}</strong> → <strong style="color:#2d7a3a;">${f.correct}</strong>
+                        </div>`).join('')}
+                    </div>`;
+                }
                 sub.innerHTML = `
                     <div class="lesson-card" style="margin-top:1.5rem;">
                         <h3 style="margin-top:0;">🎉 Klaar!</h3>
@@ -4218,7 +4942,8 @@
                             <div class="fc-stat"><div class="num">${typCorrect}</div><div class="lbl">Goed</div></div>
                             <div class="fc-stat"><div class="num">${acc}%</div><div class="lbl">Nauwkeurigheid</div></div>
                         </div>
-                        <button class="btn" onclick="startModus('typen')">Nog een ronde</button>
+                        ${foutenHTML}
+                        <button class="btn" onclick="startModus('typen')" style="margin-top:1rem;">Nog een ronde</button>
                     </div>`;
                 return;
             }
@@ -4233,13 +4958,11 @@
                     <p style="text-align:center;opacity:0.6;font-size:0.9rem;">Dag ${v.day}</p>
                     <input class="typ-input" id="typInput" type="text" placeholder="Typ het Spaanse woord…"
                         onkeydown="if(event.key==='Enter') controleerTyp()">
-                    <div style="text-align:center;">
-                        <button class="btn" onclick="controleerTyp()" style="margin-top:0.5rem;">Controleer</button>
+                    <div style="text-align:center; display:flex; justify-content:center; gap:0.8rem; margin-top:0.5rem;">
+                        <button class="btn" onclick="controleerTyp()">Controleer</button>
+                        <button class="btn btn-skip" id="typVolgendeBtn" onclick="typVolgende()" style="display:none;">Volgende →</button>
                     </div>
                     <div id="typFeedback"></div>
-                    <div id="typVolgende" style="display:none;text-align:center;margin-top:1rem;">
-                        <button class="btn btn-skip" onclick="typVolgende()">Volgende →</button>
-                    </div>
                 </div>`;
             setTimeout(() => {
                 const inp = document.getElementById('typInput');
@@ -4258,6 +4981,7 @@
             typBeantwoord = true;
             typGezien++;
             if (result === 'correct' || result === 'accent') typCorrect++;
+            else typFouten.push({ meaning: v.meaning, correct: v.spanish, jouweAntwoord: antwoord });
             recordWordResult(v.spanish, v.meaning, result);
 
             inp.disabled = true;
@@ -4270,7 +4994,7 @@
             } else {
                 fb.innerHTML = `<div class="typ-feedback fout">❌ Helaas. Het juiste antwoord: <strong>${v.spanish}</strong></div>`;
             }
-            document.getElementById('typVolgende').style.display = 'block';
+            document.getElementById('typVolgendeBtn').style.display = 'inline-block';
             typBeantwoord = false;
         }
 
@@ -4580,109 +5304,158 @@
                 { zin: 'una ciudad ___ (modern)', blank: 'moderna', hint: 'moderno → vrouwelijk' },
             ],
             4: [
-                { zin: 'Yo ___ en Madrid. (wonen)', blank: 'vivo', hint: 'vivir → yo' },
-                { zin: '¿___ tú? (hoe heet jij)', blank: 'Cómo te llamas', hint: 'presentatie vraag' },
-                { zin: 'Me ___ Ana.', blank: 'llamo', hint: 'llamarse → yo' },
-                { zin: 'Ella ___ en Barcelona. (werken)', blank: 'trabaja', hint: 'trabajar → ella' },
-                { zin: '¿De dónde ___? (zijn jij)', blank: 'eres', hint: 'ser → tú' },
+                { zin: 'Yo ___ español. (spreken)', blank: 'hablo', hint: 'hablar → yo' },
+                { zin: 'Ella ___ en Madrid. (werken)', blank: 'trabaja', hint: 'trabajar → ella' },
+                { zin: 'Nosotros ___ mucho. (studeren)', blank: 'estudiamos', hint: 'estudiar → nosotros' },
+                { zin: '¿Tú ___ música? (luisteren)', blank: 'escuchas', hint: 'escuchar → tú' },
+                { zin: 'Ellos ___ por Europa. (reizen)', blank: 'viajan', hint: 'viajar → ellos' },
             ],
             5: [
-                { zin: 'Tengo ___ años. (25)', blank: 'veinticinco', hint: 'getal 25' },
-                { zin: '¿Cuántos años ___? (hebben jij)', blank: 'tienes', hint: 'tener → tú' },
-                { zin: 'Ella ___ treinta años.', blank: 'tiene', hint: 'tener → ella' },
-                { zin: 'Nosotros ___ hambre.', blank: 'tenemos', hint: 'tener → nosotros' },
-                { zin: '¿___ sed? (hebben jij)', blank: 'Tienes', hint: 'tener → tú (vraag)' },
+                { zin: 'Yo ___ en casa. (eten)', blank: 'como', hint: 'comer → yo' },
+                { zin: 'Ella ___ agua. (drinken)', blank: 'bebe', hint: 'beber → ella' },
+                { zin: 'Nosotros ___ en Madrid. (wonen)', blank: 'vivimos', hint: 'vivir → nosotros' },
+                { zin: 'Yo ___ una carta. (schrijven)', blank: 'escribo', hint: 'escribir → yo' },
+                { zin: '¿Tú ___ español? (leren)', blank: 'aprendes', hint: 'aprender → tú' },
             ],
             6: [
-                { zin: 'Yo ___ al trabajo. (gaan)', blank: 'voy', hint: 'ir → yo' },
-                { zin: 'Ella ___ al mercado.', blank: 'va', hint: 'ir → ella' },
-                { zin: '¿A ___ vas?', blank: 'dónde', hint: 'vraagwoord richting' },
-                { zin: 'Nosotros ___ al cine.', blank: 'vamos', hint: 'ir → nosotros' },
-                { zin: 'Voy ___ comprar pan.', blank: 'a', hint: 'ir + a + infinitief' },
+                { zin: 'Yo ___ trabajo hoy. (hebben)', blank: 'tengo', hint: 'tener → yo (onregelmatig)' },
+                { zin: 'Yo ___ la tarea. (doen)', blank: 'hago', hint: 'hacer → yo (onregelmatig)' },
+                { zin: 'Yo ___ al trabajo. (gaan)', blank: 'voy', hint: 'ir → yo (onregelmatig)' },
+                { zin: 'Yo ___ de casa a las ocho. (vertrekken)', blank: 'salgo', hint: 'salir → yo (onregelmatig)' },
+                { zin: 'Yo ___ mañana. (komen)', blank: 'vengo', hint: 'venir → yo (onregelmatig)' },
             ],
             7: [
-                { zin: 'Me ___ el café. (lekker vinden)', blank: 'gusta', hint: 'gustar + enkelvoud onderwerp' },
-                { zin: 'Me ___ los libros.', blank: 'gustan', hint: 'gustar + meervoud onderwerp' },
-                { zin: '¿Te ___ el fútbol?', blank: 'gusta', hint: 'gustar → tú vorm' },
-                { zin: 'No me ___ la lluvia.', blank: 'gusta', hint: 'gustar negatief' },
-                { zin: 'Le ___ mucho la música.', blank: 'gusta', hint: 'gustar → él/ella' },
+                { zin: 'Yo ___ estudiar español. (willen)', blank: 'quiero', hint: 'querer → yo (e→ie)' },
+                { zin: 'Ella ___ venir hoy. (kunnen)', blank: 'puede', hint: 'poder → ella (o→ue)' },
+                { zin: '¿Tú ___ en mí? (denken)', blank: 'piensas', hint: 'pensar → tú (e→ie)' },
+                { zin: 'Nosotros ___ a las ocho. (terugkomen)', blank: 'volvemos', hint: 'volver → nosotros (geen wissel!)' },
+                { zin: 'Ellos ___ mucho. (slapen)', blank: 'duermen', hint: 'dormir → ellos (o→ue)' },
             ],
             8: [
-                { zin: 'Ayer ___ al cine. (ir, yo, verleden)', blank: 'fui', hint: 'ir → pretérito → yo' },
-                { zin: 'Ella ___ la carta. (schrijven, verleden)', blank: 'escribió', hint: 'escribir → pretérito → ella' },
-                { zin: 'Nosotros ___ en casa. (estar, verleden)', blank: 'estuvimos', hint: 'estar → pretérito → nosotros' },
-                { zin: '¿Qué ___ tú ayer?', blank: 'hiciste', hint: 'hacer → pretérito → tú' },
-                { zin: 'Ellos ___ mucho. (werken, verleden)', blank: 'trabajaron', hint: 'trabajar → pretérito → ellos' },
+                { zin: 'Ella ___ cansada hoy. (tijdelijk)', blank: 'está', hint: 'estar → tijdelijke toestand' },
+                { zin: 'Madrid ___ en España. (locatie)', blank: 'está', hint: 'estar → locatie' },
+                { zin: 'Él ___ profesor. (beroep)', blank: 'es', hint: 'ser → beroep/identiteit' },
+                { zin: 'La casa ___ grande. (permanent)', blank: 'es', hint: 'ser → permanente eigenschap' },
+                { zin: 'El café ___ caliente.', blank: 'está', hint: 'estar → tijdelijke eigenschap' },
             ],
             9: [
-                { zin: 'Ella ___ cansada. (tijdelijk)', blank: 'está', hint: 'estar → tijdelijke toestand' },
-                { zin: 'Madrid ___ en España. (locatie)', blank: 'está', hint: 'estar → locatie' },
-                { zin: 'El café ___ caliente.', blank: 'está', hint: 'estar → tijdelijke eigenschap' },
-                { zin: 'Ellos ___ estudiantes.', blank: 'son', hint: 'ser → identiteit/rol' },
-                { zin: 'La casa ___ grande.', blank: 'es', hint: 'ser → permanente eigenschap' },
+                { zin: '___ un restaurante aquí. (er is)', blank: 'Hay', hint: 'hay = er is/er zijn' },
+                { zin: 'El libro ___ en la mesa. (locatie)', blank: 'está', hint: 'estar → locatie van specifiek ding' },
+                { zin: '___ mucha gente hoy. (er zijn)', blank: 'Hay', hint: 'hay + onbepaald' },
+                { zin: 'La tienda ___ cerca. (locatie)', blank: 'está', hint: 'estar → locatie' },
+                { zin: 'No ___ problema. (er is)', blank: 'hay', hint: 'hay → bestaan' },
             ],
             10: [
-                { zin: 'Si ___ tiempo, salgo. (hebben, yo)', blank: 'tengo', hint: 'presente → tengo' },
-                { zin: 'Cuando ___ mayor, seré médico.', blank: 'sea', hint: 'subjuntivo van ser' },
-                { zin: 'Si llueve, ___ en casa. (blijven, yo)', blank: 'me quedo', hint: 'quedar → presente' },
-                { zin: '¿___ a la fiesta? (komen, tú)', blank: 'Vas', hint: 'ir → tú' },
-                { zin: 'Ojalá ___ buen tiempo.', blank: 'haga', hint: 'subjuntivo van hacer' },
+                { zin: 'Me ___ el café. (lekker vinden)', blank: 'gusta', hint: 'gustar + enkelvoud' },
+                { zin: 'Me ___ los libros. (lekker vinden)', blank: 'gustan', hint: 'gustar + meervoud' },
+                { zin: '¿Te ___ el fútbol?', blank: 'gusta', hint: 'gustar → te (jij)' },
+                { zin: '___ gusta viajar. (aan hem/haar)', blank: 'Le', hint: 'indirect object: le = hem/haar' },
+                { zin: 'No me ___ la lluvia.', blank: 'gusta', hint: 'gustar negatief + enkelvoud' },
             ],
             11: [
-                { zin: 'Mañana ___ al médico. (ir, yo)', blank: 'voy', hint: 'ir a + infinitief' },
-                { zin: 'El año que viene ___ en España.', blank: 'estaré', hint: 'futuro van estar' },
-                { zin: 'Ella ___ profesora. (worden)', blank: 'será', hint: 'futuro van ser' },
-                { zin: '¿___ tiempo mañana? (hebben, tú)', blank: 'Tendrás', hint: 'futuro van tener' },
-                { zin: 'Nosotros ___ juntos. (reizen)', blank: 'viajaremos', hint: 'futuro van viajar' },
+                { zin: 'Me ___ la música. (dol zijn op)', blank: 'encanta', hint: 'encantar + enkelvoud' },
+                { zin: 'Nos ___ el problema. (interesseren)', blank: 'interesa', hint: 'interesar + enkelvoud' },
+                { zin: 'Le ___ el ruido. (storen)', blank: 'molesta', hint: 'molestar + enkelvoud' },
+                { zin: 'Me ___ los animales. (dol zijn op, mv)', blank: 'encantan', hint: 'encantar + meervoud' },
+                { zin: 'No les ___ el dinero. (uitmaken)', blank: 'importa', hint: 'importar + enkelvoud' },
             ],
             12: [
-                { zin: '¡___ la ventana! (openen, tú, gebiedend)', blank: 'Abre', hint: 'imperativo tú van abrir' },
-                { zin: '¡No ___ tarde! (komen, tú, ontkennend)', blank: 'llegues', hint: 'negatief imperativo → subjuntivo' },
-                { zin: '¡___ aquí! (zitten, usted)', blank: 'Siéntese', hint: 'imperativo usted van sentarse' },
-                { zin: '¡___ la verdad! (zeggen, tú)', blank: 'Di', hint: 'imperativo tú van decir (onregelmatig)' },
-                { zin: '¡No ___ eso! (doen, tú)', blank: 'hagas', hint: 'negatief imperativo → subjuntivo van hacer' },
+                { zin: '___ veo todos los días. (hem)', blank: 'Lo', hint: 'direct object: lo = hem' },
+                { zin: '___ llamo mañana. (jou)', blank: 'Te', hint: 'direct object: te = jou' },
+                { zin: 'Me ___ explica ahora. (het)', blank: 'lo', hint: 'indirect + direct: me lo' },
+                { zin: '___ doy el libro a ella. (het aan haar)', blank: 'Se lo', hint: 'le+lo = se lo' },
+                { zin: '¿___ das el mensaje? (aan mij het)', blank: 'Me lo', hint: 'indirect + direct object' },
             ],
             13: [
-                { zin: 'El libro ___ escrito por García Márquez.', blank: 'fue', hint: 'passief: ser + participio' },
-                { zin: 'La carta ___ enviada ayer.', blank: 'fue', hint: 'passief verleden' },
-                { zin: '___ habla español aquí. (men)', blank: 'Se', hint: 'se + passief' },
-                { zin: 'Las ventanas ___ abiertas.', blank: 'están', hint: 'toestand: estar + participio' },
-                { zin: 'El problema ___ resuelto.', blank: 'está', hint: 'estar + participio' },
+                { zin: 'Estoy ___ el parque. (in)', blank: 'en', hint: 'en = in (statische locatie)' },
+                { zin: 'Voy ___ centro. (naar het)', blank: 'al', hint: 'a + el = al (richting)' },
+                { zin: 'Vengo ___ trabajo. (van het)', blank: 'del', hint: 'de + el = del (herkomst)' },
+                { zin: 'El gato está ___ la mesa. (onder)', blank: 'debajo de', hint: 'debajo de = onder' },
+                { zin: 'La farmacia está ___ del banco. (tegenover)', blank: 'enfrente', hint: 'enfrente del = tegenover' },
             ],
             14: [
-                { zin: 'Es importante que ___ la verdad. (zeggen, tú)', blank: 'digas', hint: 'subjuntivo van decir' },
-                { zin: 'Quiero que ___ aquí. (zijn, tú)', blank: 'estés', hint: 'subjuntivo van estar' },
-                { zin: 'Es posible que ___ mañana. (komen, él)', blank: 'venga', hint: 'subjuntivo van venir' },
-                { zin: 'Espero que ___ bien.', blank: 'estés', hint: 'subjuntivo → wens' },
-                { zin: 'Busco a alguien que ___ español.', blank: 'hable', hint: 'subjuntivo → onbepaalde antecedent' },
+                { zin: 'Trabajo ___ la mañana. (\'s ochtends)', blank: 'por', hint: 'por = gedurende dagdeel' },
+                { zin: 'Es ___ mañana. (voor morgen, deadline)', blank: 'para', hint: 'para = deadline' },
+                { zin: '¿A qué ___ sale el tren?', blank: 'hora', hint: 'a qué hora = hoe laat' },
+                { zin: 'Voy dos veces ___ semana.', blank: 'por', hint: 'por = per (frequentie)' },
+                { zin: '___ las tres de la tarde. (om)', blank: 'A', hint: 'a + las = om (kloktijd)' },
             ],
             15: [
-                { zin: 'Si ___ dinero, viajaría. (hebben, yo)', blank: 'tuviera', hint: 'conditionalis: imperfecto subjuntivo' },
-                { zin: 'Si ___ estudiado, habría aprobado.', blank: 'hubiera', hint: 'conditionalis verleden' },
-                { zin: 'Iría si ___ tiempo.', blank: 'tuviera', hint: 'imperfecto subjuntivo van tener' },
-                { zin: 'Si pudiera, ___ contigo.', blank: 'iría', hint: 'condicionalis van ir' },
-                { zin: '¡Ojalá ___ vacaciones!', blank: 'tuviera', hint: 'wens met subjuntivo' },
+                { zin: '___ familia es grande. (mijn)', blank: 'Mi', hint: 'mi = mijn (onbeklemtoond)' },
+                { zin: 'Este libro es ___. (van mij)', blank: 'mío', hint: 'mío = van mij (beklemtoond)' },
+                { zin: '___ padres viven aquí. (onze)', blank: 'Nuestros', hint: 'nuestros = onze (mv mannelijk)' },
+                { zin: '¿Dónde está ___ casa? (jouw)', blank: 'tu', hint: 'tu = jouw (onbeklemtoond)' },
+                { zin: 'Un amigo ___ vive en Madrid. (van mij)', blank: 'mío', hint: 'un amigo mío = een vriend van mij' },
             ],
             16: [
-                { zin: 'Estoy ___ una carta. (schrijven)', blank: 'escribiendo', hint: 'gerundio van escribir' },
-                { zin: 'Ella sigue ___ en Madrid.', blank: 'viviendo', hint: 'gerundio van vivir' },
-                { zin: 'El niño ___ dormido.', blank: 'está', hint: 'estar + participio' },
-                { zin: 'Llevo dos horas ___ español.', blank: 'estudiando', hint: 'llevar + gerundio' },
-                { zin: 'Sigo ___ tu trabajo.', blank: 'siguiendo', hint: 'gerundio van seguir' },
+                { zin: 'Ayer ___ ocho horas. (werken, yo)', blank: 'trabajé', hint: 'trabajar → pretérito → yo' },
+                { zin: 'Ella ___ la carta. (schrijven)', blank: 'escribió', hint: 'escribir → pretérito → ella' },
+                { zin: 'Nosotros ___ mucho. (eten)', blank: 'comimos', hint: 'comer → pretérito → nosotros' },
+                { zin: '¿Tú ___ la película? (kijken naar)', blank: 'miraste', hint: 'mirar → pretérito → tú' },
+                { zin: 'Ellos ___ en Madrid. (wonen)', blank: 'vivieron', hint: 'vivir → pretérito → ellos' },
             ],
             17: [
-                { zin: 'Cuando ___ pequeño, vivía en el campo.', blank: 'era', hint: 'imperfecto → gewoontes' },
-                { zin: 'Todos los días ___ al parque. (gaan, yo, gewoontes)', blank: 'iba', hint: 'imperfecto van ir' },
-                { zin: 'Mientras ___, sonó el teléfono.', blank: 'comía', hint: 'imperfecto: achtergrond' },
-                { zin: 'De niño, ___ mucho. (lezen, él)', blank: 'leía', hint: 'imperfecto van leer' },
-                { zin: 'Antes ___ más tiempo libre.', blank: 'tenía', hint: 'imperfecto van tener' },
+                { zin: 'Ayer ___ al cine. (gaan, yo)', blank: 'fui', hint: 'ir → pretérito → yo (onregelm.)' },
+                { zin: 'Ella ___ la verdad. (zeggen)', blank: 'dijo', hint: 'decir → pretérito → ella' },
+                { zin: 'Nosotros ___ en casa. (zijn)', blank: 'estuvimos', hint: 'estar → pretérito → nosotros' },
+                { zin: '¿Qué ___ tú ayer? (doen)', blank: 'hiciste', hint: 'hacer → pretérito → tú' },
+                { zin: 'Yo no ___ venir. (kunnen)', blank: 'pude', hint: 'poder → pretérito → yo' },
             ],
             18: [
-                { zin: 'He ___ mucho hoy. (leren)', blank: 'aprendido', hint: 'pretérito perfecto: aprender' },
-                { zin: '¿Has ___ alguna vez en España?', blank: 'estado', hint: 'pretérito perfecto: estar' },
-                { zin: 'Hemos ___ el examen.', blank: 'aprobado', hint: 'pretérito perfecto: aprobar' },
-                { zin: 'Todavía no han ___ el problema.', blank: 'resuelto', hint: 'pretérito perfecto: resolver (onregelm.)' },
-                { zin: 'Ella ya ha ___ la carta.', blank: 'escrito', hint: 'pretérito perfecto: escribir (onregelm.)' },
+                { zin: 'Cuando era niño, ___ en el parque. (spelen, yo)', blank: 'jugaba', hint: 'jugar → imperfecto → yo' },
+                { zin: 'Siempre ___ al parque. (gaan, nosotros)', blank: 'íbamos', hint: 'ir → imperfecto → nosotros' },
+                { zin: 'La casa ___ grande y bonita. (zijn)', blank: 'era', hint: 'ser → imperfecto → ella' },
+                { zin: 'De niño, él ___ mucho. (lezen)', blank: 'leía', hint: 'leer → imperfecto → él' },
+                { zin: 'Antes ___ más tiempo libre. (hebben, yo)', blank: 'tenía', hint: 'tener → imperfecto → yo' },
+            ],
+            19: [
+                { zin: 'Madrid es ___ grande que Barcelona.', blank: 'más', hint: 'más + que = groter dan' },
+                { zin: 'Este libro es ___ que el otro. (beter)', blank: 'mejor', hint: 'bueno → mejor (onregelmatig)' },
+                { zin: 'Ella es tan alta ___ su hermana.', blank: 'como', hint: 'tan + como = net zo als' },
+                { zin: 'Es el ___ alto de la clase. (de ...ste)', blank: 'más', hint: 'el más + adjectief = superlatief' },
+                { zin: 'La película es ___. (heel erg goed)', blank: 'buenísima', hint: '-ísimo = absoluut superlatief' },
+            ],
+            20: [
+                { zin: 'Habla ___. (snel → bijwoord)', blank: 'rápidamente', hint: 'rápida + -mente' },
+                { zin: 'Es ___ interesante. (heel erg)', blank: 'muy', hint: 'muy + adjectief' },
+                { zin: 'Trabaja ___. (veel)', blank: 'mucho', hint: 'mucho bij werkwoord' },
+                { zin: 'Siempre ___ aquí. (studeren, yo)', blank: 'estudio', hint: 'bijwoord siempre + presente' },
+                { zin: 'Habla clara y ___. (langzaam)', blank: 'lentamente', hint: 'alleen laatste -mente bij reeks' },
+            ],
+            21: [
+                { zin: 'Mañana ___ a estudiar español. (ir, yo)', blank: 'voy', hint: 'ir a + infinitief → yo = voy' },
+                { zin: 'El año que viene ___ en España. (vivir, yo, futuro)', blank: 'viviré', hint: 'futuro simple: vivir + -é' },
+                { zin: 'Ella ___ profesora. (ser, futuro)', blank: 'será', hint: 'futuro simple: ser → será' },
+                { zin: '¿___ tiempo mañana? (tener, tú, futuro)', blank: 'Tendrás', hint: 'tener → tendr- + -ás' },
+                { zin: 'Nosotros ___ a viajar juntos. (ir)', blank: 'vamos', hint: 'ir a + infinitief → nosotros = vamos' },
+            ],
+            22: [
+                { zin: 'Quiero que ___ aquí. (estar, tú)', blank: 'estés', hint: 'subjuntivo van estar → tú' },
+                { zin: 'Es importante que ___ la verdad. (decir, tú)', blank: 'digas', hint: 'subjuntivo van decir → tú' },
+                { zin: 'No creo que ___ verdad. (ser)', blank: 'sea', hint: 'subjuntivo van ser' },
+                { zin: 'Espero que ___ bien. (estar, tú)', blank: 'estés', hint: 'subjuntivo van estar → wens' },
+                { zin: 'Es necesario que ___ más. (estudiar, nosotros)', blank: 'estudiemos', hint: 'subjuntivo: estudiar → -emos' },
+            ],
+            23: [
+                { zin: '¡___ la ventana! (openen, tú)', blank: 'Abre', hint: 'imperativo tú = 3e pers. indicatief' },
+                { zin: '¡___ la verdad! (zeggen, tú)', blank: 'Di', hint: 'decir → imperativo tú = di (onregelm.)' },
+                { zin: '¡No ___ tarde! (komen, tú)', blank: 'llegues', hint: 'negatief imperativo = no + subjuntivo' },
+                { zin: '¡___! (komen, tú)', blank: 'Ven', hint: 'venir → imperativo tú = ven (onregelm.)' },
+                { zin: '¡No me lo ___! (zeggen, tú)', blank: 'digas', hint: 'negatief: no + pronomen + subjuntivo' },
+            ],
+            24: [
+                { zin: 'Hoy ___ mucho. (leren, yo)', blank: 'he aprendido', hint: 'haber (yo=he) + participio' },
+                { zin: '¿___ alguna vez en España? (estar, tú)', blank: 'Has estado', hint: 'haber (tú=has) + participio' },
+                { zin: 'Ella ya ___ la carta. (schrijven)', blank: 'ha escrito', hint: 'escribir → escrito (onregelm.)' },
+                { zin: 'Todavía no ___ la película. (zien, ellos)', blank: 'han visto', hint: 'ver → visto (onregelm.)' },
+                { zin: 'Nosotros ___ el examen. (halen)', blank: 'hemos aprobado', hint: 'haber (nosotros=hemos) + -ado' },
+            ],
+            25: [
+                { zin: 'Yo ___ más si tuviera tiempo. (studeren)', blank: 'estudiaría', hint: 'condicionalis: estudiar + -ía' },
+                { zin: '¿___ ayudarme? (kunnen, usted)', blank: 'Podría', hint: 'poder → podr- + -ía' },
+                { zin: 'Si ___ dinero, viajaría. (hebben, yo, imp. subj.)', blank: 'tuviera', hint: 'imperfecto subjuntivo van tener' },
+                { zin: 'Si estudias, ___. (slagen, tú, futuro)', blank: 'aprobarás', hint: 'si + presente → futuro' },
+                { zin: 'Me ___ un café. (leuk vinden, condicionalis)', blank: 'gustaría', hint: 'gustar → condicionalis' },
             ],
         };
 
@@ -4704,79 +5477,450 @@
                 { nl: 'Een interessant boek.', es: 'Un libro interesante.' },
             ],
             4: [
-                { nl: 'Hoe heet jij?', es: '¿Cómo te llamas?' },
-                { nl: 'Ik heet Ana en ik woon in Madrid.', es: 'Me llamo Ana y vivo en Madrid.' },
-                { nl: 'Waar kom jij vandaan?', es: '¿De dónde eres?' },
+                { nl: 'Ik spreek Spaans.', es: 'Hablo español.' },
+                { nl: 'Wij werken in Madrid.', es: 'Trabajamos en Madrid.' },
+                { nl: 'Zij studeert veel.', es: 'Estudia mucho.' },
             ],
             5: [
-                { nl: 'Hoe oud ben jij?', es: '¿Cuántos años tienes?' },
-                { nl: 'Ik heb honger.', es: 'Tengo hambre.' },
-                { nl: 'Zij heeft dorst.', es: 'Ella tiene sed.' },
+                { nl: 'Ik eet thuis.', es: 'Como en casa.' },
+                { nl: 'Wij wonen in Madrid.', es: 'Vivimos en Madrid.' },
+                { nl: 'Zij drinken water.', es: 'Beben agua.' },
             ],
             6: [
+                { nl: 'Ik heb werk vandaag.', es: 'Tengo trabajo hoy.' },
                 { nl: 'Ik ga naar het werk.', es: 'Voy al trabajo.' },
-                { nl: 'Waar ga jij naartoe?', es: '¿A dónde vas?' },
-                { nl: 'Wij gaan vanavond naar het restaurant.', es: 'Vamos al restaurante esta noche.' },
+                { nl: 'Wij vertrekken morgen.', es: 'Salimos mañana.' },
             ],
             7: [
+                { nl: 'Ik wil Spaans studeren.', es: 'Quiero estudiar español.' },
+                { nl: 'Zij kan vandaag komen.', es: 'Puede venir hoy.' },
+                { nl: 'Zij slapen goed.', es: 'Duermen bien.' },
+            ],
+            8: [
+                { nl: 'Zij is moe vandaag.', es: 'Está cansada hoy.' },
+                { nl: 'Madrid ligt in Spanje.', es: 'Madrid está en España.' },
+                { nl: 'Zij zijn studenten.', es: 'Son estudiantes.' },
+            ],
+            9: [
+                { nl: 'Er is een restaurant hier.', es: 'Hay un restaurante aquí.' },
+                { nl: 'Het boek ligt op de tafel.', es: 'El libro está en la mesa.' },
+                { nl: 'Er zijn veel mensen vandaag.', es: 'Hay mucha gente hoy.' },
+            ],
+            10: [
                 { nl: 'Ik vind koffie lekker.', es: 'Me gusta el café.' },
                 { nl: 'Hou jij van voetbal?', es: '¿Te gusta el fútbol?' },
                 { nl: 'Zij houdt van muziek.', es: 'Le gusta la música.' },
             ],
-            8: [
-                { nl: 'Gisteren ging ik naar de bioscoop.', es: 'Ayer fui al cine.' },
-                { nl: 'Wat deed jij gisteren?', es: '¿Qué hiciste ayer?' },
-                { nl: 'Wij werkten de hele dag.', es: 'Trabajamos todo el día.' },
-            ],
-            9: [
-                { nl: 'Zij is moe (tijdelijk).', es: 'Ella está cansada.' },
-                { nl: 'Madrid ligt in Spanje.', es: 'Madrid está en España.' },
-                { nl: 'Zij zijn studenten (rol).', es: 'Son estudiantes.' },
-            ],
-            10: [
-                { nl: 'Als ik tijd heb, ga ik wandelen.', es: 'Si tengo tiempo, salgo a caminar.' },
-                { nl: 'Hopelijk is het morgen mooi weer.', es: 'Ojalá haga buen tiempo mañana.' },
-                { nl: 'Als het regent, blijf ik thuis.', es: 'Si llueve, me quedo en casa.' },
-            ],
             11: [
-                { nl: 'Morgen ga ik naar de dokter.', es: 'Mañana voy al médico.' },
-                { nl: 'Volgend jaar woon ik in Spanje.', es: 'El año que viene estaré en España.' },
-                { nl: 'Zullen we samen reizen?', es: '¿Viajaremos juntos?' },
+                { nl: 'Ik ben dol op muziek.', es: 'Me encanta la música.' },
+                { nl: 'Het lawaai stoort hem.', es: 'Le molesta el ruido.' },
+                { nl: 'Geld interesseert ons niet.', es: 'No nos importa el dinero.' },
             ],
             12: [
-                { nl: 'Open het raam! (tú)', es: '¡Abre la ventana!' },
-                { nl: 'Kom niet te laat! (tú)', es: '¡No llegues tarde!' },
-                { nl: 'Ga zitten! (usted)', es: '¡Siéntese!' },
+                { nl: 'Ik zie hem elke dag.', es: 'Lo veo todos los días.' },
+                { nl: 'Ik bel je morgen.', es: 'Te llamo mañana.' },
+                { nl: 'Hij geeft het aan haar.', es: 'Se lo da a ella.' },
             ],
             13: [
-                { nl: 'Het boek werd geschreven door García Márquez.', es: 'El libro fue escrito por García Márquez.' },
-                { nl: 'Hier wordt Spaans gesproken.', es: 'Aquí se habla español.' },
-                { nl: 'De brief werd gisteren verzonden.', es: 'La carta fue enviada ayer.' },
+                { nl: 'Ik ga naar het centrum.', es: 'Voy al centro.' },
+                { nl: 'Ik ben in het park.', es: 'Estoy en el parque.' },
+                { nl: 'Ik kom van het werk.', es: 'Vengo del trabajo.' },
             ],
             14: [
-                { nl: 'Het is belangrijk dat jij de waarheid zegt.', es: 'Es importante que digas la verdad.' },
-                { nl: 'Ik wil dat jij hier bent.', es: 'Quiero que estés aquí.' },
-                { nl: 'Ik hoop dat het goed met je gaat.', es: 'Espero que estés bien.' },
+                { nl: 'Ik werk \'s ochtends.', es: 'Trabajo por la mañana.' },
+                { nl: 'Het is voor morgen.', es: 'Es para mañana.' },
+                { nl: 'Ik ga twee keer per week.', es: 'Voy dos veces por semana.' },
             ],
             15: [
-                { nl: 'Als ik geld had, zou ik reizen.', es: 'Si tuviera dinero, viajaría.' },
-                { nl: 'Als ik had gestudeerd, had ik geslaagd.', es: 'Si hubiera estudiado, habría aprobado.' },
-                { nl: 'Ik zou gaan als ik tijd had.', es: 'Iría si tuviera tiempo.' },
+                { nl: 'Mijn familie is groot.', es: 'Mi familia es grande.' },
+                { nl: 'Dit boek is van mij.', es: 'Este libro es mío.' },
+                { nl: 'Onze ouders wonen hier.', es: 'Nuestros padres viven aquí.' },
             ],
             16: [
-                { nl: 'Ik ben een brief aan het schrijven.', es: 'Estoy escribiendo una carta.' },
-                { nl: 'Zij woont nog steeds in Madrid.', es: 'Ella sigue viviendo en Madrid.' },
-                { nl: 'Ik studeer al twee uur Spaans.', es: 'Llevo dos horas estudiando español.' },
+                { nl: 'Gisteren werkte ik acht uur.', es: 'Ayer trabajé ocho horas.' },
+                { nl: 'Vorige week reisden wij naar Barcelona.', es: 'La semana pasada viajamos a Barcelona.' },
+                { nl: 'Gisteravond studeerde ik veel.', es: 'Anoche estudié mucho.' },
             ],
             17: [
+                { nl: 'Gisteren ging ik naar de bioscoop.', es: 'Ayer fui al cine.' },
+                { nl: 'Wat deed jij gisteren?', es: '¿Qué hiciste ayer?' },
+                { nl: 'Ik kon niet komen want ik was ziek.', es: 'No pude venir porque estuve enfermo.' },
+            ],
+            18: [
                 { nl: 'Toen ik klein was, woonde ik op het platteland.', es: 'Cuando era pequeño, vivía en el campo.' },
                 { nl: 'Elke dag ging ik naar het park.', es: 'Todos los días iba al parque.' },
                 { nl: 'Terwijl ik at, ging de telefoon.', es: 'Mientras comía, sonó el teléfono.' },
             ],
-            18: [
+            19: [
+                { nl: 'Madrid is groter dan Barcelona.', es: 'Madrid es más grande que Barcelona.' },
+                { nl: 'Dit boek is beter dan het andere.', es: 'Este libro es mejor que el otro.' },
+                { nl: 'Hij is de langste van de klas.', es: 'Es el más alto de la clase.' },
+            ],
+            20: [
+                { nl: 'Hij spreekt duidelijk.', es: 'Habla claramente.' },
+                { nl: 'Zij werkt snel.', es: 'Trabaja rápidamente.' },
+                { nl: 'Ik studeer altijd hier.', es: 'Siempre estudio aquí.' },
+            ],
+            21: [
+                { nl: 'Ik ga morgen studeren.', es: 'Voy a estudiar mañana.' },
+                { nl: 'Volgend jaar zullen we naar Spanje reizen.', es: 'El año que viene viajaremos a España.' },
+                { nl: 'Waar zou María toch zijn?', es: '¿Dónde estará María?' },
+            ],
+            22: [
+                { nl: 'Ik wil dat jij naar het feest komt.', es: 'Quiero que vengas a la fiesta.' },
+                { nl: 'Het is belangrijk dat jij studeert.', es: 'Es importante que estudies.' },
+                { nl: 'Ik geloof niet dat het waar is.', es: 'No creo que sea verdad.' },
+            ],
+            23: [
+                { nl: 'Spreek langzamer, alsjeblieft!', es: '¡Habla más despacio, por favor!' },
+                { nl: 'Kom niet te laat!', es: '¡No llegues tarde!' },
+                { nl: 'Vertel me de waarheid.', es: 'Dime la verdad.' },
+            ],
+            24: [
                 { nl: 'Ik heb vandaag veel geleerd.', es: 'He aprendido mucho hoy.' },
                 { nl: 'Ben jij ooit in Spanje geweest?', es: '¿Has estado alguna vez en España?' },
                 { nl: 'Wij hebben het examen gehaald.', es: 'Hemos aprobado el examen.' },
+            ],
+            25: [
+                { nl: 'Als ik geld had, zou ik reizen.', es: 'Si tuviera dinero, viajaría.' },
+                { nl: 'Zou u mij kunnen helpen?', es: '¿Podría ayudarme?' },
+                { nl: 'Als je studeert, zul je slagen.', es: 'Si estudias, aprobarás.' },
+            ],
+        };
+
+        // Mini-oefeningen per dag: snelle, diverse oefeningetjes
+        const lesMiniOef = {
+            1: [
+                { type: 'koppel', titel: 'Koppel de voornaamwoorden', items: [
+                    { left: 'yo', right: 'ik' }, { left: 'tú', right: 'jij' }, { left: 'él', right: 'hij' },
+                    { left: 'nosotros', right: 'wij' }, { left: 'ellos', right: 'zij (mv)' },
+                ]},
+                { type: 'meerkeuze', titel: 'Kies de juiste vorm van ser', vragen: [
+                    { vraag: 'Yo ___ estudiante.', opties: ['soy', 'eres', 'es', 'somos'], correct: 0 },
+                    { vraag: 'Nosotros ___ amigos.', opties: ['soy', 'eres', 'son', 'somos'], correct: 3 },
+                    { vraag: 'Ella ___ profesora.', opties: ['soy', 'es', 'son', 'eres'], correct: 1 },
+                    { vraag: 'Tú ___ holandés.', opties: ['soy', 'somos', 'eres', 'es'], correct: 2 },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ het Spaanse woord', vragen: [
+                    { hint: 'student', antwoord: 'estudiante' },
+                    { hint: 'vriend', antwoord: 'amigo' },
+                    { hint: 'docent (v)', antwoord: 'profesora' },
+                    { hint: 'vrouw', antwoord: 'mujer' },
+                ]},
+            ],
+            2: [
+                { type: 'meerkeuze', titel: 'Bepaald of onbepaald lidwoord?', vragen: [
+                    { vraag: '___ libro (bepaald, m)', opties: ['el', 'la', 'un', 'una'], correct: 0 },
+                    { vraag: '___ casa (bepaald, v)', opties: ['el', 'la', 'un', 'una'], correct: 1 },
+                    { vraag: '___ problema (bepaald)', opties: ['el', 'la', 'un', 'una'], correct: 0 },
+                    { vraag: '___ mano (bepaald)', opties: ['el', 'la', 'un', 'una'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel enkelvoud → meervoud', items: [
+                    { left: 'el libro', right: 'los libros' }, { left: 'la casa', right: 'las casas' },
+                    { left: 'la ciudad', right: 'las ciudades' }, { left: 'el día', right: 'los días' },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ het Spaanse woord', vragen: [
+                    { hint: 'dag', antwoord: 'día' },
+                    { hint: 'hand', antwoord: 'mano' },
+                    { hint: 'probleem', antwoord: 'problema' },
+                    { hint: 'stad', antwoord: 'ciudad' },
+                ]},
+            ],
+            3: [
+                { type: 'meerkeuze', titel: 'Welke vorm past?', vragen: [
+                    { vraag: 'una casa ___ (groot)', opties: ['grande', 'grandes', 'gran', 'grando'], correct: 0 },
+                    { vraag: 'los libros ___ (nieuw)', opties: ['nuevo', 'nueva', 'nuevos', 'nuevas'], correct: 2 },
+                    { vraag: 'las casas ___ (mooi)', opties: ['bonito', 'bonita', 'bonitos', 'bonitas'], correct: 3 },
+                    { vraag: 'un libro ___ (interessant)', opties: ['interesante', 'interesantes', 'interesanto', 'interesanta'], correct: 0 },
+                ]},
+                { type: 'koppel', titel: 'Koppel mannelijk → vrouwelijk', items: [
+                    { left: 'nuevo', right: 'nueva' }, { left: 'bonito', right: 'bonita' },
+                    { left: 'moderno', right: 'moderna' }, { left: 'alto', right: 'alta' },
+                ]},
+            ],
+            4: [
+                { type: 'meerkeuze', titel: 'Vervoeg het -ar werkwoord', vragen: [
+                    { vraag: 'Yo ___ español. (hablar)', opties: ['hablo', 'hablas', 'habla', 'hablamos'], correct: 0 },
+                    { vraag: 'Ella ___ mucho. (estudiar)', opties: ['estudio', 'estudias', 'estudia', 'estudian'], correct: 2 },
+                    { vraag: 'Nosotros ___ en casa. (trabajar)', opties: ['trabajo', 'trabajas', 'trabaja', 'trabajamos'], correct: 3 },
+                    { vraag: 'Ellos ___ mucho. (viajar)', opties: ['viajo', 'viajas', 'viaja', 'viajan'], correct: 3 },
+                ]},
+                { type: 'koppel', titel: 'Koppel persoon → uitgang (-ar)', items: [
+                    { left: 'yo', right: '-o' }, { left: 'tú', right: '-as' },
+                    { left: 'él/ella', right: '-a' }, { left: 'nosotros', right: '-amos' },
+                    { left: 'ellos', right: '-an' },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ de correcte vervoeging', vragen: [
+                    { hint: 'hablar → yo', antwoord: 'hablo' },
+                    { hint: 'trabajar → ella', antwoord: 'trabaja' },
+                    { hint: 'estudiar → nosotros', antwoord: 'estudiamos' },
+                    { hint: 'escuchar → tú', antwoord: 'escuchas' },
+                ]},
+            ],
+            5: [
+                { type: 'meerkeuze', titel: 'Vervoeg het -er/-ir werkwoord', vragen: [
+                    { vraag: 'Yo ___ en casa. (comer)', opties: ['como', 'comes', 'come', 'comemos'], correct: 0 },
+                    { vraag: 'Ella ___ en Madrid. (vivir)', opties: ['vivo', 'vives', 'vive', 'vivimos'], correct: 2 },
+                    { vraag: 'Nosotros ___ agua. (beber)', opties: ['bebo', 'bebes', 'bebe', 'bebemos'], correct: 3 },
+                    { vraag: 'Tú ___ una carta. (escribir)', opties: ['escribo', 'escribes', 'escribe', 'escribimos'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel -er en -ir werkwoorden', items: [
+                    { left: 'comer', right: 'eten' }, { left: 'beber', right: 'drinken' },
+                    { left: 'vivir', right: 'wonen' }, { left: 'escribir', right: 'schrijven' },
+                    { left: 'aprender', right: 'leren' },
+                ]},
+            ],
+            6: [
+                { type: 'meerkeuze', titel: 'Welke yo-vorm is correct?', vragen: [
+                    { vraag: 'tener → yo ...', opties: ['teno', 'tiene', 'tengo', 'tieno'], correct: 2 },
+                    { vraag: 'hacer → yo ...', opties: ['haco', 'hago', 'hace', 'haso'], correct: 1 },
+                    { vraag: 'salir → yo ...', opties: ['salo', 'sale', 'salgo', 'salo'], correct: 2 },
+                    { vraag: 'poner → yo ...', opties: ['pono', 'pone', 'pongo', 'ponigo'], correct: 2 },
+                ]},
+                { type: 'koppel', titel: 'Koppel infinitief → yo-vorm', items: [
+                    { left: 'tener', right: 'tengo' }, { left: 'hacer', right: 'hago' },
+                    { left: 'ir', right: 'voy' }, { left: 'venir', right: 'vengo' },
+                    { left: 'salir', right: 'salgo' },
+                ]},
+            ],
+            7: [
+                { type: 'meerkeuze', titel: 'Klinkerwissel of niet?', vragen: [
+                    { vraag: 'querer → yo ...', opties: ['quero', 'quiero', 'quieres', 'queremos'], correct: 1 },
+                    { vraag: 'poder → nosotros ...', opties: ['puedemos', 'podemos', 'podem', 'pueden'], correct: 1 },
+                    { vraag: 'pensar → ella ...', opties: ['pensa', 'pensa', 'piensa', 'piensas'], correct: 2 },
+                    { vraag: 'dormir → ellos ...', opties: ['dormen', 'duermen', 'dormimos', 'duerman'], correct: 1 },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ de juiste vorm', vragen: [
+                    { hint: 'querer → yo', antwoord: 'quiero' },
+                    { hint: 'poder → tú', antwoord: 'puedes' },
+                    { hint: 'volver → yo', antwoord: 'vuelvo' },
+                    { hint: 'pensar → nosotros', antwoord: 'pensamos' },
+                ]},
+            ],
+            8: [
+                { type: 'meerkeuze', titel: 'Ser of estar?', vragen: [
+                    { vraag: 'Ella ___ cansada. (moe, tijdelijk)', opties: ['es', 'está'], correct: 1 },
+                    { vraag: 'Él ___ profesor. (beroep)', opties: ['es', 'está'], correct: 0 },
+                    { vraag: 'La tienda ___ abierta. (open, nu)', opties: ['es', 'está'], correct: 1 },
+                    { vraag: 'Madrid ___ una ciudad grande.', opties: ['es', 'está'], correct: 0 },
+                ]},
+                { type: 'koppel', titel: 'Koppel gebruik → werkwoord', items: [
+                    { left: 'beroep', right: 'ser' }, { left: 'locatie', right: 'estar' },
+                    { left: 'tijdelijke toestand', right: 'estar' }, { left: 'nationaliteit', right: 'ser' },
+                ]},
+            ],
+            9: [
+                { type: 'meerkeuze', titel: 'Hay of estar?', vragen: [
+                    { vraag: '___ un banco aquí. (er is)', opties: ['Hay', 'Está', 'Es', 'Son'], correct: 0 },
+                    { vraag: 'El banco ___ en la esquina. (locatie)', opties: ['hay', 'está', 'es', 'son'], correct: 1 },
+                    { vraag: 'No ___ problema.', opties: ['hay', 'está', 'es', 'son'], correct: 0 },
+                    { vraag: 'La farmacia ___ cerca.', opties: ['hay', 'está', 'es', 'son'], correct: 1 },
+                ]},
+            ],
+            10: [
+                { type: 'meerkeuze', titel: 'Gusta of gustan?', vragen: [
+                    { vraag: 'Me ___ el café.', opties: ['gusta', 'gustan'], correct: 0 },
+                    { vraag: 'Me ___ los libros.', opties: ['gusta', 'gustan'], correct: 1 },
+                    { vraag: 'Me ___ viajar.', opties: ['gusta', 'gustan'], correct: 0 },
+                    { vraag: 'Me ___ las películas.', opties: ['gusta', 'gustan'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel indirect object', items: [
+                    { left: 'a mí', right: 'me gusta' }, { left: 'a ti', right: 'te gusta' },
+                    { left: 'a él/ella', right: 'le gusta' }, { left: 'a nosotros', right: 'nos gusta' },
+                ]},
+            ],
+            11: [
+                { type: 'koppel', titel: 'Koppel gustar-type werkwoord', items: [
+                    { left: 'encantar', right: 'dol zijn op' }, { left: 'molestar', right: 'storen' },
+                    { left: 'interesar', right: 'interesseren' }, { left: 'importar', right: 'uitmaken' },
+                ]},
+                { type: 'meerkeuze', titel: 'Welk werkwoord past?', vragen: [
+                    { vraag: 'Me ___ la música. (dol op)', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 0 },
+                    { vraag: 'Le ___ el ruido. (storen)', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 1 },
+                    { vraag: 'Nos ___ la política. (interesseren)', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 3 },
+                ]},
+            ],
+            12: [
+                { type: 'meerkeuze', titel: 'Direct of indirect object?', vragen: [
+                    { vraag: '___ veo. (hem)', opties: ['Lo', 'Le', 'La', 'Se'], correct: 0 },
+                    { vraag: '___ doy el libro. (aan haar)', opties: ['Lo', 'Le', 'La', 'Se'], correct: 1 },
+                    { vraag: '___ llamo mañana. (jou)', opties: ['Lo', 'Te', 'Le', 'Se'], correct: 1 },
+                    { vraag: '___ lo doy. (le + lo wordt...)', opties: ['Le lo', 'Se', 'Lo le', 'Les'], correct: 1 },
+                ]},
+            ],
+            13: [
+                { type: 'koppel', titel: 'Koppel voorzetsels', items: [
+                    { left: 'en', right: 'in (locatie)' }, { left: 'a', right: 'naar (richting)' },
+                    { left: 'de', right: 'van (herkomst)' }, { left: 'debajo de', right: 'onder' },
+                    { left: 'enfrente de', right: 'tegenover' },
+                ]},
+                { type: 'meerkeuze', titel: 'Welk voorzetsel?', vragen: [
+                    { vraag: 'Voy ___ centro. (naar het)', opties: ['en el', 'al', 'del', 'por el'], correct: 1 },
+                    { vraag: 'Vengo ___ trabajo. (van het)', opties: ['en el', 'al', 'del', 'por el'], correct: 2 },
+                    { vraag: 'Estoy ___ la oficina. (in)', opties: ['en', 'a', 'de', 'por'], correct: 0 },
+                ]},
+            ],
+            14: [
+                { type: 'meerkeuze', titel: 'Por of para?', vragen: [
+                    { vraag: 'Trabajo ___ la mañana. (dagdeel)', opties: ['por', 'para'], correct: 0 },
+                    { vraag: 'Es ___ mañana. (deadline)', opties: ['por', 'para'], correct: 1 },
+                    { vraag: 'Dos veces ___ semana. (frequentie)', opties: ['por', 'para'], correct: 0 },
+                    { vraag: 'El regalo es ___ ti. (bestemming)', opties: ['por', 'para'], correct: 1 },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ het Spaanse woord', vragen: [
+                    { hint: 'uur', antwoord: 'hora' },
+                    { hint: 'week', antwoord: 'semana' },
+                    { hint: 'vroeg', antwoord: 'temprano' },
+                    { hint: 'laat', antwoord: 'tarde' },
+                ]},
+            ],
+            15: [
+                { type: 'meerkeuze', titel: 'Welk bezittelijk voornaamwoord?', vragen: [
+                    { vraag: '___ casa es grande. (mijn)', opties: ['Mi', 'Mío', 'Tu', 'Su'], correct: 0 },
+                    { vraag: 'El libro es ___. (van mij)', opties: ['mi', 'mío', 'tu', 'su'], correct: 1 },
+                    { vraag: '___ padres viven aquí. (onze)', opties: ['Mi', 'Nuestro', 'Nuestros', 'Su'], correct: 2 },
+                    { vraag: '¿Es ___ coche? (jouw)', opties: ['mi', 'tu', 'su', 'mío'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel onbeklemtoond → beklemtoond', items: [
+                    { left: 'mi', right: 'mío' }, { left: 'tu', right: 'tuyo' },
+                    { left: 'su', right: 'suyo' }, { left: 'nuestro', right: 'nuestro' },
+                ]},
+            ],
+            16: [
+                { type: 'meerkeuze', titel: 'Pretérito indefinido: regelmatig', vragen: [
+                    { vraag: 'Ayer yo ___ mucho. (trabajar)', opties: ['trabajé', 'trabajó', 'trabajaste', 'trabajaron'], correct: 0 },
+                    { vraag: 'Ella ___ una carta. (escribir)', opties: ['escribí', 'escribiste', 'escribió', 'escribieron'], correct: 2 },
+                    { vraag: 'Nosotros ___. (comer)', opties: ['comí', 'comiste', 'comió', 'comimos'], correct: 3 },
+                ]},
+                { type: 'koppel', titel: 'Koppel signaaltwoord → vertaling', items: [
+                    { left: 'ayer', right: 'gisteren' }, { left: 'anoche', right: 'gisteravond' },
+                    { left: 'la semana pasada', right: 'vorige week' }, { left: 'hace dos días', right: 'twee dagen geleden' },
+                ]},
+            ],
+            17: [
+                { type: 'meerkeuze', titel: 'Onregelmatige pretérito', vragen: [
+                    { vraag: 'ir/ser → yo ...', opties: ['fui', 'fue', 'fuimos', 'fueron'], correct: 0 },
+                    { vraag: 'hacer → ella ...', opties: ['hice', 'hiciste', 'hizo', 'hicimos'], correct: 2 },
+                    { vraag: 'tener → yo ...', opties: ['tuve', 'tuvo', 'tuvimos', 'tuvieron'], correct: 0 },
+                    { vraag: 'decir → ellos ...', opties: ['dije', 'dijo', 'dijimos', 'dijeron'], correct: 3 },
+                ]},
+                { type: 'koppel', titel: 'Koppel infinitief → stam pretérito', items: [
+                    { left: 'tener', right: 'tuv-' }, { left: 'estar', right: 'estuv-' },
+                    { left: 'poder', right: 'pud-' }, { left: 'hacer', right: 'hic-/hiz-' },
+                    { left: 'decir', right: 'dij-' },
+                ]},
+            ],
+            18: [
+                { type: 'meerkeuze', titel: 'Imperfecto: welke vorm?', vragen: [
+                    { vraag: 'Yo siempre ___ al parque. (ir)', opties: ['iba', 'iban', 'íbamos', 'ibas'], correct: 0 },
+                    { vraag: 'Ella ___ muy bonita. (ser)', opties: ['era', 'eras', 'éramos', 'eran'], correct: 0 },
+                    { vraag: 'Nosotros ___ mucho. (jugar)', opties: ['jugaba', 'jugabas', 'jugábamos', 'jugaban'], correct: 2 },
+                    { vraag: 'Ellos ___ en Madrid. (vivir)', opties: ['vivía', 'vivías', 'vivíamos', 'vivían'], correct: 3 },
+                ]},
+                { type: 'koppel', titel: 'Koppel uitgang → werkwoordtype', items: [
+                    { left: '-aba', right: '-ar werkwoord' }, { left: '-ía', right: '-er/-ir werkwoord' },
+                    { left: 'era', right: 'ser (onregelm.)' }, { left: 'iba', right: 'ir (onregelm.)' },
+                ]},
+            ],
+            19: [
+                { type: 'meerkeuze', titel: 'Vergelijkingen', vragen: [
+                    { vraag: 'Madrid es ___ grande que Barcelona.', opties: ['más', 'menos', 'tan', 'muy'], correct: 0 },
+                    { vraag: 'Este libro es ___ que el otro. (beter)', opties: ['más bueno', 'mejor', 'buenísimo', 'más bien'], correct: 1 },
+                    { vraag: 'Juan es tan alto ___ Pedro.', opties: ['que', 'como', 'de', 'más'], correct: 1 },
+                    { vraag: 'Es el más alto ___ la clase.', opties: ['que', 'como', 'de', 'en'], correct: 2 },
+                ]},
+                { type: 'koppel', titel: 'Koppel onregelmatige vergelijkingen', items: [
+                    { left: 'bueno', right: 'mejor' }, { left: 'malo', right: 'peor' },
+                    { left: 'grande', right: 'mayor' }, { left: 'pequeño', right: 'menor' },
+                ]},
+            ],
+            20: [
+                { type: 'meerkeuze', titel: 'Muy of mucho?', vragen: [
+                    { vraag: 'Es ___ interesante.', opties: ['muy', 'mucho'], correct: 0 },
+                    { vraag: 'Trabaja ___.', opties: ['muy', 'mucho'], correct: 1 },
+                    { vraag: 'Hace ___ calor.', opties: ['muy', 'mucho'], correct: 1 },
+                    { vraag: 'Es ___ rápido.', opties: ['muy', 'mucho'], correct: 0 },
+                ]},
+                { type: 'woordzoeker', titel: 'Vorm het bijwoord met -mente', vragen: [
+                    { hint: 'rápido →', antwoord: 'rápidamente' },
+                    { hint: 'lento →', antwoord: 'lentamente' },
+                    { hint: 'claro →', antwoord: 'claramente' },
+                    { hint: 'fácil →', antwoord: 'fácilmente' },
+                ]},
+            ],
+            21: [
+                { type: 'meerkeuze', titel: 'Ir a of futuro simple?', vragen: [
+                    { vraag: 'Vanavond ___ pizza eten. (ir a, yo)', opties: ['voy a', 'comeré', 'como', 'iré'], correct: 0 },
+                    { vraag: 'Algún día ___ famoso. (ser, futuro)', opties: ['voy a ser', 'seré', 'soy', 'sea'], correct: 1 },
+                    { vraag: '___ las tres. (het zal wel... zijn)', opties: ['Son', 'Están', 'Serán', 'Van a ser'], correct: 2 },
+                ]},
+                { type: 'koppel', titel: 'Koppel onregelmatige futuro-stam', items: [
+                    { left: 'tener', right: 'tendr-' }, { left: 'hacer', right: 'har-' },
+                    { left: 'decir', right: 'dir-' }, { left: 'poder', right: 'podr-' },
+                    { left: 'salir', right: 'saldr-' },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ de futuro-vorm', vragen: [
+                    { hint: 'tener → yo', antwoord: 'tendré' },
+                    { hint: 'hacer → ella', antwoord: 'hará' },
+                    { hint: 'venir → nosotros', antwoord: 'vendremos' },
+                    { hint: 'poder → tú', antwoord: 'podrás' },
+                ]},
+            ],
+            22: [
+                { type: 'meerkeuze', titel: 'Indicatief of subjuntivo?', vragen: [
+                    { vraag: 'Creo que ___ verdad. (ser)', opties: ['es', 'sea'], correct: 0 },
+                    { vraag: 'No creo que ___ verdad. (ser)', opties: ['es', 'sea'], correct: 1 },
+                    { vraag: 'Quiero que ___ aquí. (estar, tú)', opties: ['estás', 'estés'], correct: 1 },
+                    { vraag: 'Sé que ___ aquí. (estar, tú)', opties: ['estás', 'estés'], correct: 0 },
+                ]},
+                { type: 'koppel', titel: 'Koppel trigger → type', items: [
+                    { left: 'querer que', right: 'wil/wens' }, { left: 'dudar que', right: 'twijfel' },
+                    { left: 'alegrarse de que', right: 'emotie' }, { left: 'es posible que', right: 'onpersoonlijk' },
+                ]},
+            ],
+            23: [
+                { type: 'meerkeuze', titel: 'Welke imperatief-vorm?', vragen: [
+                    { vraag: 'decir → tú (bevestigend)', opties: ['dice', 'di', 'dices', 'digas'], correct: 1 },
+                    { vraag: 'hacer → tú (bevestigend)', opties: ['hace', 'haz', 'haces', 'hagas'], correct: 1 },
+                    { vraag: 'hablar → tú (ontkennend)', opties: ['no habla', 'no hablas', 'no hables', 'no hablé'], correct: 2 },
+                    { vraag: 'venir → tú (bevestigend)', opties: ['viene', 'ven', 'vienes', 'vengas'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel onregelmatige imperatieven', items: [
+                    { left: 'ser', right: 'sé' }, { left: 'ir', right: 've' },
+                    { left: 'poner', right: 'pon' }, { left: 'salir', right: 'sal' },
+                    { left: 'tener', right: 'ten' },
+                ]},
+            ],
+            24: [
+                { type: 'meerkeuze', titel: 'Pretérito perfecto of indefinido?', vragen: [
+                    { vraag: 'Hoy ___ mucho. (aprender, yo)', opties: ['he aprendido', 'aprendí'], correct: 0 },
+                    { vraag: 'Ayer ___ al cine. (ir, yo)', opties: ['he ido', 'fui'], correct: 1 },
+                    { vraag: 'Esta semana ___ mucho. (trabajar, yo)', opties: ['he trabajado', 'trabajé'], correct: 0 },
+                    { vraag: 'El año pasado ___ en España. (estar, yo)', opties: ['he estado', 'estuve'], correct: 1 },
+                ]},
+                { type: 'koppel', titel: 'Koppel onregelmatige participia', items: [
+                    { left: 'hacer', right: 'hecho' }, { left: 'decir', right: 'dicho' },
+                    { left: 'escribir', right: 'escrito' }, { left: 'ver', right: 'visto' },
+                    { left: 'poner', right: 'puesto' },
+                ]},
+            ],
+            25: [
+                { type: 'meerkeuze', titel: 'Si-zinnen: welk type?', vragen: [
+                    { vraag: 'Si estudias, ___. (slagen, tú)', opties: ['aprobarás', 'aprobarías', 'apruebas', 'apruebes'], correct: 0 },
+                    { vraag: 'Si tuviera dinero, ___. (reizen, yo)', opties: ['viajo', 'viajaré', 'viajaría', 'viajara'], correct: 2 },
+                    { vraag: 'Si ___ buen tiempo, vamos. (hacer)', opties: ['hace', 'haga', 'hiciera', 'haría'], correct: 0 },
+                ]},
+                { type: 'koppel', titel: 'Koppel condicionalis-stam', items: [
+                    { left: 'tener', right: 'tendría' }, { left: 'hacer', right: 'haría' },
+                    { left: 'poder', right: 'podría' }, { left: 'decir', right: 'diría' },
+                    { left: 'saber', right: 'sabría' },
+                ]},
+                { type: 'woordzoeker', titel: 'Typ de conditionalis', vragen: [
+                    { hint: 'hablar → yo', antwoord: 'hablaría' },
+                    { hint: 'comer → ella', antwoord: 'comería' },
+                    { hint: 'tener → tú', antwoord: 'tendrías' },
+                    { hint: 'hacer → nosotros', antwoord: 'haríamos' },
+                ]},
             ],
         };
 
@@ -4818,57 +5962,152 @@
                 ],
             },
             4: {
-                titel: 'Iemand leren kennen',
+                titel: 'Op het werk (reguliere -ar werkwoorden)',
                 stappen: [
-                    { bot: '¡Hola! ¿Cómo te llamas?', hint: 'Hoe heet jij?', opties: [
-                        { tekst: 'Me llamo Carlos. ¿Y tú?', correct: true, uitleg: '✅ Goed — en ¿Y tú? vraag jij ook naar de naam' },
-                        { tekst: 'Llamo Carlos.', correct: false, uitleg: 'Fout — het reflexieve voornaamwoord me is nodig: me llamo' },
-                        { tekst: 'Mi nombre es Carlos muy bien.', correct: false, uitleg: 'Fout — muy bien hoort er niet bij' },
+                    { bot: '¿Hablas español?', hint: 'Spreek jij Spaans?', opties: [
+                        { tekst: 'Sí, hablo un poco de español.', correct: true, uitleg: '✅ Goed! hablar → yo = hablo' },
+                        { tekst: 'Sí, hables español.', correct: false, uitleg: 'Fout — hables is subjuntivo, hier moet je hablo gebruiken' },
+                        { tekst: 'Sí, habla español.', correct: false, uitleg: 'Fout — habla is de él/ella-vorm, niet yo' },
                     ]},
-                    { bot: '¿Dónde vives?', hint: 'Waar woon jij?', opties: [
-                        { tekst: 'Vivo en Ámsterdam.', correct: true, uitleg: '✅ Correct! vivo en = ik woon in' },
-                        { tekst: 'Vivo Ámsterdam.', correct: false, uitleg: 'Fout — vivir vraagt het voorzetsel en' },
-                        { tekst: 'Estoy en Ámsterdam.', correct: false, uitleg: 'Deels goed qua betekenis, maar vivo is specifieker voor wonen' },
+                    { bot: '¿Dónde trabajas?', hint: 'Waar werk jij?', opties: [
+                        { tekst: 'Trabajo en una empresa en Madrid.', correct: true, uitleg: '✅ Perfect! trabajar → yo = trabajo' },
+                        { tekst: 'Trabaja en Madrid.', correct: false, uitleg: 'Fout — trabaja is de él/ella-vorm' },
+                        { tekst: 'Trabajas en Madrid.', correct: false, uitleg: 'Fout — trabajas is de tú-vorm, maar je praat over jezelf' },
                     ]},
-                    { bot: '¿A qué te dedicas?', hint: 'Wat doe jij voor werk?', opties: [
-                        { tekst: 'Soy diseñador. Trabajo en una empresa.', correct: true, uitleg: '✅ Perfect! ser voor beroep, trabajar voor werkplek' },
-                        { tekst: 'Estoy diseñador.', correct: false, uitleg: 'Fout — beroep vraagt ser, niet estar' },
-                        { tekst: 'Tengo trabajo diseñador.', correct: false, uitleg: 'Fout — tener werkt hier niet zo' },
+                    { bot: '¿Estudias mucho?', hint: 'Studeer jij veel?', opties: [
+                        { tekst: 'Sí, estudio español todos los días.', correct: true, uitleg: '✅ Correct! estudiar → yo = estudio' },
+                        { tekst: 'Sí, estudia todos los días.', correct: false, uitleg: 'Fout — estudia is de él/ella-vorm' },
+                        { tekst: 'Sí, estudiamos todos los días.', correct: false, uitleg: 'Fout — estudiamos is de nosotros-vorm' },
                     ]},
                 ],
             },
             6: {
-                titel: 'De weg vragen',
+                titel: 'Dagelijkse bezigheden (onregelmatige yo-vormen)',
                 stappen: [
-                    { bot: 'Hola, ¿me puede decir dónde está la estación?', hint: 'Kunt u mij zeggen waar het station is?', opties: [
-                        { tekst: 'Sí, está a dos calles de aquí, a la derecha.', correct: true, uitleg: '✅ Goed! estar voor locatie + richtingsaanduiding' },
-                        { tekst: 'Sí, es a dos calles de aquí.', correct: false, uitleg: 'Fout — locatie vraagt estar, niet ser' },
-                        { tekst: 'No sé. Estoy extranjero.', correct: false, uitleg: 'Fout — buitenlander zijn is een eigenschap → ser extranjero' },
+                    { bot: '¿Qué haces hoy?', hint: 'Wat doe jij vandaag?', opties: [
+                        { tekst: 'Hago la tarea y salgo con amigos.', correct: true, uitleg: '✅ Goed! hacer → yo = hago, salir → yo = salgo' },
+                        { tekst: 'Haco la tarea.', correct: false, uitleg: 'Fout — hacer → yo = hago (niet haco)' },
+                        { tekst: 'Haces la tarea.', correct: false, uitleg: 'Fout — haces is de tú-vorm, niet yo' },
                     ]},
-                    { bot: '¿Está lejos?', hint: 'Is het ver?', opties: [
-                        { tekst: 'No, está muy cerca, a unos cinco minutos a pie.', correct: true, uitleg: '✅ Perfect! cerca = dichtbij, a pie = te voet' },
-                        { tekst: 'No, es muy cerca.', correct: false, uitleg: 'Fout — afstand/locatie → estar' },
-                        { tekst: 'No, tiene cinco minutos.', correct: false, uitleg: 'Fout — tener werkt hier niet' },
+                    { bot: '¿A dónde vas?', hint: 'Waar ga je naartoe?', opties: [
+                        { tekst: 'Voy al trabajo.', correct: true, uitleg: '✅ Perfect! ir → yo = voy, a + el = al' },
+                        { tekst: 'Vo al trabajo.', correct: false, uitleg: 'Fout — ir → yo = voy (niet vo)' },
+                        { tekst: 'Vamos al trabajo.', correct: false, uitleg: 'Fout — vamos is de nosotros-vorm' },
+                    ]},
+                    { bot: '¿Tienes trabajo hoy?', hint: 'Heb jij werk vandaag?', opties: [
+                        { tekst: 'Sí, tengo mucho trabajo hoy.', correct: true, uitleg: '✅ Correct! tener → yo = tengo' },
+                        { tekst: 'Sí, tiene mucho trabajo.', correct: false, uitleg: 'Fout — tiene is de él/ella-vorm' },
+                        { tekst: 'Sí, teno trabajo.', correct: false, uitleg: 'Fout — tener → yo = tengo (niet teno)' },
                     ]},
                 ],
             },
             7: {
-                titel: 'In het restaurant',
+                titel: 'Wat wil jij? (klinkerwisselingen)',
                 stappen: [
-                    { bot: '¿Qué le apetece de primero?', hint: 'Wat wilt u als voorgerecht?', opties: [
-                        { tekst: 'Me gustaría la sopa, por favor.', correct: true, uitleg: '✅ Goed! me gustaría = ik zou willen (beleefd)' },
-                        { tekst: 'Me gusta la sopa, por favor.', correct: false, uitleg: 'Bijna — me gusta = ik vind het lekker, me gustaría = ik wil graag' },
-                        { tekst: 'Quiero la sopas.', correct: false, uitleg: 'Fout — la sopa (enkelvoud, met lidwoord)' },
+                    { bot: '¿Quieres un café?', hint: 'Wil jij een koffie?', opties: [
+                        { tekst: 'Sí, quiero un café con leche.', correct: true, uitleg: '✅ Goed! querer → yo = quiero (e→ie)' },
+                        { tekst: 'Sí, quero un café.', correct: false, uitleg: 'Fout — querer → yo = quiero (e→ie klinkerwissel)' },
+                        { tekst: 'Sí, queremos un café.', correct: false, uitleg: 'Fout — queremos is wij-vorm' },
                     ]},
-                    { bot: '¿Y de segundo?', hint: 'En als hoofdgerecht?', opties: [
-                        { tekst: 'Voy a tomar el pollo asado.', correct: true, uitleg: '✅ Correct! voy a tomar = ik ga nemen' },
-                        { tekst: 'Voy tomar pollo asado.', correct: false, uitleg: 'Fout — ir + a + infinitief: voy a tomar' },
-                        { tekst: 'Me gusta pollo.', correct: false, uitleg: 'Fout — je bestelt niet met me gusta' },
+                    { bot: '¿Puedes venir mañana?', hint: 'Kun jij morgen komen?', opties: [
+                        { tekst: 'No, no puedo. Pero puedo venir el viernes.', correct: true, uitleg: '✅ Perfect! poder → yo = puedo (o→ue)' },
+                        { tekst: 'No, no podo.', correct: false, uitleg: 'Fout — poder → yo = puedo (o→ue klinkerwissel)' },
+                        { tekst: 'No, no podemos.', correct: false, uitleg: 'Fout — podemos is wij-vorm, en geen klinkerwissel bij nosotros!' },
                     ]},
-                    { bot: '¿Algo para beber?', hint: 'Iets te drinken?', opties: [
-                        { tekst: 'Agua mineral sin gas, por favor.', correct: true, uitleg: '✅ Perfect! sin gas = plat water' },
-                        { tekst: 'Sí, agua con mucho gas.', correct: false, uitleg: 'Con gas = bruisend — prima, maar "mucho gas" klinkt raar' },
-                        { tekst: 'Me gustan el agua.', correct: false, uitleg: 'Fout — agua is enkelvoud: me gusta el agua' },
+                    { bot: '¿A qué hora vuelves a casa?', hint: 'Hoe laat kom jij terug naar huis?', opties: [
+                        { tekst: 'Vuelvo a las ocho de la noche.', correct: true, uitleg: '✅ Correct! volver → yo = vuelvo (o→ue)' },
+                        { tekst: 'Volvo a las ocho.', correct: false, uitleg: 'Fout — volver → yo = vuelvo (o→ue klinkerwissel)' },
+                        { tekst: 'Volvemos a las ocho.', correct: false, uitleg: 'Fout — volvemos is wij-vorm, en geen wissel bij nosotros!' },
+                    ]},
+                ],
+            },
+            8: {
+                titel: 'Hoe voel je je? (ser vs estar)',
+                stappen: [
+                    { bot: '¿Cómo estás hoy?', hint: 'Hoe gaat het met je vandaag?', opties: [
+                        { tekst: 'Estoy un poco cansado, pero bien.', correct: true, uitleg: '✅ Goed! estar voor tijdelijke toestand (moe zijn)' },
+                        { tekst: 'Soy cansado hoy.', correct: false, uitleg: 'Fout — moe zijn is tijdelijk → estar, niet ser' },
+                        { tekst: 'Tengo cansado.', correct: false, uitleg: 'Fout — tener werkt hier niet' },
+                    ]},
+                    { bot: '¿Tu amigo es simpático?', hint: 'Is jouw vriend aardig?', opties: [
+                        { tekst: 'Sí, es muy simpático y divertido.', correct: true, uitleg: '✅ Perfect! ser voor permanente eigenschappen' },
+                        { tekst: 'Sí, está muy simpático.', correct: false, uitleg: 'Fout — karakter is permanent → ser (estar zou tijdelijk impliceren)' },
+                        { tekst: 'Sí, tiene simpático.', correct: false, uitleg: 'Fout — tener werkt niet voor eigenschappen' },
+                    ]},
+                ],
+            },
+            10: {
+                titel: 'Wat vind jij lekker? (gustar)',
+                stappen: [
+                    { bot: '¿Te gusta la comida española?', hint: 'Vind jij Spaans eten lekker?', opties: [
+                        { tekst: 'Sí, me gusta mucho la paella.', correct: true, uitleg: '✅ Goed! me gusta + enkelvoud' },
+                        { tekst: 'Sí, me gustan la paella.', correct: false, uitleg: 'Fout — paella is enkelvoud, dus gusta (niet gustan)' },
+                        { tekst: 'Sí, yo gusto la paella.', correct: false, uitleg: 'Fout — gustar werkt anders: me gusta (het bevalt mij)' },
+                    ]},
+                    { bot: '¿Qué deportes te gustan?', hint: 'Van welke sporten hou jij?', opties: [
+                        { tekst: 'Me gustan el fútbol y el tenis.', correct: true, uitleg: '✅ Perfect! me gustan + meervoud' },
+                        { tekst: 'Me gusta el fútbol y el tenis.', correct: false, uitleg: 'Bijna — meervoud onderwerp (twee sporten) → gustan' },
+                        { tekst: 'Yo gusto deportes.', correct: false, uitleg: 'Fout — gustar gebruikt indirect object: me gustan' },
+                    ]},
+                ],
+            },
+            21: {
+                titel: 'Toekomstplannen (ir a + infinitivo & futuro simple)',
+                stappen: [
+                    { bot: '¿Qué vas a hacer este fin de semana?', hint: 'Wat ga je dit weekend doen?', opties: [
+                        { tekst: 'Voy a visitar a mis abuelos.', correct: true, uitleg: '✅ Goed! ir a + infinitivo voor nabije toekomst' },
+                        { tekst: 'Voy visitar mis abuelos.', correct: false, uitleg: 'Fout — ir a + infinitivo: de "a" mag niet ontbreken' },
+                        { tekst: 'Fui a visitar a mis abuelos.', correct: false, uitleg: 'Fout — fui is verleden tijd (pretérito), niet toekomst' },
+                    ]},
+                    { bot: '¿Crees que lloverá mañana?', hint: 'Denk je dat het morgen zal regenen?', opties: [
+                        { tekst: 'No sé, pero creo que hará buen tiempo.', correct: true, uitleg: '✅ Perfect! hacer → hará (futuro simple)' },
+                        { tekst: 'No sé, pero creo que hacerá buen tiempo.', correct: false, uitleg: 'Fout — hacer is onregelmatig: har- (niet hacer-)' },
+                        { tekst: 'No sé, pero creo que hace buen tiempo.', correct: false, uitleg: 'Fout — hace is tegenwoordige tijd, niet toekomst' },
+                    ]},
+                    { bot: '¿Dónde vivirás en el futuro?', hint: 'Waar zul je in de toekomst wonen?', opties: [
+                        { tekst: 'Viviré en Barcelona, cerca del mar.', correct: true, uitleg: '✅ Correct! vivir → viviré (futuro simple, regulier)' },
+                        { tekst: 'Vivré en Barcelona.', correct: false, uitleg: 'Fout — regulier: hele infinitief + uitgang: viviré' },
+                        { tekst: 'Voy a vivir en Barcelona.', correct: false, uitleg: 'Niet fout, maar de vraag gebruikt futuro simple — antwoord ook zo!' },
+                    ]},
+                ],
+            },
+            23: {
+                titel: 'Instructies geven (imperativo)',
+                stappen: [
+                    { bot: 'Estoy perdido. ¿Cómo llego al centro?', hint: 'Ik ben verdwaald. Hoe kom ik in het centrum?', opties: [
+                        { tekst: 'Sigue recto y luego gira a la derecha.', correct: true, uitleg: '✅ Goed! seguir → sigue (tú), girar → gira (tú)' },
+                        { tekst: 'Sigues recto y giras a la derecha.', correct: false, uitleg: 'Fout — dat is tegenwoordige tijd (indicativo), geen gebiedende wijs' },
+                        { tekst: 'Seguir recto y girar a la derecha.', correct: false, uitleg: 'Fout — infinitief is geen imperativo' },
+                    ]},
+                    { bot: 'Quiero mejorar mi español. ¿Qué me recomiendas?', hint: 'Ik wil mijn Spaans verbeteren. Wat raad je aan?', opties: [
+                        { tekst: 'Lee libros en español y escucha podcasts.', correct: true, uitleg: '✅ Perfect! leer → lee (tú), escuchar → escucha (tú)' },
+                        { tekst: 'Lees libros y escuchas podcasts.', correct: false, uitleg: 'Fout — "lees" is Nederlands, en escuchas is indicativo' },
+                        { tekst: 'No leas libros, solo mira películas.', correct: false, uitleg: 'Bijna — leas is negatieve imperativo (juist!), maar het advies klopt niet met de vraag' },
+                    ]},
+                    { bot: 'Me duele la cabeza.', hint: 'Ik heb hoofdpijn.', opties: [
+                        { tekst: 'Toma una pastilla y descansa un poco.', correct: true, uitleg: '✅ Correct! tomar → toma (tú), descansar → descansa (tú)' },
+                        { tekst: 'Tomas una pastilla y descansas.', correct: false, uitleg: 'Fout — indicativo in plaats van imperativo' },
+                        { tekst: 'Tomé una pastilla.', correct: false, uitleg: 'Fout — tomé is "ik nam" (pretérito), geen imperativo' },
+                    ]},
+                ],
+            },
+            25: {
+                titel: 'Wat zou jij doen? (conditionalis + si-zinnen)',
+                stappen: [
+                    { bot: '¿Qué harías con un millón de euros?', hint: 'Wat zou jij doen met een miljoen euro?', opties: [
+                        { tekst: 'Viajaría por todo el mundo.', correct: true, uitleg: '✅ Goed! viajar → viajaría (conditionalis)' },
+                        { tekst: 'Viajaba por todo el mundo.', correct: false, uitleg: 'Fout — viajaba is imperfecto, niet conditionalis' },
+                        { tekst: 'Viajaré por todo el mundo.', correct: false, uitleg: 'Fout — viajaré is futuro simple, niet conditionalis' },
+                    ]},
+                    { bot: 'Si pudieras vivir en cualquier país, ¿cuál elegirías?', hint: 'Als je in elk land kon wonen, welk zou je kiezen?', opties: [
+                        { tekst: 'Si pudiera elegir, viviría en España.', correct: true, uitleg: '✅ Perfect! si + imperfecto de subjuntivo + conditionalis' },
+                        { tekst: 'Si puedo elegir, vivo en España.', correct: false, uitleg: 'Fout — bij een hypothetische si-zin gebruik je subjuntivo + conditionalis' },
+                        { tekst: 'Si pudiera elegir, vivo en España.', correct: false, uitleg: 'Fout — de hoofdzin moet ook conditionalis zijn: viviría' },
+                    ]},
+                    { bot: '¿Qué consejo le darías a tu yo del pasado?', hint: 'Welk advies zou je aan je vroegere zelf geven?', opties: [
+                        { tekst: 'Le diría que estudiara más idiomas.', correct: true, uitleg: '✅ Correct! decir → diría (conditionalis, onregelmatig: dir-)' },
+                        { tekst: 'Le digo que estudia más idiomas.', correct: false, uitleg: 'Fout — digo/estudia is tegenwoordige tijd, niet conditionalis' },
+                        { tekst: 'Le deciría que estudiara más.', correct: false, uitleg: 'Fout — decir is onregelmatig: dir- (niet decir-)' },
                     ]},
                 ],
             },
@@ -4880,18 +6119,71 @@
             const invul = lesInvulOef[day] || [];
             const zinnen = lesZinOef[day] || [];
             const sim = lesSims[day] || null;
-            if (invul.length === 0 && zinnen.length === 0 && !sim) return '';
+            const mini = lesMiniOef[day] || [];
+            if (invul.length === 0 && zinnen.length === 0 && !sim && mini.length === 0) return '';
 
-            // Sla dag-data op zodat handlers er via index bij kunnen
             window._lesDay = day;
 
             const hasInvul = invul.length > 0;
             const hasZin = zinnen.length > 0;
+            const hasMini = mini.length > 0;
 
             let tabs = '';
-            if (hasInvul) tabs += `<button class="les-oef-tab active" data-panel="lop-invul">Invuloefening</button>`;
-            if (hasZin)  tabs += `<button class="les-oef-tab ${!hasInvul?'active':''}" data-panel="lop-zinnen">Zinnen vertalen</button>`;
-            if (sim)     tabs += `<button class="les-oef-tab ${!hasInvul&&!hasZin?'active':''}" data-panel="lop-sim">Gesprekssimulator</button>`;
+            let firstActive = true;
+            if (hasMini) { tabs += `<button class="les-oef-tab ${firstActive?'active':''}" data-panel="lop-mini">Mini oefeningen</button>`; firstActive = false; }
+            if (hasInvul) { tabs += `<button class="les-oef-tab ${firstActive?'active':''}" data-panel="lop-invul">Invuloefening</button>`; firstActive = false; }
+            if (hasZin) { tabs += `<button class="les-oef-tab ${firstActive?'active':''}" data-panel="lop-zinnen">Zinnen vertalen</button>`; firstActive = false; }
+            if (sim) { tabs += `<button class="les-oef-tab ${firstActive?'active':''}" data-panel="lop-sim">Gesprekssimulator</button>`; firstActive = false; }
+
+            // Mini exercises HTML
+            let miniHTML = '';
+            if (hasMini) {
+                let miniContent = mini.map((oef, oi) => {
+                    if (oef.type === 'meerkeuze') {
+                        const vr = oef.vragen.map((v, vi) => {
+                            const opts = v.opties.map((o, idx) =>
+                                `<button class="mini-mc-opt" data-oef="${oi}" data-vraag="${vi}" data-idx="${idx}">${o}</button>`
+                            ).join('');
+                            return `<div class="mini-mc-vraag" id="miniMc${oi}_${vi}">
+                                <div class="mini-mc-zin">${v.vraag}</div>
+                                <div class="mini-mc-opts">${opts}</div>
+                                <div class="mini-mc-fb" id="miniMcFb${oi}_${vi}"></div>
+                            </div>`;
+                        }).join('');
+                        return `<div class="mini-oef-blok"><h4>${oef.titel}</h4>${vr}</div>`;
+                    } else if (oef.type === 'koppel') {
+                        const shuffledRight = [...oef.items].sort(() => Math.random() - 0.5);
+                        const leftItems = oef.items.map((item, idx) =>
+                            `<div class="koppel-item koppel-left" data-oef="${oi}" data-idx="${idx}" data-match="${item.right}">${item.left}</div>`
+                        ).join('');
+                        const rightItems = shuffledRight.map((item, idx) =>
+                            `<div class="koppel-item koppel-right" data-oef="${oi}" data-ridx="${idx}" data-val="${item.right}">${item.right}</div>`
+                        ).join('');
+                        return `<div class="mini-oef-blok"><h4>${oef.titel}</h4>
+                            <p style="opacity:0.7;font-size:0.9rem;margin-bottom:0.5rem;">Klik links, dan rechts om te koppelen.</p>
+                            <div class="koppel-container" id="koppelWrap${oi}">
+                                <div class="koppel-col">${leftItems}</div>
+                                <div class="koppel-col">${rightItems}</div>
+                            </div>
+                            <div class="koppel-score" id="koppelScore${oi}"></div>
+                        </div>`;
+                    } else if (oef.type === 'woordzoeker') {
+                        const vr = oef.vragen.map((v, vi) =>
+                            `<div class="mini-wz-vraag" id="miniWz${oi}_${vi}">
+                                <span class="mini-wz-hint">${v.hint} →</span>
+                                <input class="mini-wz-input" id="miniWzInp${oi}_${vi}" placeholder="..." data-oef="${oi}" data-idx="${vi}">
+                                <span class="mini-wz-fb" id="miniWzFb${oi}_${vi}"></span>
+                            </div>`
+                        ).join('');
+                        return `<div class="mini-oef-blok"><h4>${oef.titel}</h4>${vr}</div>`;
+                    }
+                    return '';
+                }).join('');
+                miniHTML = `<div class="les-oef-panel active" id="lop-mini">
+                    <p style="opacity:0.8;margin-bottom:1rem;">Snelle oefeningetjes bij deze les!</p>
+                    ${miniContent}
+                </div>`;
+            }
 
             let invulHTML = '';
             if (hasInvul) {
@@ -4904,7 +6196,7 @@
                     </div>`;
                 }).join('');
                 invulHTML = `
-                    <div class="les-oef-panel ${hasInvul?'active':''}" id="lop-invul">
+                    <div class="les-oef-panel ${!hasMini?'active':''}" id="lop-invul">
                         <p style="opacity:0.8;margin-bottom:1rem;">Vul het juiste Spaanse woord in. Enter of ✓ = controleer.</p>
                         <div id="invulForm">${rijen}</div>
                         <div style="margin-top:1rem;display:flex;gap:0.8rem;flex-wrap:wrap;">
@@ -4925,7 +6217,7 @@
                     </div>`
                 ).join('');
                 zinHTML = `
-                    <div class="les-oef-panel ${!hasInvul?'active':''}" id="lop-zinnen">
+                    <div class="les-oef-panel ${!hasMini&&!hasInvul?'active':''}" id="lop-zinnen">
                         <p style="opacity:0.8;margin-bottom:1rem;">Vertaal naar het Spaans. Enter = controleer.</p>
                         ${blokken}
                         <button class="btn btn-sm" id="zinAllesBtn" style="margin-top:1rem;">Controleer alles</button>
@@ -4935,7 +6227,7 @@
             let simHTML = '';
             if (sim) {
                 simHTML = `
-                    <div class="les-oef-panel ${!hasInvul&&!hasZin?'active':''}" id="lop-sim">
+                    <div class="les-oef-panel ${!hasMini&&!hasInvul&&!hasZin?'active':''}" id="lop-sim">
                         <p style="opacity:0.8;margin-bottom:0.8rem;">Kies de juiste reactie in het gesprek.</p>
                         <div id="simChat" class="sim-chat"></div>
                         <div id="simOpties" class="sim-opties"></div>
@@ -4948,7 +6240,7 @@
                 <div class="les-oef-wrap" id="lesOefWrap">
                     <h3 style="margin-top:0;">✍️ Interactief oefenen</h3>
                     <div class="les-oef-tabs">${tabs}</div>
-                    ${invulHTML}${zinHTML}${simHTML}
+                    ${miniHTML}${invulHTML}${zinHTML}${simHTML}
                 </div>`;
         }
 
@@ -4994,6 +6286,96 @@
             // Sim opnieuw
             const simBtn = document.getElementById('simOpnieuwBtn');
             if (simBtn) simBtn.addEventListener('click', () => startSim(day));
+
+            // Mini oefeningen events
+            const mini = lesMiniOef[day] || [];
+            mini.forEach((oef, oi) => {
+                if (oef.type === 'meerkeuze') {
+                    oef.vragen.forEach((v, vi) => {
+                        document.querySelectorAll(`.mini-mc-opt[data-oef="${oi}"][data-vraag="${vi}"]`).forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const idx = parseInt(this.dataset.idx);
+                                const fb = document.getElementById(`miniMcFb${oi}_${vi}`);
+                                const parent = document.getElementById(`miniMc${oi}_${vi}`);
+                                parent.querySelectorAll('.mini-mc-opt').forEach((b, bi) => {
+                                    b.disabled = true;
+                                    if (bi === v.correct) b.classList.add('mc-correct');
+                                    else if (bi === idx && idx !== v.correct) b.classList.add('mc-fout');
+                                    else b.style.opacity = '0.4';
+                                });
+                                fb.textContent = idx === v.correct ? '✅ Goed!' : '❌ Helaas, het juiste antwoord is gemarkeerd.';
+                                fb.className = 'mini-mc-fb ' + (idx === v.correct ? 'ok' : 'nee');
+                            });
+                        });
+                    });
+                } else if (oef.type === 'koppel') {
+                    const wrap = document.getElementById(`koppelWrap${oi}`);
+                    if (wrap) {
+                        let selectedLeft = null;
+                        let matchCount = 0;
+                        wrap.querySelectorAll('.koppel-left').forEach(el => {
+                            el.addEventListener('click', function() {
+                                if (this.classList.contains('koppel-done')) return;
+                                wrap.querySelectorAll('.koppel-left').forEach(l => l.classList.remove('koppel-selected'));
+                                this.classList.add('koppel-selected');
+                                selectedLeft = this;
+                            });
+                        });
+                        wrap.querySelectorAll('.koppel-right').forEach(el => {
+                            el.addEventListener('click', function() {
+                                if (!selectedLeft || this.classList.contains('koppel-done')) return;
+                                const match = selectedLeft.dataset.match;
+                                const val = this.dataset.val;
+                                if (match === val) {
+                                    selectedLeft.classList.add('koppel-done');
+                                    this.classList.add('koppel-done');
+                                    selectedLeft.classList.remove('koppel-selected');
+                                    matchCount++;
+                                    const score = document.getElementById(`koppelScore${oi}`);
+                                    if (matchCount === oef.items.length && score) {
+                                        score.textContent = '✅ Alles gekoppeld!';
+                                        score.style.color = '#2d7a3a';
+                                    }
+                                } else {
+                                    selectedLeft.classList.add('koppel-wrong');
+                                    this.classList.add('koppel-wrong');
+                                    setTimeout(() => {
+                                        selectedLeft.classList.remove('koppel-wrong', 'koppel-selected');
+                                        this.classList.remove('koppel-wrong');
+                                    }, 600);
+                                }
+                                selectedLeft = null;
+                            });
+                        });
+                    }
+                } else if (oef.type === 'woordzoeker') {
+                    oef.vragen.forEach((v, vi) => {
+                        const inp = document.getElementById(`miniWzInp${oi}_${vi}`);
+                        if (inp) {
+                            inp.addEventListener('keydown', function(e) {
+                                if (e.key === 'Enter') {
+                                    const fb = document.getElementById(`miniWzFb${oi}_${vi}`);
+                                    const result = checkAnswer(this.value, v.antwoord);
+                                    this.disabled = true;
+                                    if (result === 'correct') {
+                                        fb.textContent = '✅';
+                                        fb.className = 'mini-wz-fb ok';
+                                        this.classList.add('correct-inp');
+                                    } else if (result === 'accent') {
+                                        fb.textContent = `⚠️ (${v.antwoord})`;
+                                        fb.className = 'mini-wz-fb ok';
+                                        this.classList.add('correct-inp');
+                                    } else {
+                                        fb.innerHTML = `❌ ${v.antwoord}`;
+                                        fb.className = 'mini-wz-fb nee';
+                                        this.classList.add('fout-inp');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function switchLesPanel(btn, panelId) {
