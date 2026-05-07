@@ -2,8 +2,16 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>DuoCoengo - Jouw Complete Spaanse Cursus</title>
+    <!-- PWA meta -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#c0392b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DuoCoengo">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -502,6 +510,292 @@
         }
         .dark-toggle:hover { opacity: 1; }
 
+        /* Language switcher */
+        .lang-switcher { position: absolute; top: 1rem; left: 1.5rem; z-index: 11; }
+        .lang-toggle {
+            background: rgba(255,255,255,0.18); border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 999px; padding: 0.35rem 0.75rem; font-size: 0.95rem;
+            cursor: pointer; opacity: 0.9; transition: opacity 0.2s, transform 0.1s, background 0.2s;
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-family: inherit; color: inherit; backdrop-filter: blur(4px);
+        }
+        .lang-toggle:hover { opacity: 1; background: rgba(255,255,255,0.28); }
+        .lang-toggle:active { transform: scale(0.97); }
+        .lang-toggle .lang-caret { font-size: 0.7rem; opacity: 0.6; }
+        .lang-menu {
+            position: absolute; top: calc(100% + 0.5rem); left: 0;
+            background: #fff; border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+            min-width: 240px; padding: 0.4rem; display: flex; flex-direction: column;
+            gap: 0.1rem; animation: langMenuIn 0.15s ease-out;
+        }
+        @keyframes langMenuIn { from { opacity: 0; transform: translateY(-4px);} to { opacity:1; transform: translateY(0);} }
+        .lang-menu[hidden] { display: none; }
+        .lang-option {
+            background: none; border: none; cursor: pointer; padding: 0.5rem 0.7rem;
+            border-radius: 8px; text-align: left; color: inherit;
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            font-size: 0.92rem; font-weight: 500;
+            display: flex; align-items: center; gap: 0.6rem;
+            transition: background 0.15s;
+        }
+        .lang-option:hover:not([disabled]) { background: rgba(192,57,43,0.08); }
+        .lang-option.active { background: rgba(192,57,43,0.14); font-weight: 600; }
+        .lang-option[disabled] { opacity: 0.55; cursor: not-allowed; }
+        .lang-option .lang-flag {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: linear-gradient(135deg, #f8d568, #c0392b);
+            color: #fff; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+            font-family: system-ui, sans-serif; flex-shrink: 0;
+        }
+        .lang-option[data-lang="it"] .lang-flag { background: linear-gradient(135deg, #009246 33%, #fff 33%, #fff 66%, #ce2b37 66%); color: #333; text-shadow: 0 0 2px #fff; }
+        .lang-option[data-lang="fr"] .lang-flag { background: linear-gradient(90deg, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%); color: #333; text-shadow: 0 0 2px #fff; }
+        .lang-option[data-lang="de"] .lang-flag { background: linear-gradient(180deg, #000 33%, #dd0000 33%, #dd0000 66%, #ffce00 66%); color: #fff; text-shadow: 0 0 2px #000; }
+        .lang-option[data-lang="pt"] .lang-flag { background: linear-gradient(90deg, #006600 38%, #ff0000 38%); color: #fff; text-shadow: 0 0 2px #000; }
+        .lang-option[data-lang="es"] .lang-flag { background: linear-gradient(180deg, #aa151b 25%, #f1bf00 25%, #f1bf00 75%, #aa151b 75%); color: #333; text-shadow: 0 0 2px #fff; }
+        .lang-option .lang-status {
+            margin-left: auto; font-size: 0.7rem; opacity: 0.75;
+            background: rgba(0,0,0,0.06); padding: 0.18rem 0.55rem; border-radius: 999px;
+            font-family: system-ui, sans-serif; font-weight: 500;
+            text-transform: lowercase; letter-spacing: 0.2px;
+        }
+        .lang-option.active .lang-status { background: #27ae60; color: #fff; opacity: 1; }
+
+        /* Big header flag (centred above DuoCoengo title) */
+        .header-flag-wrap { margin-bottom: 0.5rem; display: flex; justify-content: center; }
+        .header-flag {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 56px; height: 56px; border-radius: 50%;
+            font-family: system-ui, sans-serif; font-weight: 800;
+            font-size: 1rem; letter-spacing: 1px; color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(180deg, #aa151b 25%, #f1bf00 25%, #f1bf00 75%, #aa151b 75%);
+            text-shadow: 0 0 3px rgba(255,255,255,0.9);
+        }
+        .header-flag[data-lang="es"] { background: linear-gradient(180deg, #aa151b 25%, #f1bf00 25%, #f1bf00 75%, #aa151b 75%); color: #333; }
+        .header-flag[data-lang="it"] { background: linear-gradient(90deg, #009246 33%, #fff 33%, #fff 66%, #ce2b37 66%); color: #333; }
+        .header-flag[data-lang="fr"] { background: linear-gradient(90deg, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%); color: #333; }
+        .header-flag[data-lang="de"] { background: linear-gradient(180deg, #000 33%, #dd0000 33%, #dd0000 66%, #ffce00 66%); color: #fff; text-shadow: 0 0 3px #000; }
+        .header-flag[data-lang="pt"] { background: linear-gradient(90deg, #006600 38%, #ff0000 38%); color: #fff; text-shadow: 0 0 3px #000; }
+
+        /* ============ Daily stats strip (streak + goal ring + XP) ============ */
+        .daily-stats-strip {
+            display: grid; grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 0.5rem;
+            margin: 0 0 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #fef6e6, #fff);
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        [data-theme="dark"] .daily-stats-strip { background: linear-gradient(135deg, #2a2520, #221d18); border-color: rgba(255,255,255,0.06); }
+        .stat-chip {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.45rem 0.5rem;
+            border-radius: 12px;
+            background: transparent;
+            font-family: system-ui, sans-serif;
+            transition: transform 0.12s;
+            cursor: default;
+        }
+        .stat-chip .stat-emoji { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+        .stat-chip .stat-info { display: flex; flex-direction: column; line-height: 1.05; min-width: 0; }
+        .stat-chip .stat-value { font-size: 1.05rem; font-weight: 800; color: #2c3e50; }
+        .stat-chip .stat-label { font-size: 0.65rem; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.5px; }
+        [data-theme="dark"] .stat-chip .stat-value { color: #ecf0f1; }
+        .ring-chip { background: rgba(192,57,43,0.06); border-radius: 14px; }
+        [data-theme="dark"] .ring-chip { background: rgba(192,57,43,0.16); }
+        .goal-ring-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
+        .goal-ring { width: 44px; height: 44px; transform: rotate(-90deg); }
+        .goal-ring-bg { fill: none; stroke: rgba(0,0,0,0.08); stroke-width: 3.2; }
+        .goal-ring-fg {
+            fill: none; stroke: var(--terracotta, #c0392b); stroke-width: 3.4;
+            stroke-linecap: round;
+            stroke-dasharray: 0 100;
+            transition: stroke-dasharray 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .goal-ring-emoji {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-size: 1.05rem; line-height: 1;
+        }
+        .ring-chip.completed .goal-ring-fg { stroke: #27ae60; }
+        @media (max-width: 480px) {
+            .stat-chip .stat-value { font-size: 0.95rem; }
+            .stat-chip .stat-emoji { font-size: 1.4rem; }
+            .goal-ring-wrap { width: 40px; height: 40px; }
+            .goal-ring { width: 40px; height: 40px; }
+        }
+
+        /* ============ Lesson Path (Duolingo-style winding path) ============ */
+        .lesson-path {
+            position: relative;
+            padding: 0.5rem 0 5rem;
+            max-width: 380px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            overflow-x: hidden;
+        }
+        .path-section-banner {
+            position: relative;
+            background: var(--terracotta, #c0392b);
+            color: var(--warm-white, #fff8ee);
+            padding: 0.85rem 1.4rem;
+            border-radius: 14px;
+            margin: 1.5rem 0 1rem;
+            font-family: system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: left;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 0.5rem;
+        }
+        .path-section-banner .section-label { font-size: 0.7rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px; display: block; }
+        .path-section-banner .section-title { font-size: 1.05rem; line-height: 1.2; display: block; }
+        .path-section-banner .section-progress { font-family: system-ui; font-size: 0.85rem; opacity: 0.9; white-space: nowrap; }
+        .path-node-wrap { position: relative; display: flex; justify-content: center; padding: 0.65rem 0; }
+        .path-node-wrap[data-pos="far-left"]   { transform: translateX(-78px); }
+        .path-node-wrap[data-pos="left"]       { transform: translateX(-44px); }
+        .path-node-wrap[data-pos="center"]     { transform: translateX(0); }
+        .path-node-wrap[data-pos="right"]      { transform: translateX(44px); }
+        .path-node-wrap[data-pos="far-right"]  { transform: translateX(78px); }
+        .path-node-button {
+            position: relative;
+            width: 78px; height: 78px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #e8e4dd;
+            color: #95a3a4;
+            font-weight: 800;
+            font-size: 1.2rem;
+            font-family: system-ui, sans-serif;
+            box-shadow: 0 6px 0 #c8c2b8;
+            transition: transform 0.1s, background 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .path-node-button:hover { transform: translateY(-2px); }
+        .path-node-button:active { transform: translateY(3px); box-shadow: 0 3px 0 #c8c2b8; }
+        .path-node-button.completed { background: #58cc02; color: #fff; box-shadow: 0 6px 0 #46a302; }
+        .path-node-button.completed:active { box-shadow: 0 3px 0 #46a302; }
+        .path-node-button.current { background: var(--terracotta, #c0392b); color: #fff; box-shadow: 0 6px 0 #922b21; animation: pathNodePulse 1.6s ease-in-out infinite; }
+        .path-node-button.current:active { box-shadow: 0 3px 0 #922b21; }
+        .path-node-button.future { background: #ecf0f1; color: #b2babb; box-shadow: 0 6px 0 #d5dbdc; }
+        @keyframes pathNodePulse {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.07); }
+        }
+        .path-node-button .crown-overlay {
+            position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+            font-size: 1.4rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+        }
+        .path-node-button .lock-icon { font-size: 1.5rem; opacity: 0.55; }
+        .path-node-tooltip {
+            position: absolute;
+            top: 100%; left: 50%; transform: translateX(-50%);
+            margin-top: 8px;
+            background: rgba(40,30,20,0.92); color: #fff;
+            padding: 0.4rem 0.7rem;
+            border-radius: 8px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.78rem;
+            line-height: 1.2;
+            text-align: center;
+            white-space: normal;
+            width: 170px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.18s;
+            z-index: 5;
+        }
+        .path-node-tooltip::before {
+            content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+            border: 5px solid transparent; border-bottom-color: rgba(40,30,20,0.92); border-top: 0;
+        }
+        .path-node-wrap:hover .path-node-tooltip { opacity: 1; }
+        [data-theme="dark"] .path-node-button { background: #2c2823; color: #6f6862; box-shadow: 0 6px 0 #1c1916; }
+        [data-theme="dark"] .path-node-button.future { background: #25221e; color: #574f47; box-shadow: 0 6px 0 #181613; }
+        [data-theme="dark"] .path-section-banner { background: #6b1f17; }
+
+        /* ============ Bottom navigation bar (mobile-app feel) ============ */
+        .nav-tabs {
+            position: fixed; left: 0; right: 0; bottom: 0;
+            display: flex; gap: 0; margin: 0; padding: 0.4rem 0.3rem env(safe-area-inset-bottom, 0.5rem);
+            background: var(--warm-white, #fff8ee);
+            border-top: 1px solid rgba(0,0,0,0.08);
+            border-bottom: none;
+            box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
+            z-index: 50;
+            justify-content: space-around;
+        }
+        .nav-tabs .tab {
+            background: transparent !important;
+            border: none;
+            cursor: pointer;
+            flex: 1; max-width: 110px;
+            padding: 0.5rem 0.3rem;
+            font-family: system-ui, sans-serif;
+            font-size: 0.7rem; font-weight: 600;
+            color: #95a5a6;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            border-radius: 12px;
+            transition: color 0.18s, transform 0.1s, background 0.18s;
+            line-height: 1;
+        }
+        .nav-tabs .tab .tab-icon {
+            font-size: 1.5rem; line-height: 1;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: transform 0.18s;
+            font-family: system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+        }
+        .nav-tabs .tab:hover { color: var(--terracotta, #c0392b); }
+        .nav-tabs .tab.active {
+            color: var(--terracotta, #c0392b) !important;
+            background: rgba(192,57,43,0.10) !important;
+        }
+        .nav-tabs .tab.active .tab-icon { transform: translateY(-2px) scale(1.12); }
+        .nav-tabs .tab:active { transform: scale(0.95); }
+        body { padding-bottom: 78px; }
+        @media (max-width: 768px) {
+            .nav-tabs .tab { font-size: 0.66rem; padding: 0.4rem 0.2rem; }
+            .nav-tabs .tab .tab-icon { font-size: 1.35rem; }
+            body { padding-bottom: 70px; }
+        }
+        [data-theme="dark"] .nav-tabs { background: #1a1614; border-top-color: rgba(255,255,255,0.08); }
+        [data-theme="dark"] .nav-tabs .tab { color: #6f6862; }
+        [data-theme="dark"] .nav-tabs .tab.active { background: rgba(192,57,43,0.18) !important; }
+
+        /* ============ Install-as-app floating chip ============ */
+        .install-chip {
+            position: fixed;
+            bottom: calc(78px + env(safe-area-inset-bottom, 0px) + 12px);
+            right: 14px;
+            background: linear-gradient(135deg, #c0392b, #e67e22);
+            color: #fff8ee;
+            border: none; cursor: pointer;
+            padding: 0.7rem 1.1rem;
+            border-radius: 999px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            box-shadow: 0 6px 20px rgba(192,57,43,0.4), 0 2px 4px rgba(0,0,0,0.15);
+            z-index: 60;
+            animation: installChipIn 0.4s ease-out;
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+        @keyframes installChipIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.85); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .install-chip:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(192,57,43,0.5); }
+        .install-chip:active { transform: translateY(1px); }
+
+        [data-theme="dark"] .lang-toggle { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
+        [data-theme="dark"] .lang-toggle:hover { background: rgba(255,255,255,0.16); }
+        [data-theme="dark"] .lang-menu { background: #2a2a2a; border-color: rgba(255,255,255,0.1); box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
+        [data-theme="dark"] .lang-option .lang-status { background: rgba(255,255,255,0.1); }
+
         /* Speak & copy buttons */
         .speak-btn, .copy-btn {
             background: none; border: none; cursor: pointer; font-size: 1rem;
@@ -703,6 +997,451 @@
         }
 
         /* ============================== */
+        /* === SESSIE-MODUS (oefenflow) === */
+        /* ============================== */
+        .session-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--warm-white) 100%);
+            display: none; flex-direction: column;
+            opacity: 0; transition: opacity 0.25s ease;
+        }
+        .session-overlay.is-open { display: flex; opacity: 1; }
+        [data-theme="dark"] .session-overlay {
+            background: linear-gradient(135deg, #1a1410 0%, #221a12 100%);
+        }
+        .session-header {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(192, 57, 43, 0.15);
+            background: var(--warm-white);
+        }
+        .session-close {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 1.6rem; color: var(--deep-blue);
+            width: 38px; height: 38px; border-radius: 50%;
+            display: grid; place-items: center;
+            transition: background 0.15s;
+        }
+        .session-close:hover { background: rgba(192, 57, 43, 0.1); }
+        .session-progress-track {
+            flex: 1; height: 14px;
+            background: rgba(192, 57, 43, 0.15);
+            border-radius: 999px; overflow: hidden;
+            position: relative;
+        }
+        .session-progress-fill {
+            position: absolute; inset: 0; right: auto;
+            background: linear-gradient(90deg, var(--ochre), var(--terracotta));
+            border-radius: 999px;
+            width: 0%;
+            transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .session-hearts {
+            display: flex; gap: 0.25rem; font-size: 1.1rem;
+            color: var(--terracotta); font-weight: 700;
+            min-width: 50px; justify-content: flex-end;
+        }
+        .session-body {
+            flex: 1; overflow-y: auto;
+            padding: 1.5rem 1rem 7rem;
+            display: flex; align-items: flex-start; justify-content: center;
+        }
+        .session-card {
+            width: 100%; max-width: 560px;
+            animation: sessionCardIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes sessionCardIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .session-card .ses-tag {
+            display: inline-block; font-size: 0.78rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--ochre); margin-bottom: 0.6rem;
+        }
+        .session-card .ses-prompt {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.45rem; line-height: 1.4;
+            color: var(--deep-blue);
+            margin: 0 0 1.4rem;
+        }
+        .session-card .ses-prompt-sub {
+            font-size: 0.95rem; opacity: 0.75;
+            margin: -0.8rem 0 1.2rem;
+        }
+        .session-card .ses-zin {
+            background: var(--warm-white);
+            border: 2px solid rgba(192, 57, 43, 0.18);
+            border-radius: 14px;
+            padding: 1.2rem 1.1rem;
+            font-size: 1.25rem; line-height: 1.55;
+            color: var(--deep-blue);
+            margin-bottom: 1.1rem;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+        .session-card .ses-zin .ses-blank {
+            display: inline-block;
+            min-width: 80px;
+            border-bottom: 3px solid var(--terracotta);
+            padding: 0 0.4rem;
+            margin: 0 0.2rem;
+            font-weight: 700;
+            color: var(--terracotta);
+        }
+        .session-card .ses-input {
+            width: 100%; padding: 1rem 1.1rem;
+            font-size: 1.15rem; font-family: inherit;
+            border: 2px solid rgba(192, 57, 43, 0.25);
+            border-radius: 14px;
+            background: var(--warm-white);
+            color: var(--deep-blue);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .session-card .ses-input:focus {
+            outline: none;
+            border-color: var(--terracotta);
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15);
+        }
+        .session-card .ses-hint {
+            margin-top: 0.7rem; font-size: 0.9rem;
+            color: var(--ochre); opacity: 0.85;
+        }
+        .session-card .ses-hint::before { content: '💡 '; }
+        .session-footer {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+            background: var(--warm-white);
+            border-top: 1px solid rgba(192, 57, 43, 0.15);
+            display: flex; justify-content: center;
+            z-index: 5;
+        }
+        .session-footer .ses-btn {
+            width: 100%; max-width: 560px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem; font-weight: 700;
+            border: none; border-radius: 14px;
+            background: var(--terracotta); color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #8b271c, 0 6px 14px rgba(192, 57, 43, 0.3);
+            transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
+        }
+        .session-footer .ses-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #8b271c, 0 3px 8px rgba(192, 57, 43, 0.25);
+        }
+        .session-footer .ses-btn:disabled {
+            opacity: 0.45; cursor: not-allowed;
+            box-shadow: 0 4px 0 #8b271c;
+        }
+        /* Feedback states */
+        .session-feedback {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 1.1rem 1rem calc(1.4rem + env(safe-area-inset-bottom));
+            border-top: 2px solid;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 6;
+            display: flex; flex-direction: column; gap: 0.7rem;
+            align-items: center;
+        }
+        .session-feedback.visible { transform: translateY(0); }
+        .session-feedback.correct {
+            background: #d4f5dd; border-color: var(--verde);
+            color: #1d6a3a;
+        }
+        .session-feedback.wrong {
+            background: #fde0dc; border-color: var(--terracotta);
+            color: #7a1f15;
+        }
+        [data-theme="dark"] .session-feedback.correct { background: #1d3a26; color: #a0e8b5; }
+        [data-theme="dark"] .session-feedback.wrong   { background: #3a1c18; color: #f3a59b; }
+        .session-feedback .fb-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.3rem; font-weight: 700;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .session-feedback .fb-answer {
+            font-size: 0.95rem; opacity: 0.9;
+        }
+        .session-feedback .fb-answer strong { font-weight: 700; }
+        .session-feedback .ses-btn {
+            width: 100%; max-width: 560px;
+            padding: 1rem 1.5rem;
+            font-size: 1.05rem; font-weight: 700;
+            border: none; border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .session-feedback.correct .ses-btn { background: var(--verde); color: #fff; box-shadow: 0 4px 0 #196b34; }
+        .session-feedback.wrong   .ses-btn { background: var(--terracotta); color: #fff; box-shadow: 0 4px 0 #8b271c; }
+        .session-feedback .ses-btn:active { transform: translateY(2px); }
+        /* Result screen */
+        .session-result {
+            text-align: center; padding: 1.5rem 1rem;
+            animation: sessionCardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .session-result .ses-result-emoji {
+            font-size: 4.5rem; margin-bottom: 0.5rem;
+            animation: resultBounce 0.8s ease;
+        }
+        @keyframes resultBounce {
+            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            60% { transform: scale(1.15) rotate(8deg); }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        .session-result h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2rem; color: var(--terracotta);
+            margin: 0.5rem 0 1.5rem;
+        }
+        .session-result .result-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 0.7rem; margin-top: 1.5rem;
+        }
+        .session-result .result-stat {
+            background: var(--warm-white);
+            border: 2px solid rgba(192, 57, 43, 0.2);
+            border-radius: 14px;
+            padding: 1rem 0.5rem;
+        }
+        .session-result .result-stat .label {
+            font-size: 0.72rem; text-transform: uppercase;
+            letter-spacing: 0.06em; opacity: 0.7; font-weight: 700;
+        }
+        .session-result .result-stat .value {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.7rem; font-weight: 900;
+            color: var(--terracotta); margin-top: 0.2rem;
+        }
+        /* Start oefensessie call-to-action above lesson */
+        .session-cta {
+            background: linear-gradient(135deg, var(--ochre) 0%, var(--terracotta) 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 1.2rem 1.3rem;
+            margin: 0 0 1.5rem;
+            display: flex; align-items: center; gap: 1rem;
+            box-shadow: 0 6px 18px rgba(192, 57, 43, 0.35);
+        }
+        .session-cta .cta-icon {
+            font-size: 2.2rem; line-height: 1;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 56px; height: 56px;
+            display: grid; place-items: center;
+            flex-shrink: 0;
+        }
+        .session-cta .cta-text { flex: 1; min-width: 0; }
+        .session-cta .cta-text h3 {
+            margin: 0 0 0.15rem; font-size: 1.05rem;
+            color: #fff;
+        }
+        .session-cta .cta-text p {
+            margin: 0; font-size: 0.85rem;
+            color: rgba(255,255,255,0.92);
+        }
+        .session-cta .cta-btn {
+            background: #fff; color: var(--terracotta);
+            border: none; padding: 0.7rem 1.1rem;
+            font-weight: 800; font-size: 0.95rem;
+            border-radius: 12px; cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.1s;
+        }
+        .session-cta .cta-btn:active { transform: scale(0.96); }
+        @media (max-width: 480px) {
+            .session-cta { flex-wrap: wrap; }
+            .session-cta .cta-btn { width: 100%; padding: 0.85rem; }
+        }
+
+        /* ============================== */
+        /* === INLINE INVUL-OEFENINGEN === */
+        /* ============================== */
+        .inline-oef {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.14) 0%, rgba(230, 126, 34, 0.18) 100%);
+            border: 2px dashed var(--ochre);
+            border-radius: 14px;
+            padding: 1rem 1.2rem 1.2rem;
+            margin: 1.6rem 0;
+            position: relative;
+        }
+        [data-theme="dark"] .inline-oef {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.10) 0%, rgba(230, 126, 34, 0.14) 100%);
+            border-color: rgba(230, 126, 34, 0.6);
+        }
+        .inline-oef-header {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.05rem; font-weight: 700;
+            color: var(--terracotta);
+            margin-bottom: 0.85rem;
+            display: flex; align-items: center; gap: 0.45rem;
+        }
+        .inline-oef-header::before {
+            content: '✍️'; font-size: 1.05rem;
+        }
+        .inline-oef-row {
+            display: flex; align-items: center; gap: 0.6rem;
+            flex-wrap: wrap;
+            padding: 0.55rem 0;
+            border-bottom: 1px dashed rgba(192, 57, 43, 0.18);
+        }
+        .inline-oef-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .inline-zin {
+            font-size: 1.05rem;
+            flex: 1; min-width: 200px;
+            color: var(--deep-blue);
+            line-height: 1.7;
+        }
+        .inline-zin .nl-hint {
+            display: block;
+            font-size: 0.82rem; opacity: 0.7;
+            margin-bottom: 0.2rem;
+            font-style: italic;
+        }
+        .inline-blank {
+            display: inline-block;
+            min-width: 90px; padding: 0.32rem 0.55rem;
+            border: none;
+            border-bottom: 2.5px solid var(--terracotta);
+            background: rgba(255, 255, 255, 0.65);
+            font-size: 1rem; font-family: inherit;
+            color: var(--deep-blue);
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+            transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+        }
+        [data-theme="dark"] .inline-blank {
+            background: rgba(35, 29, 23, 0.85);
+            color: var(--deep-blue);
+        }
+        .inline-blank:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.18);
+        }
+        [data-theme="dark"] .inline-blank:focus { background: rgba(45, 36, 28, 1); }
+        .inline-blank.ok {
+            background: rgba(39, 174, 96, 0.22);
+            border-bottom-color: var(--verde);
+            color: #196b34;
+            font-weight: 700;
+        }
+        [data-theme="dark"] .inline-blank.ok { color: #a0e8b5; }
+        .inline-blank.fout {
+            background: rgba(192, 57, 43, 0.18);
+            border-bottom-color: var(--terracotta);
+            color: var(--terracotta);
+            animation: shakeBlank 0.35s;
+        }
+        @keyframes shakeBlank {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .inline-oef-tools {
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .inline-oef-hint {
+            font-size: 0.78rem; opacity: 0.7;
+            color: var(--deep-blue);
+            white-space: nowrap;
+        }
+        .inline-oef-reveal {
+            background: transparent;
+            border: 1.5px solid var(--ochre);
+            color: var(--ochre);
+            padding: 0.25rem 0.55rem;
+            font-size: 0.78rem;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: inherit; font-weight: 600;
+            transition: all 0.15s;
+            line-height: 1;
+        }
+        .inline-oef-reveal:hover {
+            background: var(--ochre); color: #fff;
+        }
+        .inline-oef-result {
+            display: none;
+            margin-top: 0.85rem;
+            padding: 0.6rem 0.9rem;
+            background: rgba(39, 174, 96, 0.18);
+            border-left: 3px solid var(--verde);
+            border-radius: 6px;
+            color: #1d6a3a;
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+        [data-theme="dark"] .inline-oef-result {
+            background: rgba(39, 174, 96, 0.18);
+            color: #a0e8b5;
+        }
+        .inline-oef-result.show {
+            display: block;
+            animation: sessionCardIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        /* Variant: hele-zin invoer (vertaaloefening) */
+        .inline-oef-row.zin-vert {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.4rem;
+        }
+        .inline-oef-row.zin-vert .inline-zin {
+            display: flex; align-items: baseline; gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .inline-oef-row.zin-vert .inline-prompt {
+            font-weight: 600; color: var(--terracotta);
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .inline-zin-input {
+            width: 100%;
+            padding: 0.55rem 0.75rem;
+            font-size: 1rem; font-family: inherit;
+            border: 2px solid rgba(192, 57, 43, 0.25);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.65);
+            color: var(--deep-blue);
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        [data-theme="dark"] .inline-zin-input {
+            background: rgba(35, 29, 23, 0.85);
+        }
+        .inline-zin-input:focus {
+            outline: none;
+            border-color: var(--terracotta);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+        }
+        [data-theme="dark"] .inline-zin-input:focus { background: rgba(45, 36, 28, 1); }
+        .inline-zin-input.ok {
+            background: rgba(39, 174, 96, 0.18);
+            border-color: var(--verde);
+            color: #196b34;
+        }
+        [data-theme="dark"] .inline-zin-input.ok { color: #a0e8b5; }
+        .inline-zin-input.fout {
+            background: rgba(192, 57, 43, 0.12);
+            border-color: var(--terracotta);
+            color: var(--terracotta);
+            animation: shakeBlank 0.35s;
+        }
+        .inline-zin-feedback {
+            font-size: 0.85rem; opacity: 0.8; margin-top: 0.25rem;
+            display: none;
+        }
+        .inline-zin-feedback.show { display: block; }
+        .inline-zin-feedback.ok-msg { color: #1d6a3a; }
+        .inline-zin-feedback.fout-msg { color: var(--terracotta); }
+
+        @media (max-width: 480px) {
+            .inline-oef { padding: 0.85rem 0.95rem 1rem; }
+            .inline-zin { font-size: 1rem; min-width: 0; width: 100%; }
+            .inline-oef-row { padding: 0.45rem 0; }
+            .inline-oef-tools { width: 100%; justify-content: flex-end; }
+        }
+
+        /* ============================== */
         /* === PRINTWEERGAVE          === */
         /* ============================== */
         @media print {
@@ -766,10 +1505,24 @@
 <body>
     <div class="container">
         <header>
+            <div class="lang-switcher" id="langSwitcher">
+                <button class="lang-toggle" id="langToggle" title="Kies een taal" aria-haspopup="true" aria-expanded="false">
+                    <span id="langToggleFlag" class="lang-flag" data-lang="es">ES</span>
+                    <span id="langToggleName">Spaans</span>
+                    <span class="lang-caret">▾</span>
+                </button>
+                <div class="lang-menu" id="langMenu" hidden>
+                    <button class="lang-option active" data-lang="es"><span class="lang-flag">🇪🇸</span>Spaans<span class="lang-status">actief</span></button>
+                    <button class="lang-option" data-lang="it" disabled><span class="lang-flag">🇮🇹</span>Italiaans<span class="lang-status">binnenkort</span></button>
+                    <button class="lang-option" data-lang="fr" disabled><span class="lang-flag">🇫🇷</span>Frans<span class="lang-status">binnenkort</span></button>
+                    <button class="lang-option" data-lang="de" disabled><span class="lang-flag">🇩🇪</span>Duits<span class="lang-status">binnenkort</span></button>
+                    <button class="lang-option" data-lang="pt" disabled><span class="lang-flag">🇵🇹</span>Portugees<span class="lang-status">binnenkort</span></button>
+                </div>
+            </div>
             <button class="dark-toggle" id="darkToggle" title="Dark mode">🌙</button>
-            <div style="font-size: 2.5rem; margin-bottom: 0.3rem;">🇪🇸</div>
+            <div class="header-flag-wrap"><span id="headerFlag" class="header-flag" data-lang="es">ES</span></div>
             <h1>DuoCoengo</h1>
-            <p class="subtitle">Jouw complete 25-daagse Spaanse cursus
+            <p class="subtitle"><span id="headerSubtitle">Jouw complete 25-daagse Spaanse cursus</span>
                 <span class="streak-badge" id="streakBadge" style="display:none;">🔥 <span id="streakCount">0</span></span>
             </p>
             <div class="progress-bar">
@@ -785,16 +1538,47 @@
         <canvas id="confettiCanvas"></canvas>
 
         <div class="nav-tabs">
-            <button class="tab active" data-tab="lessen" onclick="switchTab('lessen')">Lessen</button>
-            <button class="tab" data-tab="voortgang" onclick="switchTab('voortgang')">Voortgang</button>
-            <button class="tab" data-tab="oefenen" onclick="switchTab('oefenen')">Oefenen</button>
-            <button class="tab" data-tab="themas" onclick="switchTab('themas')">Thema's</button>
+            <button class="tab active" data-tab="lessen" onclick="switchTab('lessen')"><span class="tab-icon">🛤️</span><span>Leren</span></button>
+            <button class="tab" data-tab="oefenen" onclick="switchTab('oefenen')"><span class="tab-icon">🎯</span><span>Oefenen</span></button>
+            <button class="tab" data-tab="themas" onclick="switchTab('themas')"><span class="tab-icon">🌶️</span><span>Thema's</span></button>
+            <button class="tab" data-tab="voortgang" onclick="switchTab('voortgang')"><span class="tab-icon">🏆</span><span>Profiel</span></button>
         </div>
 
         <div id="lessen-tab" class="tab-content active">
             <div class="lesson-card">
-                <h2>Selecteer een dag</h2>
-                <div class="day-selector" id="daySelector"></div>
+                <div class="daily-stats-strip" id="dailyStatsStrip">
+                    <div class="stat-chip streak-chip" title="Dagelijkse reeks">
+                        <span class="stat-emoji">🔥</span>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dailyStreakVal">0</span>
+                            <span class="stat-label">dagen</span>
+                        </div>
+                    </div>
+                    <div class="stat-chip ring-chip" title="Dagelijks doel" id="dailyGoalChip">
+                        <div class="goal-ring-wrap">
+                            <svg class="goal-ring" viewBox="0 0 36 36" aria-hidden="true">
+                                <circle class="goal-ring-bg" cx="18" cy="18" r="15.9155"></circle>
+                                <circle class="goal-ring-fg" cx="18" cy="18" r="15.9155" id="dailyRingFg"></circle>
+                            </svg>
+                            <span class="goal-ring-emoji">🎯</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dailyXpVal">0/30</span>
+                            <span class="stat-label">vandaag</span>
+                        </div>
+                    </div>
+                    <div class="stat-chip gem-chip" title="Totaal XP">
+                        <span class="stat-emoji">💎</span>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalXpVal">0</span>
+                            <span class="stat-label">XP totaal</span>
+                        </div>
+                    </div>
+                </div>
+                <h2>Jouw leerpad</h2>
+                <div class="lesson-path" id="lessonPath"></div>
+                <!-- Legacy day-selector kept for compatibility but hidden -->
+                <div class="day-selector" id="daySelector" style="display:none"></div>
             </div>
             <div id="lessonContent"></div>
         </div>
@@ -816,6 +1600,134 @@
         <div class="kb-hint">Toetsenbord: <kbd>←</kbd><kbd>→</kbd> vorige/volgende les &nbsp; <kbd>1</kbd>-<kbd>4</kbd> wissel tab &nbsp; <kbd>D</kbd> dark mode</div>
     </div>
     <script>
+        // ============================================================
+        // === DuoCoengo v2 — Multi-language foundation ===============
+        // ============================================================
+        // Doel: één app, meerdere talen. Spaans is volledig actief.
+        // Andere talen worden in volgende iteraties gevuld met content.
+        const LANGUAGE_REGISTRY = {
+            es: { code:'es', name:'Spaans',     native:'Español',   flag:'🇪🇸',
+                  subtitle:'Jouw complete 25-daagse Spaanse cursus',
+                  speechLang:'es-ES', ready:true },
+            it: { code:'it', name:'Italiaans',  native:'Italiano',  flag:'🇮🇹',
+                  subtitle:'Italiaanse cursus — binnenkort beschikbaar',
+                  speechLang:'it-IT', ready:false },
+            fr: { code:'fr', name:'Frans',      native:'Français',  flag:'🇫🇷',
+                  subtitle:'Franse cursus — binnenkort beschikbaar',
+                  speechLang:'fr-FR', ready:false },
+            de: { code:'de', name:'Duits',      native:'Deutsch',   flag:'🇩🇪',
+                  subtitle:'Duitse cursus — binnenkort beschikbaar',
+                  speechLang:'de-DE', ready:false },
+            pt: { code:'pt', name:'Portugees',  native:'Português', flag:'🇵🇹',
+                  subtitle:'Portugese cursus — binnenkort beschikbaar',
+                  speechLang:'pt-PT', ready:false }
+        };
+        const ACTIVE_LANG_KEY = 'duocoengo_active_lang';
+        let activeLangCode = (function() {
+            const saved = localStorage.getItem(ACTIVE_LANG_KEY);
+            return (saved && LANGUAGE_REGISTRY[saved] && LANGUAGE_REGISTRY[saved].ready) ? saved : 'es';
+        })();
+        function getActiveLanguage() { return LANGUAGE_REGISTRY[activeLangCode]; }
+        function switchLanguage(code) {
+            const lang = LANGUAGE_REGISTRY[code];
+            if (!lang) return;
+            if (!lang.ready) {
+                alert(`${lang.name} is nog in ontwikkeling — komt binnenkort!`);
+                return;
+            }
+            if (code === activeLangCode) return;
+            localStorage.setItem(ACTIVE_LANG_KEY, code);
+            location.reload();
+        }
+        function updateLanguageHeaderUI() {
+            const lang = getActiveLanguage();
+            const flagEl = document.getElementById('headerFlag');
+            const subEl  = document.getElementById('headerSubtitle');
+            const tFlag  = document.getElementById('langToggleFlag');
+            const tName  = document.getElementById('langToggleName');
+            if (flagEl) { flagEl.textContent = lang.code.toUpperCase(); flagEl.dataset.lang = lang.code; }
+            if (subEl)  subEl.textContent  = lang.subtitle;
+            if (tFlag)  { tFlag.textContent = lang.code.toUpperCase(); tFlag.dataset.lang = lang.code; }
+            if (tName)  tName.textContent  = lang.name;
+            document.querySelectorAll('.lang-option').forEach(b => {
+                b.classList.toggle('active', b.dataset.lang === activeLangCode);
+                if (b.dataset.lang === activeLangCode) {
+                    const status = b.querySelector('.lang-status');
+                    if (status && !b.disabled) status.textContent = 'actief';
+                }
+            });
+        }
+        function initLanguageSwitcher() {
+            const toggle = document.getElementById('langToggle');
+            const menu   = document.getElementById('langMenu');
+            if (!toggle || !menu) return;
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = menu.hasAttribute('hidden');
+                if (isHidden) { menu.removeAttribute('hidden'); toggle.setAttribute('aria-expanded','true'); }
+                else          { menu.setAttribute('hidden','');  toggle.setAttribute('aria-expanded','false'); }
+            });
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) {
+                    menu.setAttribute('hidden',''); toggle.setAttribute('aria-expanded','false');
+                }
+            });
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const code = btn.dataset.lang;
+                    const lang = LANGUAGE_REGISTRY[code];
+                    if (!lang) return;
+                    if (!lang.ready) { alert(`${lang.name} is nog in ontwikkeling — komt binnenkort!`); return; }
+                    switchLanguage(code);
+                });
+            });
+            updateLanguageHeaderUI();
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLanguageSwitcher);
+        } else {
+            initLanguageSwitcher();
+        }
+
+        // ============================================================
+        // === PWA: Service worker + install prompt ===================
+        // ============================================================
+        let _deferredInstallPrompt = null;
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    // SW registreren faalt op file:// — dat is OK, app werkt nog steeds
+                    console.info('[DuoCoengo] Service worker niet actief (waarschijnlijk file://):', err.message);
+                });
+            });
+        }
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            _deferredInstallPrompt = e;
+            showInstallChip();
+        });
+        window.addEventListener('appinstalled', () => {
+            _deferredInstallPrompt = null;
+            const chip = document.getElementById('installChip');
+            if (chip) chip.remove();
+        });
+        function showInstallChip() {
+            if (document.getElementById('installChip')) return;
+            const chip = document.createElement('button');
+            chip.id = 'installChip';
+            chip.className = 'install-chip';
+            chip.innerHTML = '📲 Installeer als app';
+            chip.onclick = async () => {
+                if (!_deferredInstallPrompt) return;
+                _deferredInstallPrompt.prompt();
+                const choice = await _deferredInstallPrompt.userChoice;
+                if (choice && choice.outcome === 'accepted') chip.remove();
+                _deferredInstallPrompt = null;
+            };
+            document.body.appendChild(chip);
+        }
+        // ============================================================
+
         let currentDay = 1;
         let completedDays = new Set();
 
@@ -869,6 +1781,23 @@
 <p>In de praktijk worden deze voornaamwoorden vaak niet gebruikt, behalve voor nadruk of contrast.</p>
 </div>
 
+<div class="inline-oef" data-step="voornaamwoorden">
+<div class="inline-oef-header">Probeer het zelf — voornaamwoorden</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">jij (informeel)</span><input class="inline-blank" data-answer="tú" placeholder="Spaans"></span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">2e persoon ev.</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">wij (gemengd of mannelijk)</span><input class="inline-blank" data-answer="nosotros" placeholder="Spaans"></span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">1e persoon mv.</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">u (formeel)</span><input class="inline-blank" data-answer="usted" placeholder="Spaans"></span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">grammaticaal 3e persoon</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-result">✅ ¡Perfecto! Je hebt de voornaamwoorden onder de knie. <strong>+5 XP</strong></div>
+</div>
+
 <h4>3. Het werkwoord ser (zijn)</h4>
 <p>Ser is een onregelmatig werkwoord en een van de belangrijkste werkwoorden in het Spaans.</p>
 
@@ -893,6 +1822,27 @@
 <tr><td>ellos/as / ustedes</td><td><strong>son</strong></td></tr>
 </table>
 <p><em>Deze vormen moeten uit het hoofd geleerd worden. Er zit geen regelmatig patroon in.</em></p>
+
+<div class="inline-oef" data-step="ser-vervoeging">
+<div class="inline-oef-header">Probeer het zelf — vervoeg ser</div>
+<div class="inline-oef-row">
+  <span class="inline-zin">Yo <input class="inline-blank" data-answer="soy" placeholder="ser?"> estudiante.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">ser → yo</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin">Tú <input class="inline-blank" data-answer="eres" placeholder="ser?"> profesor.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">ser → tú</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin">Ella <input class="inline-blank" data-answer="es" placeholder="ser?"> española.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">ser → ella</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin">Nosotros <input class="inline-blank" data-answer="somos" placeholder="ser?"> amigos.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">ser → nosotros</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-result">✅ ¡Muy bien! Ser zit nu in je vingers. <strong>+5 XP</strong></div>
+</div>
 
 <h4>Voorbeeldzinnen</h4>
 <div class="example-box">
@@ -943,6 +1893,33 @@
 <div>Zij is Nederlands.</div>
 </div>
 
+<div class="inline-oef" data-step="vocab-ser">
+<div class="inline-oef-header">Probeer het zelf — woordenschat in actie</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">Ik ben Nederlands.</span>Soy <input class="inline-blank" data-answer="holandés" placeholder="?">.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">mannelijk</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">Wij zijn vrienden.</span>Somos <input class="inline-blank" data-answer="amigos" placeholder="?">.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">meervoud</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-row">
+  <span class="inline-zin"><span class="nl-hint">Zij is docente.</span>Ella es <input class="inline-blank" data-answer="profesora" placeholder="?">.</span>
+  <div class="inline-oef-tools"><span class="inline-oef-hint">vrouwelijk</span><button class="inline-oef-reveal" type="button">💡</button></div>
+</div>
+<div class="inline-oef-result">✅ Top! Je verbindt nu woorden met ser. <strong>+5 XP</strong></div>
+</div>
+
+<div class="inline-oef" data-oef-id="les1-vert-nl-es">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Vertaal de zin</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik ben student.</div><input type="text" class="inline-zin-input" data-answer="soy estudiante" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij zijn vrienden.</div><input type="text" class="inline-zin-input" data-answer="somos amigos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Zij is docent.</div><input type="text" class="inline-zin-input" data-answer="es profesora" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jij bent Nederlands.</div><input type="text" class="inline-zin-input" data-answer="eres holandés" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Madrid is de hoofdstad.</div><input type="text" class="inline-zin-input" data-answer="madrid es la capital" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h3>🔨 Zinsopbouw en structuur</h3>
 <h4>Basisstructuur</h4>
 <div class="grammar-box">
@@ -964,39 +1941,14 @@
 </ul>
 </div>
 
-<h3>✍️ Oefeningen</h3>
-<h4>a. Grammatica invullen</h4>
-<ol>
-<li>Yo ___ estudiante.</li>
-<li>Nosotros ___ amigos.</li>
-<li>Ella ___ española.</li>
-<li>Tú ___ profesor.</li>
-<li>Madrid ___ una ciudad grande.</li>
-</ol>
-
-<h4>b. Vertaal Nederlands naar Spaans</h4>
-<ol>
-<li>Ik ben student.</li>
-<li>Wij zijn vrienden.</li>
-<li>Zij is docent.</li>
-<li>Jij bent Nederlands.</li>
-<li>Madrid is de hoofdstad.</li>
-</ol>
-
-<h4>c. Vertaal Spaans naar Nederlands</h4>
-<ol>
-<li>Soy estudiante.</li>
-<li>Ella es profesora.</li>
-<li>Somos amigos.</li>
-<li>Tú eres español.</li>
-<li>Madrid es una ciudad.</li>
-</ol>
-
-<h4>Antwoorden</h4>
-<div class="grammar-box">
-<p><strong>a.</strong> 1. soy, 2. somos, 3. es, 4. eres, 5. es</p>
-<p><strong>b.</strong> 1. Soy estudiante. 2. Somos amigos. 3. Es profesora. 4. Eres holandés/holandesa. 5. Madrid es la capital.</p>
-<p><strong>c.</strong> 1. Ik ben student. 2. Zij is docent. 3. Wij zijn vrienden. 4. Jij bent Spaans. 5. Madrid is een stad.</p>
+<div class="inline-oef" data-oef-id="les1-vert-es-nl">
+  <div class="inline-oef-header">🇪🇸 → 🇳🇱 Vertaal de zin</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Yo soy holandés.</div><input type="text" class="inline-zin-input" data-answer="ik ben nederlands" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ella es profesora.</div><input type="text" class="inline-zin-input" data-answer="zij is docent" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Vosotros sois amigos.</div><input type="text" class="inline-zin-input" data-answer="jullie zijn vrienden" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Tú eres una persona.</div><input type="text" class="inline-zin-input" data-answer="jij bent een persoon" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Madrid es una ciudad española.</div><input type="text" class="inline-zin-input" data-answer="madrid is een spaanse stad" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>🌍 Cultuur</h3>
@@ -1013,6 +1965,18 @@
 <li>In veel Latijns-Amerikaanse landen is de omgang informeler</li>
 <li>Eettijden en sociale ritmes verschillen sterk per regio</li>
 </ul>
+</div>
+
+<div class="inline-oef" data-oef-id="les1-vert-nl-es-final">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Eindoefening — vertaal de zinnen (variatie)</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Hij is een beroemde docent.</div><input type="text" class="inline-zin-input" data-answer="es un profesor famoso" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij zijn geen Spanjaarden.</div><input type="text" class="inline-zin-input" data-answer="no somos españoles" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jullie zijn vrienden uit Mexico.</div><input type="text" class="inline-zin-input" data-answer="vosotros sois amigos de méxico" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Zij is een goede student.</div><input type="text" class="inline-zin-input" data-answer="ella es una buena estudiante" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Madrid en Barcelona zijn Spaanse steden.</div><input type="text" class="inline-zin-input" data-answer="madrid y barcelona son ciudades españolas" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik ben geen docent, ik ben student.</div><input type="text" class="inline-zin-input" data-answer="no soy profesor, soy estudiante" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jij bent Nederlands en zij zijn Mexicanen.</div><input type="text" class="inline-zin-input" data-answer="tú eres holandés y ellos son mexicanos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>✨ Samenvatting</h3>
@@ -1096,6 +2060,17 @@
 <div>de huizen</div>
 </div>
 
+<div class="inline-oef" data-oef-id="les2-bepaald">
+  <div class="inline-oef-header">✍️ Probeer het zelf — bepaalde lidwoorden</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="el" maxlength="4" placeholder="?"></span> coche <span class="inline-oef-hint">(de auto)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="la" maxlength="4" placeholder="?"></span> mesa <span class="inline-oef-hint">(de tafel)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="el" maxlength="4" placeholder="?"></span> día <span class="inline-oef-hint">(de dag — uitzondering!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="la" maxlength="4" placeholder="?"></span> mano <span class="inline-oef-hint">(de hand — uitzondering!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="los" maxlength="4" placeholder="?"></span> países <span class="inline-oef-hint">(de landen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="las" maxlength="4" placeholder="?"></span> ciudades <span class="inline-oef-hint">(de steden)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h4>4. Onbepaalde lidwoorden</h4>
 <table class="conjugation-table">
 <tr><th>Geslacht</th><th>Enkelvoud</th><th>Meervoud</th></tr>
@@ -1108,6 +2083,16 @@
 <li><strong>un / una</strong> betekenen <em>een</em></li>
 <li><strong>unos / unas</strong> betekenen <em>enkele</em> of <em>een aantal</em></li>
 </ul>
+
+<div class="inline-oef" data-oef-id="les2-onbepaald">
+  <div class="inline-oef-header">✍️ Probeer het zelf — onbepaalde lidwoorden</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="un" maxlength="5" placeholder="?"></span> problema <span class="inline-oef-hint">(een probleem — uitzondering!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="una" maxlength="5" placeholder="?"></span> foto <span class="inline-oef-hint">(een foto — uitzondering!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="un" maxlength="5" placeholder="?"></span> sistema <span class="inline-oef-hint">(een systeem)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="unos" maxlength="5" placeholder="?"></span> coches <span class="inline-oef-hint">(enkele auto's)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="unas" maxlength="5" placeholder="?"></span> manos <span class="inline-oef-hint">(enkele handen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
 
 <h4>5. Wanneer gebruik je geen lidwoord</h4>
 <div class="grammar-box">
@@ -1142,24 +2127,31 @@
 <p><em>Het lidwoord verandert altijd mee.</em></p>
 </div>
 
-<h3>✍️ Oefeningen</h3>
-<h4>a. Grammatica invullen</h4>
-<ol>
-<li>___ libro</li>
-<li>___ casa</li>
-<li>___ problema</li>
-<li>___ ciudades</li>
-<li>___ manos</li>
-</ol>
-
-<h4>Antwoorden</h4>
-<div class="grammar-box">
-<p><strong>a.</strong> 1. el, 2. la, 3. el, 4. las, 5. las</p>
+<div class="inline-oef" data-oef-id="les2-meervoud">
+  <div class="inline-oef-header">✍️ Maak het meervoud (met lidwoord)</div>
+  <div class="inline-oef-row">la mesa → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="las mesas" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(de tafels)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">el país → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="los países" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(de landen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">la ciudad → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="las ciudades" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(de steden)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">el problema → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="los problemas" maxlength="16" placeholder="?"></span> <span class="inline-oef-hint">(de problemen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>🌍 Cultuur</h3>
 <div class="grammar-box">
 <p>In Spanje wordt correct lidwoordgebruik als teken van taalbeheersing gezien. Objecten en plaatsen worden vaker expliciet benoemd met lidwoorden.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="les2-vert-nl-es">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Eindoefening — vertaal naar het Spaans (variatie)</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">het probleem en het systeem</div><input type="text" class="inline-zin-input" data-answer="el problema y el sistema" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">een hand en een foto</div><input type="text" class="inline-zin-input" data-answer="una mano y una foto" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">de mannen en de vrouwen</div><input type="text" class="inline-zin-input" data-answer="los hombres y las mujeres" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">enkele steden in het land</div><input type="text" class="inline-zin-input" data-answer="unas ciudades en el país" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">de dag en de nacht</div><input type="text" class="inline-zin-input" data-answer="el día y la noche" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">enkele problemen</div><input type="text" class="inline-zin-input" data-answer="unos problemas" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">een auto en enkele tafels</div><input type="text" class="inline-zin-input" data-answer="un coche y unas mesas" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">de handen van de man</div><input type="text" class="inline-zin-input" data-answer="las manos del hombre" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>✨ Samenvatting</h3>
@@ -1197,6 +2189,17 @@
 <p>Deze veranderen niet van geslacht (el coche <strong>grande</strong>, la ciudad <strong>grande</strong>)</p>
 </div>
 
+<div class="inline-oef" data-oef-id="les3-geslacht">
+  <div class="inline-oef-header">✍️ Probeer het zelf — vul het juiste bijvoeglijk naamwoord in</div>
+  <div class="inline-oef-row">la casa <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="bonita" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(mooi)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">el coche <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="nuevo" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(nieuw)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">la profesora <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="famosa" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(beroemd)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">el hombre <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="viejo" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(oud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">la ciudad <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="grande" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(groot)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">el libro <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="interesante" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(interessant)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h4>3. Overeenstemming in getal</h4>
 <div class="grammar-box">
 <p>Het bijvoeglijk naamwoord volgt altijd het meervoud van het zelfstandig naamwoord.</p>
@@ -1205,6 +2208,17 @@
 <li>Eindigt op medeklinker → voeg <strong>-es</strong> toe</li>
 </ul>
 <p>Voorbeelden: los libros <strong>nuevos</strong>, las casas <strong>grandes</strong></p>
+</div>
+
+<div class="inline-oef" data-oef-id="les3-meervoud">
+  <div class="inline-oef-header">✍️ Probeer het zelf — meervoud (let op: geslacht én getal)</div>
+  <div class="inline-oef-row">los libros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="modernos" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(modern)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">las mujeres <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="famosas" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(beroemd)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">las casas <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="pequeñas" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(klein)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">los coches <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="grandes" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(groot)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">las ciudades <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="interesantes" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(interessant)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">los hombres <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="viejos" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(oud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h4>4. Positie van het bijvoeglijk naamwoord</h4>
@@ -1221,6 +2235,17 @@
 <li><strong>un gran hombre</strong> = een groot man (figuurlijk)</li>
 <li><strong>un hombre grande</strong> = een grote man (fysiek)</li>
 </ul>
+</div>
+
+<div class="inline-oef" data-oef-id="les3-context">
+  <div class="inline-oef-header">✍️ Vul in — overeenstemming in volledige zinnen (nieuwe woorden)</div>
+  <div class="inline-oef-row">Estos coches son muy <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="rápidos" maxlength="12" placeholder="?"></span>. <span class="inline-oef-hint">(snel)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Esta mujer es <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="inteligente" maxlength="14" placeholder="?"></span>. <span class="inline-oef-hint">(slim)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Mis amigas son <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="felices" maxlength="12" placeholder="?"></span>. <span class="inline-oef-hint">(blij)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">La música es <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="tranquila" maxlength="12" placeholder="?"></span>. <span class="inline-oef-hint">(rustig)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Los chicos son <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="simpáticos" maxlength="14" placeholder="?"></span>. <span class="inline-oef-hint">(aardig)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Las clases son <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="difíciles" maxlength="14" placeholder="?"></span>. <span class="inline-oef-hint">(moeilijk)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>📖 Vocabulaire</h3>
@@ -1260,24 +2285,41 @@
 <p><em>Dit is een vaste regel, geen stijlkeuze.</em></p>
 </div>
 
-<h3>✍️ Oefeningen</h3>
-<h4>a. Grammatica invullen</h4>
-<ol>
-<li>el libro ___ (nieuw)</li>
-<li>la casa ___ (groot)</li>
-<li>los coches ___ (modern)</li>
-<li>una ciudad ___ (interessant)</li>
-<li>las mujeres ___ (beroemd)</li>
-</ol>
+<div class="inline-oef" data-oef-id="les3-vert-nl-es">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Vertaal de zinsdelen</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">het nieuwe boek</div><input type="text" class="inline-zin-input" data-answer="el libro nuevo" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">een mooi huis</div><input type="text" class="inline-zin-input" data-answer="una casa bonita" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">de oude mannen</div><input type="text" class="inline-zin-input" data-answer="los hombres viejos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">een interessante stad</div><input type="text" class="inline-zin-input" data-answer="una ciudad interesante" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">de moderne auto's</div><input type="text" class="inline-zin-input" data-answer="los coches modernos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
 
-<h4>Antwoorden</h4>
-<div class="grammar-box">
-<p><strong>a.</strong> 1. nuevo, 2. grande, 3. modernos, 4. interesante, 5. famosas</p>
+<div class="inline-oef" data-oef-id="les3-vert-es-nl">
+  <div class="inline-oef-header">🇪🇸 → 🇳🇱 Vertaal naar het Nederlands</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">la profesora famosa</div><input type="text" class="inline-zin-input" data-answer="de beroemde lerares" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">las casas pequeñas</div><input type="text" class="inline-zin-input" data-answer="de kleine huizen" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">un coche grande</div><input type="text" class="inline-zin-input" data-answer="een grote auto" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">los libros interesantes</div><input type="text" class="inline-zin-input" data-answer="de interessante boeken" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>🌍 Cultuur</h3>
 <div class="grammar-box">
 <p>In Spanje wordt het correct laten overeenstemmen van bijvoeglijke naamwoorden als essentieel gezien voor grammaticale correctheid. Beschrijvingen in het Spaans zijn vaak explicieter en gedetailleerder.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="les3-vert-nl-es-final">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Eindoefening — vertaal de zinnen (variatie)</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Het is een snelle auto.</div><input type="text" class="inline-zin-input" data-answer="es un coche rápido" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">De stad is groot en mooi.</div><input type="text" class="inline-zin-input" data-answer="la ciudad es grande y bonita" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">De boeken zijn niet interessant.</div><input type="text" class="inline-zin-input" data-answer="los libros no son interesantes" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Mijn vriendinnen zijn slim en aardig.</div><input type="text" class="inline-zin-input" data-answer="mis amigas son inteligentes y simpáticas" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">De huizen zijn modern en niet duur.</div><input type="text" class="inline-zin-input" data-answer="las casas son modernas y no son caras" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Het is een oude maar beroemde stad.</div><input type="text" class="inline-zin-input" data-answer="es una ciudad vieja pero famosa" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">De jongens zijn blij vandaag.</div><input type="text" class="inline-zin-input" data-answer="los chicos están felices hoy" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Spaans is een moeilijke maar mooie taal.</div><input type="text" class="inline-zin-input" data-answer="el español es una lengua difícil pero bonita" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>✨ Samenvatting</h3>
@@ -1326,6 +2368,16 @@
 
 <p><em>Deze patronen moet je mechanisch kunnen toepassen.</em></p>
 
+<div class="inline-oef" data-oef-id="les4-vervoeging">
+  <div class="inline-oef-header">✍️ Probeer het zelf — vervoeg hablar</div>
+  <div class="inline-oef-row">yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hablo" maxlength="10" placeholder="?"></span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">tú <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hablas" maxlength="10" placeholder="?"></span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ella <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="habla" maxlength="10" placeholder="?"></span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hablamos" maxlength="12" placeholder="?"></span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hablan" maxlength="10" placeholder="?"></span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h4>4. Gebruik van het onderwerp</h4>
 <div class="grammar-box">
 <p>Net als bij ser geldt:</p>
@@ -1368,6 +2420,37 @@
 <div>Zij spreken veel.</div>
 </div>
 
+<div class="inline-oef" data-oef-id="les4-vocab">
+  <div class="inline-oef-header">✍️ Vul het werkwoord in — gebruik de Nederlandse hint</div>
+  <div class="inline-oef-row">Tú <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="escuchas" maxlength="12" placeholder="?"></span> la radio. <span class="inline-oef-hint">(luisteren)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="miramos" maxlength="12" placeholder="?"></span> la película. <span class="inline-oef-hint">(kijken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="compro" maxlength="12" placeholder="?"></span> el periódico. <span class="inline-oef-hint">(kopen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="viajan" maxlength="12" placeholder="?"></span> a México. <span class="inline-oef-hint">(reizen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="estudiáis" maxlength="14" placeholder="?"></span> francés. <span class="inline-oef-hint">(studeren)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ella <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="trabaja" maxlength="12" placeholder="?"></span> en una oficina. <span class="inline-oef-hint">(werken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<div class="inline-oef" data-oef-id="les4-extra">
+  <div class="inline-oef-header">✍️ Extra -ar oefening — nieuwe werkwoorden in context</div>
+  <div class="inline-oef-row">Yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="cocino" maxlength="12" placeholder="?"></span> paella los domingos. <span class="inline-oef-hint">(koken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tú <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="cantas" maxlength="12" placeholder="?"></span> muy bien. <span class="inline-oef-hint">(zingen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ella <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="llega" maxlength="12" placeholder="?"></span> tarde a la oficina. <span class="inline-oef-hint">(aankomen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="tomamos" maxlength="12" placeholder="?"></span> café en el bar. <span class="inline-oef-hint">(nemen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="bailáis" maxlength="12" placeholder="?"></span> flamenco. <span class="inline-oef-hint">(dansen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="preguntan" maxlength="14" placeholder="?"></span> mucho en clase. <span class="inline-oef-hint">(vragen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<div class="inline-oef" data-oef-id="les4-vert-es-nl">
+  <div class="inline-oef-header">🇪🇸 → 🇳🇱 Vertaal de zin</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Yo escucho música.</div><input type="text" class="inline-zin-input" data-answer="ik luister naar muziek" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ella mira la tele.</div><input type="text" class="inline-zin-input" data-answer="zij kijkt tv" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Nosotros viajamos mucho.</div><input type="text" class="inline-zin-input" data-answer="wij reizen veel" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ellos compran un coche.</div><input type="text" class="inline-zin-input" data-answer="zij kopen een auto" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h3>🔨 Zinsopbouw</h3>
 <div class="grammar-box">
 <p><strong>Basisstructuur:</strong> werkwoord + rest</p>
@@ -1383,13 +2466,17 @@
 <p>In Spanje zijn directe formuleringen gebruikelijk; werkwoorden staan centraal in zinnen.</p>
 </div>
 
-<h3>🔄 Extra recap: gerichte herhaling</h3>
-<div class="grammar-box">
-<p><strong>Oefening 1:</strong> Bij welke persoon horen deze vormen?</p>
-<ol><li>hablamos</li><li>estudias</li><li>trabajan</li></ol>
-<p><strong>Oefening 2:</strong> Fout of correct?</p>
-<ol><li>Yo trabaja mucho.</li><li>Estudiamos español.</li></ol>
-<p><strong>Oefening 3:</strong> Maak zinnen met: 1) trabajar + yo, 2) estudiar + nosotros, 3) hablar + ella</p>
+<div class="inline-oef" data-oef-id="les4-vert-nl-es">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Eindoefening — vertaal de zinnen (variatie in werkwoorden)</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik kook morgen voor mijn vrienden.</div><input type="text" class="inline-zin-input" data-answer="yo cocino mañana para mis amigos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij dansen niet veel.</div><input type="text" class="inline-zin-input" data-answer="nosotros no bailamos mucho" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jullie nemen koffie in het café.</div><input type="text" class="inline-zin-input" data-answer="vosotros tomáis café en el café" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Zij komen laat aan op het feest.</div><input type="text" class="inline-zin-input" data-answer="ellos llegan tarde a la fiesta" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Hij kijkt tv terwijl ik studeer.</div><input type="text" class="inline-zin-input" data-answer="él mira la tele mientras yo estudio" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij reizen veel naar Spanje.</div><input type="text" class="inline-zin-input" data-answer="nosotros viajamos mucho a españa" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jij zingt heel goed in het Spaans.</div><input type="text" class="inline-zin-input" data-answer="tú cantas muy bien en español" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik werk niet, ik luister naar muziek.</div><input type="text" class="inline-zin-input" data-answer="yo no trabajo, escucho música" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>✨ Samenvatting</h3>
@@ -1419,6 +2506,16 @@
 <tr><td>ellos / ellas / ustedes</td><td><strong>-en</strong></td><td><strong>comen</strong></td></tr>
 </table>
 
+<div class="inline-oef" data-oef-id="les5-er">
+  <div class="inline-oef-header">✍️ Vul het -er werkwoord in (gebruik de NL-hint)</div>
+  <div class="inline-oef-row">Yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="bebo" maxlength="12" placeholder="?"></span> agua. <span class="inline-oef-hint">(drinken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ella <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="lee" maxlength="12" placeholder="?"></span> el periódico. <span class="inline-oef-hint">(lezen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="aprendemos" maxlength="14" placeholder="?"></span> francés. <span class="inline-oef-hint">(leren)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vendéis" maxlength="12" placeholder="?"></span> coches. <span class="inline-oef-hint">(verkopen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="comen" maxlength="12" placeholder="?"></span> pan. <span class="inline-oef-hint">(eten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h4>2. Regelmatige -ir werkwoorden</h4>
 <table class="conjugation-table">
 <tr><th>Persoon</th><th>Uitgang</th><th>Voorbeeld: vivir</th></tr>
@@ -1430,6 +2527,17 @@
 <tr><td>ellos / ellas / ustedes</td><td><strong>-en</strong></td><td><strong>viven</strong></td></tr>
 </table>
 
+<div class="inline-oef" data-oef-id="les5-ir">
+  <div class="inline-oef-header">✍️ Vul het -ir werkwoord in (let op: nosotros = -imos, vosotros = -ís)</div>
+  <div class="inline-oef-row">Tú <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="escribes" maxlength="12" placeholder="?"></span> una carta. <span class="inline-oef-hint">(schrijven)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="abro" maxlength="12" placeholder="?"></span> la puerta. <span class="inline-oef-hint">(openen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ella <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="recibe" maxlength="12" placeholder="?"></span> un regalo. <span class="inline-oef-hint">(ontvangen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="compartimos" maxlength="14" placeholder="?"></span> la comida. <span class="inline-oef-hint">(delen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="decidís" maxlength="12" placeholder="?"></span> rápido. <span class="inline-oef-hint">(beslissen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="asisten" maxlength="12" placeholder="?"></span> a la clase. <span class="inline-oef-hint">(bijwonen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h4>3. Vergelijking -ar, -er, -ir</h4>
 <div class="grammar-box">
 <p><strong>Belangrijk inzicht:</strong></p>
@@ -1439,6 +2547,17 @@
 <li>-ir: vivimos, vivís</li>
 </ul>
 <p><em>Fouten ontstaan vaak juist hier!</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="les5-mix">
+  <div class="inline-oef-header">✍️ Mix-oefening — schakel tussen -er en -ir (let op nosotros/vosotros)</div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="comemos" maxlength="12" placeholder="?"></span> tapas. <span class="inline-oef-hint">(eten — er)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vivimos" maxlength="12" placeholder="?"></span> en Sevilla. <span class="inline-oef-hint">(wonen — ir)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="bebéis" maxlength="12" placeholder="?"></span> vino. <span class="inline-oef-hint">(drinken — er)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vosotros <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="escribís" maxlength="12" placeholder="?"></span> mensajes. <span class="inline-oef-hint">(schrijven — ir)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Yo <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="leo" maxlength="10" placeholder="?"></span> el periódico. <span class="inline-oef-hint">(lezen — er)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ellos <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="comparten" maxlength="14" placeholder="?"></span> los problemas. <span class="inline-oef-hint">(delen — ir)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>📖 Vocabulaire</h3>
@@ -1474,6 +2593,16 @@
 <div>Zij drinken water.</div>
 </div>
 
+<div class="inline-oef" data-oef-id="les5-vert-es-nl">
+  <div class="inline-oef-header">🇪🇸 → 🇳🇱 Vertaal de zin</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ella lee un libro interesante.</div><input type="text" class="inline-zin-input" data-answer="zij leest een interessant boek" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Nosotros aprendemos español.</div><input type="text" class="inline-zin-input" data-answer="wij leren spaans" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Yo recibo una carta.</div><input type="text" class="inline-zin-input" data-answer="ik ontvang een brief" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Vosotros vendéis la casa.</div><input type="text" class="inline-zin-input" data-answer="jullie verkopen het huis" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ellos comparten la comida.</div><input type="text" class="inline-zin-input" data-answer="zij delen het eten" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
 <h3>🌍 Cultuur</h3>
 <div class="grammar-box">
 <p><strong>Een praktisch verschil dat hier relevant is:</strong></p>
@@ -1485,11 +2614,17 @@
 <p>Dit is volledig normaal en vereist geen aanvulling zoals in het Nederlands.</p>
 </div>
 
-<h3>🔄 Extra recap</h3>
-<div class="grammar-box">
-<p><strong>Oefening 1:</strong> Herken het type: 1) vivir, 2) comer, 3) estudiar</p>
-<p><strong>Oefening 2:</strong> Vul in: 1) nosotros ___ (comer), 2) vosotros ___ (vivir)</p>
-<p><strong>Oefening 3:</strong> Maak zinnen met: 1) aprender + yo, 2) vivir + ellos, 3) beber + nosotros</p>
+<div class="inline-oef" data-oef-id="les5-vert-nl-es">
+  <div class="inline-oef-header">🇳🇱 → 🇪🇸 Eindoefening — vertaal de zinnen (alle werkwoorden door elkaar)</div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik drink water terwijl ik een boek lees.</div><input type="text" class="inline-zin-input" data-answer="yo bebo agua mientras leo un libro" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij verkopen geen auto's, wij wonen op het platteland.</div><input type="text" class="inline-zin-input" data-answer="nosotros no vendemos coches, vivimos en el campo" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Hij ontvangt een geschenk van zijn vrienden.</div><input type="text" class="inline-zin-input" data-answer="él recibe un regalo de sus amigos" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Jullie schrijven brieven en delen verhalen.</div><input type="text" class="inline-zin-input" data-answer="vosotros escribís cartas y compartís historias" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Zij eten thuis maar zij drinken in het café.</div><input type="text" class="inline-zin-input" data-answer="ellos comen en casa pero beben en el bar" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij beslissen vandaag, jullie beslissen morgen.</div><input type="text" class="inline-zin-input" data-answer="nosotros decidimos hoy, vosotros decidís mañana" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Ik open de deur en zij komt binnen.</div><input type="text" class="inline-zin-input" data-answer="yo abro la puerta y ella entra" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row zin-vert"><div class="inline-prompt">Wij leren Spaans op de universiteit.</div><input type="text" class="inline-zin-input" data-answer="nosotros aprendemos español en la universidad" placeholder="schrijf hier..."><div class="inline-zin-feedback"></div><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
 </div>
 
 <h3>✨ Samenvatting</h3>
@@ -4862,6 +5997,7 @@
             loadLesson(currentDay);
             updateXPDisplay();
             updateStreakDisplay();
+            updateDailyStrip();
         }
 
         // switchTab werkt zowel via onclick als vanuit code (geen event.target afhankelijkheid)
@@ -4876,23 +6012,88 @@
             if (tabName === 'themas') loadThemasMenu();
         }
 
-        function renderDaySelector() {
-            const selector = document.getElementById('daySelector');
-            selector.innerHTML = '';
-            for (let i = 1; i <= 25; i++) {
-                const button = document.createElement('button');
-                button.className = 'day-button';
-                if (completedDays.has(i)) button.classList.add('completed');
-                if (i === currentDay) button.classList.add('active');
-                button.textContent = `Dag ${i}`;
-                button.onclick = () => {
-                    currentDay = i;
-                    renderDaySelector();
-                    loadLesson(i);
-                };
-                selector.appendChild(button);
+        // Course sections — group of 5 lessons each, named by theme
+        const COURSE_SECTIONS = [
+            { label: 'Sectie 1', title: 'De basis & woordsoorten',     range: [1, 5]   },
+            { label: 'Sectie 2', title: 'Werkwoorden uitgebreid',       range: [6, 10]  },
+            { label: 'Sectie 3', title: 'Voornaamwoorden & verbinden',  range: [11, 15] },
+            { label: 'Sectie 4', title: 'Het verleden',                  range: [16, 20] },
+            { label: 'Sectie 5', title: 'Toekomst, wens & voorwaarde',   range: [21, 25] },
+        ];
+        // Position pattern for the winding path (repeats)
+        const PATH_POSITIONS = ['center','right','far-right','right','center','left','far-left','left'];
+        function renderLessonPath() {
+            const path = document.getElementById('lessonPath');
+            if (!path) { return renderDaySelector(); /* fallback */ }
+            path.innerHTML = '';
+            COURSE_SECTIONS.forEach(section => {
+                const [from, to] = section.range;
+                const total = to - from + 1;
+                const completedInSection = [...completedDays].filter(d => d >= from && d <= to).length;
+                const banner = document.createElement('div');
+                banner.className = 'path-section-banner';
+                banner.innerHTML = `
+                    <div>
+                        <span class="section-label">${section.label}</span>
+                        <span class="section-title">${section.title}</span>
+                    </div>
+                    <span class="section-progress">${completedInSection}/${total}</span>
+                `;
+                path.appendChild(banner);
+                for (let i = from; i <= to; i++) {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'path-node-wrap';
+                    wrap.dataset.pos = PATH_POSITIONS[(i - 1) % PATH_POSITIONS.length];
+                    const isCompleted = completedDays.has(i);
+                    const isCurrent = (i === currentDay);
+                    const isFuture = !isCompleted && !isCurrent;
+                    if (isCurrent) wrap.classList.add('is-current');
+                    const btn = document.createElement('button');
+                    btn.className = 'path-node-button ' + (isCompleted ? 'completed' : isCurrent ? 'current' : 'future');
+                    btn.setAttribute('aria-label', `Les ${i}: ${(typeof lessonTitles !== 'undefined' && lessonTitles[i]) ? lessonTitles[i] : ''}`);
+                    if (isCompleted) {
+                        btn.innerHTML = `<span class="crown-overlay">👑</span>✓`;
+                    } else if (isCurrent) {
+                        btn.textContent = i;
+                    } else {
+                        btn.innerHTML = `${i}`;
+                    }
+                    btn.onclick = () => {
+                        currentDay = i;
+                        renderLessonPath();
+                        loadLesson(i);
+                        // Smooth-scroll to lesson content after render
+                        setTimeout(() => {
+                            const lc = document.getElementById('lessonContent');
+                            if (lc) lc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 60);
+                    };
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'path-node-tooltip';
+                    const title = (typeof lessonTitles !== 'undefined' && lessonTitles[i]) ? lessonTitles[i] : `Dag ${i}`;
+                    tooltip.innerHTML = `<strong>Dag ${i}</strong><br>${title}`;
+                    wrap.appendChild(btn);
+                    wrap.appendChild(tooltip);
+                    path.appendChild(wrap);
+                }
+            });
+            // Keep legacy daySelector in sync (used by progress overview links)
+            const legacy = document.getElementById('daySelector');
+            if (legacy) {
+                legacy.innerHTML = '';
+                for (let i = 1; i <= 25; i++) {
+                    const button = document.createElement('button');
+                    button.className = 'day-button';
+                    if (completedDays.has(i)) button.classList.add('completed');
+                    if (i === currentDay) button.classList.add('active');
+                    button.textContent = `Dag ${i}`;
+                    button.onclick = () => { currentDay = i; renderLessonPath(); loadLesson(i); };
+                    legacy.appendChild(button);
+                }
             }
         }
+        // Backwards-compat alias: existing code calls renderDaySelector()
+        function renderDaySelector() { return renderLessonPath(); }
 
         function updateProgressBar() {
             const progress = (completedDays.size / 25) * 100;
@@ -4911,9 +6112,21 @@
         function displayLesson(day) {
             const content = document.getElementById('lessonContent');
 
+            const hasCards = (typeof lesInvulOef !== 'undefined' && lesInvulOef[day] && lesInvulOef[day].length)
+                          || (typeof lesZinOef   !== 'undefined' && lesZinOef[day]   && lesZinOef[day].length);
+            const ctaHTML = hasCards ? `
+                <div class="session-cta">
+                    <div class="cta-icon">🎯</div>
+                    <div class="cta-text">
+                        <h3>Klaar voor de oefensessie?</h3>
+                        <p>Eén oefening per scherm — verdien XP en houd je streak.</p>
+                    </div>
+                    <button class="cta-btn" onclick="startLessonSession(${day})">Start sessie</button>
+                </div>` : '';
             const html = `
                 <div class="lesson-card">
                     <h2>Dag ${day}: ${lessonTitles[day]}</h2>
+                    ${ctaHTML}
                     ${lessonsHTML[day]}
                     <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--ochre);">
                         <button class="btn" onclick="markDayComplete(${day})">
@@ -4937,6 +6150,7 @@
             } catch(e) {
                 console.warn('Les-oefeningen konden niet geladen worden:', e);
             }
+            try { if (typeof bindInlineOef === 'function') bindInlineOef(content); } catch(e) {}
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -7634,10 +8848,6 @@ ONDERWERP: ${gesprekTopic}`;
         // Mini-oefeningen per dag: snelle, diverse oefeningetjes
         const lesMiniOef = {
             1: [
-                { type: 'koppel', titel: 'Koppel de voornaamwoorden', items: [
-                    { left: 'yo', right: 'ik' }, { left: 'tú', right: 'jij' }, { left: 'él', right: 'hij' },
-                    { left: 'nosotros', right: 'wij' }, { left: 'ellos', right: 'zij (mv)' },
-                ]},
                 { type: 'meerkeuze', titel: 'Kies de juiste vorm van ser', vragen: [
                     { vraag: 'Yo ___ estudiante.', opties: ['soy', 'eres', 'es', 'somos'], correct: 0 },
                     { vraag: 'Nosotros ___ amigos.', opties: ['soy', 'eres', 'son', 'somos'], correct: 3 },
@@ -7650,11 +8860,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { hint: 'docent (v)', antwoord: 'profesora' },
                     { hint: 'vrouw', antwoord: 'mujer' },
                 ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['Yo', 'soy', 'estudiante'], correct: 'Yo soy estudiante' },
-                    { woorden: ['es', 'Ella', 'profesora'], correct: 'Ella es profesora' },
-                    { woorden: ['de', 'Soy', 'Holanda'], correct: 'Soy de Holanda' },
-                ]},
             ],
             2: [
                 { type: 'meerkeuze', titel: 'Bepaald of onbepaald lidwoord?', vragen: [
@@ -7662,10 +8867,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: '___ casa (bepaald, v)', opties: ['el', 'la', 'un', 'una'], correct: 1 },
                     { vraag: '___ problema (bepaald)', opties: ['el', 'la', 'un', 'una'], correct: 0 },
                     { vraag: '___ mano (bepaald)', opties: ['el', 'la', 'un', 'una'], correct: 1 },
-                ]},
-                { type: 'koppel', titel: 'Koppel enkelvoud → meervoud', items: [
-                    { left: 'el libro', right: 'los libros' }, { left: 'la casa', right: 'las casas' },
-                    { left: 'la ciudad', right: 'las ciudades' }, { left: 'el día', right: 'los días' },
                 ]},
                 { type: 'woordzoeker', titel: 'Typ het Spaanse woord', vragen: [
                     { hint: 'dag', antwoord: 'día' },
@@ -7686,15 +8887,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'las casas ___ (mooi)', opties: ['bonito', 'bonita', 'bonitos', 'bonitas'], correct: 3 },
                     { vraag: 'un libro ___ (interessant)', opties: ['interesante', 'interesantes', 'interesanto', 'interesanta'], correct: 0 },
                 ]},
-                { type: 'koppel', titel: 'Koppel mannelijk → vrouwelijk', items: [
-                    { left: 'nuevo', right: 'nueva' }, { left: 'bonito', right: 'bonita' },
-                    { left: 'moderno', right: 'moderna' }, { left: 'alto', right: 'alta' },
-                ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['es', 'La', 'grande', 'casa'], correct: 'La casa es grande' },
-                    { woorden: ['rojo', 'El', 'es', 'coche'], correct: 'El coche es rojo' },
-                    { woorden: ['son', 'Las', 'bonitas', 'flores'], correct: 'Las flores son bonitas' },
-                ]},
             ],
             4: [
                 { type: 'meerkeuze', titel: 'Vervoeg het -ar werkwoord', vragen: [
@@ -7702,11 +8894,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Ella ___ mucho. (estudiar)', opties: ['estudio', 'estudias', 'estudia', 'estudian'], correct: 2 },
                     { vraag: 'Nosotros ___ en casa. (trabajar)', opties: ['trabajo', 'trabajas', 'trabaja', 'trabajamos'], correct: 3 },
                     { vraag: 'Ellos ___ mucho. (viajar)', opties: ['viajo', 'viajas', 'viaja', 'viajan'], correct: 3 },
-                ]},
-                { type: 'koppel', titel: 'Koppel persoon → uitgang (-ar)', items: [
-                    { left: 'yo', right: '-o' }, { left: 'tú', right: '-as' },
-                    { left: 'él/ella', right: '-a' }, { left: 'nosotros', right: '-amos' },
-                    { left: 'ellos', right: '-an' },
                 ]},
                 { type: 'woordzoeker', titel: 'Typ de correcte vervoeging', vragen: [
                     { hint: 'hablar → yo', antwoord: 'hablo' },
@@ -7727,16 +8914,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Nosotros ___ agua. (beber)', opties: ['bebo', 'bebes', 'bebe', 'bebemos'], correct: 3 },
                     { vraag: 'Tú ___ una carta. (escribir)', opties: ['escribo', 'escribes', 'escribe', 'escribimos'], correct: 1 },
                 ]},
-                { type: 'koppel', titel: 'Koppel -er en -ir werkwoorden', items: [
-                    { left: 'comer', right: 'eten' }, { left: 'beber', right: 'drinken' },
-                    { left: 'vivir', right: 'wonen' }, { left: 'escribir', right: 'schrijven' },
-                    { left: 'aprender', right: 'leren' },
-                ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['como', 'Yo', 'paella'], correct: 'Yo como paella' },
-                    { woorden: ['español', 'Ella', 'aprende'], correct: 'Ella aprende español' },
-                    { woorden: ['en', 'Vivimos', 'Barcelona'], correct: 'Vivimos en Barcelona' },
-                ]},
             ],
             6: [
                 { type: 'meerkeuze', titel: 'Welke yo-vorm is correct?', vragen: [
@@ -7744,11 +8921,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'hacer → yo ...', opties: ['haco', 'hago', 'hace', 'haso'], correct: 1 },
                     { vraag: 'salir → yo ...', opties: ['salo', 'sale', 'salgo', 'salo'], correct: 2 },
                     { vraag: 'poner → yo ...', opties: ['pono', 'pone', 'pongo', 'ponigo'], correct: 2 },
-                ]},
-                { type: 'koppel', titel: 'Koppel infinitief → yo-vorm', items: [
-                    { left: 'tener', right: 'tengo' }, { left: 'hacer', right: 'hago' },
-                    { left: 'ir', right: 'voy' }, { left: 'venir', right: 'vengo' },
-                    { left: 'salir', right: 'salgo' },
                 ]},
                 { type: 'foutzoeken', titel: 'Vind de fout', zinnen: [
                     { zin: ['Yo', 'haco', 'la', 'tarea'], fout: 1, correctie: 'hago', uitleg: 'hacer → yo = hago (onregelmatig)' },
@@ -7782,10 +8954,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'La tienda ___ abierta. (open, nu)', opties: ['es', 'está'], correct: 1 },
                     { vraag: 'Madrid ___ una ciudad grande.', opties: ['es', 'está'], correct: 0 },
                 ]},
-                { type: 'koppel', titel: 'Koppel gebruik → werkwoord', items: [
-                    { left: 'beroep', right: 'ser' }, { left: 'locatie', right: 'estar' },
-                    { left: 'tijdelijke toestand', right: 'estar' }, { left: 'nationaliteit', right: 'ser' },
-                ]},
                 { type: 'foutzoeken', titel: 'Vind de fout: ser of estar?', zinnen: [
                     { zin: ['Ella', 'está', 'inteligente'], fout: 1, correctie: 'es', uitleg: 'Intelligentie is permanent → ser' },
                     { zin: ['El', 'es', 'cansado', 'hoy'], fout: 1, correctie: 'está', uitleg: 'Moe zijn is tijdelijk → estar' },
@@ -7812,10 +8980,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Me ___ viajar.', opties: ['gusta', 'gustan'], correct: 0 },
                     { vraag: 'Me ___ las películas.', opties: ['gusta', 'gustan'], correct: 1 },
                 ]},
-                { type: 'koppel', titel: 'Koppel indirect object', items: [
-                    { left: 'a mí', right: 'me gusta' }, { left: 'a ti', right: 'te gusta' },
-                    { left: 'a él/ella', right: 'le gusta' }, { left: 'a nosotros', right: 'nos gusta' },
-                ]},
                 { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
                     { woorden: ['gusta', 'Me', 'café', 'el'], correct: 'Me gusta el café' },
                     { woorden: ['gustan', 'Te', 'flores', 'las'], correct: 'Te gustan las flores' },
@@ -7823,10 +8987,6 @@ ONDERWERP: ${gesprekTopic}`;
                 ]},
             ],
             11: [
-                { type: 'koppel', titel: 'Koppel gustar-type werkwoord', items: [
-                    { left: 'encantar', right: 'dol zijn op' }, { left: 'molestar', right: 'storen' },
-                    { left: 'interesar', right: 'interesseren' }, { left: 'importar', right: 'uitmaken' },
-                ]},
                 { type: 'meerkeuze', titel: 'Welk werkwoord past?', vragen: [
                     { vraag: 'Me ___ la música. (dol op)', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 0 },
                     { vraag: 'Le ___ el ruido. (storen)', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 1 },
@@ -7852,11 +9012,6 @@ ONDERWERP: ${gesprekTopic}`;
                 ]},
             ],
             13: [
-                { type: 'koppel', titel: 'Koppel voorzetsels', items: [
-                    { left: 'en', right: 'in (locatie)' }, { left: 'a', right: 'naar (richting)' },
-                    { left: 'de', right: 'van (herkomst)' }, { left: 'debajo de', right: 'onder' },
-                    { left: 'enfrente de', right: 'tegenover' },
-                ]},
                 { type: 'meerkeuze', titel: 'Welk voorzetsel?', vragen: [
                     { vraag: 'Voy ___ centro. (naar het)', opties: ['en el', 'al', 'del', 'por el'], correct: 1 },
                     { vraag: 'Vengo ___ trabajo. (van het)', opties: ['en el', 'al', 'del', 'por el'], correct: 2 },
@@ -7894,10 +9049,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: '___ padres viven aquí. (onze)', opties: ['Mi', 'Nuestro', 'Nuestros', 'Su'], correct: 2 },
                     { vraag: '¿Es ___ coche? (jouw)', opties: ['mi', 'tu', 'su', 'mío'], correct: 1 },
                 ]},
-                { type: 'koppel', titel: 'Koppel onbeklemtoond → beklemtoond', items: [
-                    { left: 'mi', right: 'mío' }, { left: 'tu', right: 'tuyo' },
-                    { left: 'su', right: 'suyo' }, { left: 'nuestro', right: 'nuestro' },
-                ]},
                 { type: 'luister', titel: 'Luister en typ', zinnen: [
                     { zin: 'Mi casa es tu casa', hint: 'bezittelijk' },
                     { zin: 'Nuestro perro es grande', hint: 'ons' },
@@ -7909,10 +9060,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Ayer yo ___ mucho. (trabajar)', opties: ['trabajé', 'trabajó', 'trabajaste', 'trabajaron'], correct: 0 },
                     { vraag: 'Ella ___ una carta. (escribir)', opties: ['escribí', 'escribiste', 'escribió', 'escribieron'], correct: 2 },
                     { vraag: 'Nosotros ___. (comer)', opties: ['comí', 'comiste', 'comió', 'comimos'], correct: 3 },
-                ]},
-                { type: 'koppel', titel: 'Koppel signaaltwoord → vertaling', items: [
-                    { left: 'ayer', right: 'gisteren' }, { left: 'anoche', right: 'gisteravond' },
-                    { left: 'la semana pasada', right: 'vorige week' }, { left: 'hace dos días', right: 'twee dagen geleden' },
                 ]},
                 { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
                     { woorden: ['Ayer', 'hablé', 'con', 'mi', 'madre'], correct: 'Ayer hablé con mi madre' },
@@ -7927,11 +9074,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'tener → yo ...', opties: ['tuve', 'tuvo', 'tuvimos', 'tuvieron'], correct: 0 },
                     { vraag: 'decir → ellos ...', opties: ['dije', 'dijo', 'dijimos', 'dijeron'], correct: 3 },
                 ]},
-                { type: 'koppel', titel: 'Koppel infinitief → stam pretérito', items: [
-                    { left: 'tener', right: 'tuv-' }, { left: 'estar', right: 'estuv-' },
-                    { left: 'poder', right: 'pud-' }, { left: 'hacer', right: 'hic-/hiz-' },
-                    { left: 'decir', right: 'dij-' },
-                ]},
                 { type: 'foutzoeken', titel: 'Vind de fout', zinnen: [
                     { zin: ['Yo', 'hacié', 'la', 'tarea', 'ayer'], fout: 1, correctie: 'hice', uitleg: 'hacer → pretérito: yo hice (onregelmatig)' },
                     { zin: ['Ella', 'ponió', 'la', 'mesa'], fout: 1, correctie: 'puso', uitleg: 'poner → pretérito: ella puso (stam: pus-)' },
@@ -7945,10 +9087,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Nosotros ___ mucho. (jugar)', opties: ['jugaba', 'jugabas', 'jugábamos', 'jugaban'], correct: 2 },
                     { vraag: 'Ellos ___ en Madrid. (vivir)', opties: ['vivía', 'vivías', 'vivíamos', 'vivían'], correct: 3 },
                 ]},
-                { type: 'koppel', titel: 'Koppel uitgang → werkwoordtype', items: [
-                    { left: '-aba', right: '-ar werkwoord' }, { left: '-ía', right: '-er/-ir werkwoord' },
-                    { left: 'era', right: 'ser (onregelm.)' }, { left: 'iba', right: 'ir (onregelm.)' },
-                ]},
                 { type: 'luister', titel: 'Luister en typ', zinnen: [
                     { zin: 'Cuando era niño jugaba mucho', hint: 'vroeger' },
                     { zin: 'Siempre comíamos juntos', hint: 'altijd' },
@@ -7961,10 +9099,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Este libro es ___ que el otro. (beter)', opties: ['más bueno', 'mejor', 'buenísimo', 'más bien'], correct: 1 },
                     { vraag: 'Juan es tan alto ___ Pedro.', opties: ['que', 'como', 'de', 'más'], correct: 1 },
                     { vraag: 'Es el más alto ___ la clase.', opties: ['que', 'como', 'de', 'en'], correct: 2 },
-                ]},
-                { type: 'koppel', titel: 'Koppel onregelmatige vergelijkingen', items: [
-                    { left: 'bueno', right: 'mejor' }, { left: 'malo', right: 'peor' },
-                    { left: 'grande', right: 'mayor' }, { left: 'pequeño', right: 'menor' },
                 ]},
                 { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
                     { woorden: ['alto', 'Juan', 'más', 'es', 'que', 'Pedro'], correct: 'Juan es más alto que Pedro' },
@@ -7997,11 +9131,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Algún día ___ famoso. (ser, futuro)', opties: ['voy a ser', 'seré', 'soy', 'sea'], correct: 1 },
                     { vraag: '___ las tres. (het zal wel... zijn)', opties: ['Son', 'Están', 'Serán', 'Van a ser'], correct: 2 },
                 ]},
-                { type: 'koppel', titel: 'Koppel onregelmatige futuro-stam', items: [
-                    { left: 'tener', right: 'tendr-' }, { left: 'hacer', right: 'har-' },
-                    { left: 'decir', right: 'dir-' }, { left: 'poder', right: 'podr-' },
-                    { left: 'salir', right: 'saldr-' },
-                ]},
                 { type: 'woordzoeker', titel: 'Typ de futuro-vorm', vragen: [
                     { hint: 'tener → yo', antwoord: 'tendré' },
                     { hint: 'hacer → ella', antwoord: 'hará' },
@@ -8021,10 +9150,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Quiero que ___ aquí. (estar, tú)', opties: ['estás', 'estés'], correct: 1 },
                     { vraag: 'Sé que ___ aquí. (estar, tú)', opties: ['estás', 'estés'], correct: 0 },
                 ]},
-                { type: 'koppel', titel: 'Koppel trigger → type', items: [
-                    { left: 'querer que', right: 'wil/wens' }, { left: 'dudar que', right: 'twijfel' },
-                    { left: 'alegrarse de que', right: 'emotie' }, { left: 'es posible que', right: 'onpersoonlijk' },
-                ]},
                 { type: 'foutzoeken', titel: 'Vind de fout', zinnen: [
                     { zin: ['Quiero', 'que', 'vienes', 'a', 'mi', 'fiesta'], fout: 2, correctie: 'vengas', uitleg: 'Na quiero que → subjuntivo: vengas' },
                     { zin: ['Espero', 'que', 'tienes', 'tiempo'], fout: 2, correctie: 'tengas', uitleg: 'Na espero que → subjuntivo: tengas' },
@@ -8037,11 +9162,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'hacer → tú (bevestigend)', opties: ['hace', 'haz', 'haces', 'hagas'], correct: 1 },
                     { vraag: 'hablar → tú (ontkennend)', opties: ['no habla', 'no hablas', 'no hables', 'no hablé'], correct: 2 },
                     { vraag: 'venir → tú (bevestigend)', opties: ['viene', 'ven', 'vienes', 'vengas'], correct: 1 },
-                ]},
-                { type: 'koppel', titel: 'Koppel onregelmatige imperatieven', items: [
-                    { left: 'ser', right: 'sé' }, { left: 'ir', right: 've' },
-                    { left: 'poner', right: 'pon' }, { left: 'salir', right: 'sal' },
-                    { left: 'tener', right: 'ten' },
                 ]},
                 { type: 'volgorde', titel: 'Zet het bevel in de juiste volgorde', zinnen: [
                     { woorden: ['la', 'Abre', 'ventana'], correct: 'Abre la ventana' },
@@ -8056,11 +9176,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Esta semana ___ mucho. (trabajar, yo)', opties: ['he trabajado', 'trabajé'], correct: 0 },
                     { vraag: 'El año pasado ___ en España. (estar, yo)', opties: ['he estado', 'estuve'], correct: 1 },
                 ]},
-                { type: 'koppel', titel: 'Koppel onregelmatige participia', items: [
-                    { left: 'hacer', right: 'hecho' }, { left: 'decir', right: 'dicho' },
-                    { left: 'escribir', right: 'escrito' }, { left: 'ver', right: 'visto' },
-                    { left: 'poner', right: 'puesto' },
-                ]},
                 { type: 'luister', titel: 'Luister en typ', zinnen: [
                     { zin: 'Hoy he comido paella', hint: 'vandaag' },
                     { zin: 'Nunca he viajado a México', hint: 'nooit' },
@@ -8072,11 +9187,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Si estudias, ___. (slagen, tú)', opties: ['aprobarás', 'aprobarías', 'apruebas', 'apruebes'], correct: 0 },
                     { vraag: 'Si tuviera dinero, ___. (reizen, yo)', opties: ['viajo', 'viajaré', 'viajaría', 'viajara'], correct: 2 },
                     { vraag: 'Si ___ buen tiempo, vamos. (hacer)', opties: ['hace', 'haga', 'hiciera', 'haría'], correct: 0 },
-                ]},
-                { type: 'koppel', titel: 'Koppel condicionalis-stam', items: [
-                    { left: 'tener', right: 'tendría' }, { left: 'hacer', right: 'haría' },
-                    { left: 'poder', right: 'podría' }, { left: 'decir', right: 'diría' },
-                    { left: 'saber', right: 'sabría' },
                 ]},
                 { type: 'woordzoeker', titel: 'Typ de conditionalis', vragen: [
                     { hint: 'hablar → yo', antwoord: 'hablaría' },
@@ -8093,20 +9203,14 @@ ONDERWERP: ${gesprekTopic}`;
         };
 
         // ADD CONJUGATION AND STORY SEQUENCING EXERCISES TO ALL 25 DAYS
+        // Dag 1 — geen extra verhaal/volgorde meer, focus op invuloefeningen die in de theorie zelf staan
         lesMiniOef[1].push(
           { type: 'meerkeuze', titel: 'Vervoeg ser: Eerste schooldag', vragen: [
             { vraag: 'Yo ___ nuevo en esta escuela.', opties: ['soy', 'eres', 'es', 'somos'], correct: 0 },
             { vraag: 'Tú ___ mi nuevo compañero.', opties: ['soy', 'eres', 'es', 'somos'], correct: 1 },
             { vraag: 'El profesor ___ muy amable.', opties: ['soy', 'eres', 'es', 'somos'], correct: 2 },
             { vraag: 'Nosotros ___ estudiantes de primero.', opties: ['soy', 'eres', 'son', 'somos'], correct: 3 },
-          ]},
-          { type: 'verhaal', titel: 'Mi primer día', context: 'Primera escena: Llego a la escuela. Segunda escena: Conocer a mis compañeros. Tercera escena: La clase de español. Cuarta escena: El recreo con nuevos amigos.',
-            zinnen: [
-              { tekst: 'Después, tengo clase de español con muchos estudiantes nuevos.', correct_idx: 2 },
-              { tekst: 'Llego a la escuela con nervios pero también emoción.', correct_idx: 0 },
-              { tekst: 'En el recreo juego con mis nuevos compañeros en el patio.', correct_idx: 3 },
-              { tekst: 'Mis compañeros son muy amables y me presentan a sus amigos.', correct_idx: 1 }
-            ]}
+          ]}
         );
 
         lesMiniOef[2].push(
@@ -8115,14 +9219,7 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: '___ mano del vendedor es muy grande.', opties: ['el', 'la', 'un', 'una'], correct: 1 },
             { vraag: 'Hay ___ problema: el precio es muy alto.', opties: ['el', 'la', 'un', 'una'], correct: 2 },
             { vraag: '___ ciudad es bonita y tiene muchas tiendas.', opties: ['el', 'la', 'un', 'una'], correct: 1 },
-          ]},
-          { type: 'verhaal', titel: 'La tienda especial', context: 'Visito una tienda muy antigua en el centro de la ciudad. El vendedor tiene objetos mágicos. Descubro un libro especial. Pago y me voy feliz.',
-            zinnen: [
-              { tekst: 'Pago veinte euros por el libro mágico y salgo feliz de la tienda.', correct_idx: 3 },
-              { tekst: 'Entro en una tienda antigua y oscura en el centro de la ciudad.', correct_idx: 0 },
-              { tekst: 'El vendedor me muestra libros, fotos y objetos muy especiales.', correct_idx: 1 },
-              { tekst: 'Encuentro un libro amarillo que brilla y huele a magia antigua.', correct_idx: 2 }
-            ]}
+          ]}
         );
 
         lesMiniOef[3].push(
@@ -8131,14 +9228,7 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Las estudiantes son muy ___.', opties: ['inteligente', 'inteligentes', 'intelligente', 'intelligentes'], correct: 1 },
             { vraag: 'Yo tengo unos ojos ___.', opties: ['marrón', 'marrona', 'marrones', 'marrona'], correct: 2 },
             { vraag: 'Mi hermana tiene una voz ___.', opties: ['dulce', 'dulces', 'dulca', 'dulcas'], correct: 0 },
-          ]},
-          { type: 'verhaal', titel: 'Mi grupo de amigos', context: 'Mi amigo Carlos es alto y deportista. Mi amiga Elena es inteligente y seria. Mi amiga Rosa es baja pero muy sociable. Somos un grupo divertido.',
-            zinnen: [
-              { tekst: 'Somos un grupo de amigos muy divertido y unido.', correct_idx: 3 },
-              { tekst: 'Mi amigo Carlos es alto, moreno y muy deportista.', correct_idx: 0 },
-              { tekst: 'Mi amiga Elena es inteligente, seria y le encanta leer.', correct_idx: 1 },
-              { tekst: 'Mi amiga Rosa es baja pero muy sociable y alegre.', correct_idx: 2 }
-            ]}
+          ]}
         );
 
         lesMiniOef[4].push(
@@ -8147,14 +9237,7 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Ella ___ el desayuno en la cocina.', opties: ['preparo', 'prepara', 'preparamos', 'preparan'], correct: 1 },
             { vraag: 'Nosotros ___ al colegio a las ocho.', opties: ['llego', 'llegas', 'llega', 'llegamos'], correct: 3 },
             { vraag: 'Los estudiantes ___ en la biblioteca.', opties: ['estudio', 'estudias', 'estudia', 'estudian'], correct: 3 },
-          ]},
-          { type: 'verhaal', titel: 'Un día típico', context: 'Me despierdo temprano. Desayuno rápidamente. Tomo el autobús al colegio. Regreso a casa por la tarde y debo hacer la tarea.',
-            zinnen: [
-              { tekst: 'Regreso a casa por la tarde cansado pero contento.', correct_idx: 3 },
-              { tekst: 'Me despierzo a las siete y media de la mañana.', correct_idx: 0 },
-              { tekst: 'Desayuno leche, tostadas y fruta en la cocina.', correct_idx: 1 },
-              { tekst: 'Tomo el autobús número 5 y llego al colegio a las ocho.', correct_idx: 2 }
-            ]}
+          ]}
         );
 
         lesMiniOef[5].push(
@@ -8163,14 +9246,7 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Mi amiga ___ agua fría.', opties: ['bebo', 'bebes', 'bebe', 'bebemos'], correct: 2 },
             { vraag: 'Nosotros ___ en una mesa cerca de la ventana.', opties: ['vivo', 'vives', 'vive', 'vivimos'], correct: 3 },
             { vraag: '¿Dónde ___ tú la dirección de esta cafetería?', opties: ['aprendo', 'aprendes', 'aprende', 'aprendemos'], correct: 1 },
-          ]},
-          { type: 'verhaal', titel: 'Café con amigos', context: 'Entro en una cafetería acogedora. Mi amigo Pedro pide un café con leche. Yo como un pastel delicioso. Hablamos de nuestros planes para el fin de semana.',
-            zinnen: [
-              { tekst: 'Hablamos durante una hora sobre nuestros sueños y proyectos.', correct_idx: 3 },
-              { tekst: 'Entro en una cafetería pequeña y acogedora del centro.', correct_idx: 0 },
-              { tekst: 'Mi amigo Pedro pide un café con leche y un croissant.', correct_idx: 1 },
-              { tekst: 'Yo como un pastel de chocolate que está delicioso.', correct_idx: 2 }
-            ]}
+          ]}
         );
 
         lesMiniOef[6].push(
@@ -10230,9 +11306,41 @@ ONDERWERP: ${gesprekTopic}`;
                 document.getElementById('xpFill').style.width = '100%';
             }
         }
+        // ===== Daily Goal Ring helpers =====
+        const DAILY_GOAL_KEY  = 'duocoengo_daily_goal';
+        const DAILY_GOAL_DEFAULT = 30;
+        function _todayKey() { return 'xp_day_' + new Date().toISOString().slice(0,10); }
+        function getTodayXP()   { try { return parseInt(localStorage.getItem(_todayKey()) || '0'); } catch(e) { return 0; } }
+        function setTodayXP(n)  { try { localStorage.setItem(_todayKey(), String(n)); } catch(e) {} }
+        function getDailyGoal() { try { return parseInt(localStorage.getItem(DAILY_GOAL_KEY) || String(DAILY_GOAL_DEFAULT)); } catch(e) { return DAILY_GOAL_DEFAULT; } }
+        function setDailyGoal(n){ try { localStorage.setItem(DAILY_GOAL_KEY, String(n)); } catch(e) {} updateDailyStrip(); }
+        function addTodayXP(n)  { setTodayXP(getTodayXP() + (n || 0)); updateDailyStrip(); }
+        function updateDailyStrip() {
+            const todayXP = getTodayXP();
+            const goal    = getDailyGoal();
+            const pct     = Math.min(100, Math.round((todayXP / goal) * 100));
+            const ring    = document.getElementById('dailyRingFg');
+            const xpEl    = document.getElementById('dailyXpVal');
+            const strkEl  = document.getElementById('dailyStreakVal');
+            const totEl   = document.getElementById('totalXpVal');
+            const chip    = document.getElementById('dailyGoalChip');
+            if (ring) ring.style.strokeDasharray = `${(pct / 100) * 99.9} 100`;
+            if (xpEl) xpEl.textContent = `${todayXP}/${goal}`;
+            if (strkEl) strkEl.textContent = (typeof streakCount !== 'undefined') ? streakCount : 0;
+            if (totEl)  totEl.textContent  = (typeof totalXP !== 'undefined') ? totalXP : 0;
+            if (chip) chip.classList.toggle('completed', pct >= 100);
+            // Celebrate goal completion once per day
+            const celebKey = 'goal_celebrated_' + new Date().toISOString().slice(0,10);
+            if (pct >= 100 && !sessionStorage.getItem(celebKey)) {
+                sessionStorage.setItem(celebKey, '1');
+                if (typeof launchConfetti === 'function') launchConfetti();
+            }
+        }
+
         function awardXP(amount, label) {
             const oldLevel = getLevel().naam;
             totalXP += amount;
+            addTodayXP(amount);
             saveXP();
             updateXPDisplay();
             // Popup
@@ -10447,8 +11555,298 @@ ONDERWERP: ${gesprekTopic}`;
             lessonObserver.observe(lessonContainer, { childList: true, subtree: true });
         }
 
+        // =====================================================
+        // SESSIE-MODUS — Duolingo-stijl card flow
+        // =====================================================
+        const Session = {
+            day: null,
+            cards: [],
+            idx: 0,
+            correct: 0,
+            wrong: 0,
+            startTime: 0,
+            els: {},
+            init() {
+                this.els.overlay = document.getElementById('sessionOverlay');
+                if (!this.els.overlay) return false;
+                this.els.body    = document.getElementById('sessionBody');
+                this.els.fill    = document.getElementById('sessionProgressFill');
+                this.els.hearts  = document.getElementById('sessionHearts');
+                this.els.footer  = document.getElementById('sessionFooter');
+                this.els.feedback= document.getElementById('sessionFeedback');
+                const closeBtn = document.getElementById('sessionClose');
+                if (closeBtn && !closeBtn._wired) {
+                    closeBtn.addEventListener('click', () => this.exit());
+                    closeBtn._wired = true;
+                }
+                if (!this._keyWired) {
+                    this._keyWired = true;
+                    document.addEventListener('keydown', (e) => {
+                        if (!this.els.overlay || !this.els.overlay.classList.contains('is-open')) return;
+                        if (e.key !== 'Enter') return;
+                        if (this._feedbackActive) {
+                            e.preventDefault();
+                            const next = document.getElementById('sesNextBtn');
+                            if (next) next.click();
+                        }
+                    });
+                }
+                return true;
+            },
+            ensureReady() {
+                if (!this.els.overlay) return this.init();
+                return true;
+            },
+            buildCards(day) {
+                const cards = [];
+                const inv = (typeof lesInvulOef !== 'undefined' && lesInvulOef[day]) || [];
+                const zin = (typeof lesZinOef   !== 'undefined' && lesZinOef[day])   || [];
+                inv.forEach(o => cards.push({ type: 'invul', zin: o.zin, blank: o.blank, hint: o.hint }));
+                zin.forEach(o => cards.push({ type: 'vert',  nl: o.nl, es: o.es }));
+                // simple shuffle so each session feels fresh
+                for (let i = cards.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [cards[i], cards[j]] = [cards[j], cards[i]];
+                }
+                return cards;
+            },
+            start(day) {
+                if (!this.ensureReady()) {
+                    console.warn('Session overlay not in DOM yet');
+                    return;
+                }
+                this.day = day;
+                this.cards = this.buildCards(day);
+                if (!this.cards.length) {
+                    alert('Voor deze les zijn nog geen oefenkaarten beschikbaar.');
+                    return;
+                }
+                this.idx = 0; this.correct = 0; this.wrong = 0;
+                this.startTime = Date.now();
+                this.els.hearts.textContent = '❤️❤️❤️';
+                this.els.overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                this.renderCard();
+            },
+            exit() {
+                this.els.overlay.classList.remove('is-open');
+                document.body.style.overflow = '';
+                this.hideFeedback();
+            },
+            updateProgress() {
+                const pct = (this.idx / this.cards.length) * 100;
+                this.els.fill.style.width = pct + '%';
+            },
+            renderCard() {
+                this.updateProgress();
+                this.hideFeedback();
+                const c = this.cards[this.idx];
+                let html = '';
+                if (c.type === 'invul') {
+                    const zinHTML = String(c.zin).replace('___', '<span class="ses-blank">&nbsp;&nbsp;&nbsp;</span>');
+                    html = `
+                        <div class="session-card">
+                            <span class="ses-tag">Vul aan</span>
+                            <p class="ses-prompt">Vul het juiste woord in.</p>
+                            <div class="ses-zin">${zinHTML}</div>
+                            <input type="text" class="ses-input" id="sesAnswer" placeholder="Typ je antwoord…" autocomplete="off" autocapitalize="off" spellcheck="false">
+                            ${c.hint ? `<div class="ses-hint">${c.hint}</div>` : ''}
+                        </div>`;
+                } else {
+                    html = `
+                        <div class="session-card">
+                            <span class="ses-tag">Vertaal naar het Spaans</span>
+                            <p class="ses-prompt">${c.nl}</p>
+                            <input type="text" class="ses-input" id="sesAnswer" placeholder="Schrijf je vertaling…" autocomplete="off" autocapitalize="off" spellcheck="false">
+                            <div class="ses-hint">Tip: accenten zijn niet verplicht.</div>
+                        </div>`;
+                }
+                this.els.body.innerHTML = html;
+                this.els.footer.style.display = 'flex';
+                const input = document.getElementById('sesAnswer');
+                const btn = document.getElementById('sesCheckBtn');
+                btn.disabled = true;
+                btn.textContent = 'Controleer';
+                input.addEventListener('input', () => { btn.disabled = !input.value.trim(); });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !btn.disabled) { e.preventDefault(); this.check(); }
+                });
+                setTimeout(() => input.focus(), 50);
+            },
+            normalize(s) {
+                return String(s || '')
+                    .toLowerCase()
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[¿¡!?.,;:"'()]/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+            },
+            check() {
+                const c = this.cards[this.idx];
+                const input = document.getElementById('sesAnswer');
+                const ans = input.value;
+                const expected = c.type === 'invul' ? c.blank : c.es;
+                const ok = this.normalize(ans) === this.normalize(expected);
+                if (ok) this.correct++; else this.wrong++;
+                this.showFeedback(ok, expected);
+            },
+            showFeedback(ok, expected) {
+                const fb = this.els.feedback;
+                fb.className = 'session-feedback ' + (ok ? 'correct' : 'wrong');
+                fb.innerHTML = ok
+                    ? `<div class="fb-title">✅ ¡Muy bien!</div>
+                       <button class="ses-btn" id="sesNextBtn">Volgende</button>`
+                    : `<div class="fb-title">❌ Niet helemaal</div>
+                       <div class="fb-answer">Juist antwoord: <strong>${expected}</strong></div>
+                       <button class="ses-btn" id="sesNextBtn">Ga door</button>`;
+                this.els.footer.style.display = 'none';
+                requestAnimationFrame(() => fb.classList.add('visible'));
+                const nextBtn = document.getElementById('sesNextBtn');
+                nextBtn.addEventListener('click', () => this.next());
+                this._feedbackActive = true;
+                setTimeout(() => { try { nextBtn.focus(); } catch(e) {} }, 30);
+                if (!ok) {
+                    const hearts = ['❤️❤️❤️', '❤️❤️🖤', '❤️🖤🖤', '🖤🖤🖤'];
+                    this.els.hearts.textContent = hearts[Math.min(this.wrong, 3)];
+                }
+            },
+            hideFeedback() {
+                this.els.feedback.classList.remove('visible');
+                this._feedbackActive = false;
+            },
+            next() {
+                this.idx++;
+                if (this.idx >= this.cards.length) { this.finish(); return; }
+                this.renderCard();
+            },
+            finish() {
+                this.updateProgress();
+                this.els.fill.style.width = '100%';
+                this.hideFeedback();
+                this.els.footer.style.display = 'none';
+                const total = this.correct + this.wrong;
+                const pct = total ? Math.round((this.correct / total) * 100) : 0;
+                const seconds = Math.max(1, Math.round((Date.now() - this.startTime) / 1000));
+                const xp = Math.max(10, this.correct * 5 + (pct === 100 ? 15 : 0));
+                const emoji = pct === 100 ? '🏆' : pct >= 70 ? '🎉' : pct >= 40 ? '💪' : '🌱';
+                const titel = pct === 100 ? '¡Perfecto!' : pct >= 70 ? '¡Muy bien!' : pct >= 40 ? '¡Sigue así!' : 'Probeer nog eens!';
+                this.els.body.innerHTML = `
+                    <div class="session-result">
+                        <div class="ses-result-emoji">${emoji}</div>
+                        <h2>${titel}</h2>
+                        <p style="opacity:0.8;margin:0 0 0.5rem;">Sessie voor Dag ${this.day} klaar.</p>
+                        <div class="result-stats">
+                            <div class="result-stat"><div class="label">Goed</div><div class="value">${this.correct}/${total}</div></div>
+                            <div class="result-stat"><div class="label">XP</div><div class="value">+${xp}</div></div>
+                            <div class="result-stat"><div class="label">Tijd</div><div class="value">${seconds}s</div></div>
+                        </div>
+                        <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;justify-content:center;">
+                            <button class="ses-btn" id="sesAgainBtn" style="background:var(--ochre);color:#fff;padding:0.85rem 1.2rem;border:none;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #b3631c;">Nog een keer</button>
+                            <button class="ses-btn" id="sesDoneBtn" style="background:var(--terracotta);color:#fff;padding:0.85rem 1.2rem;border:none;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #8b271c;">Klaar</button>
+                        </div>
+                    </div>`;
+                document.getElementById('sesAgainBtn').addEventListener('click', () => this.start(this.day));
+                document.getElementById('sesDoneBtn').addEventListener('click', () => {
+                    try { if (typeof awardXP === 'function') awardXP(xp, 'Sessie Dag ' + this.day); } catch(e) {}
+                    if (pct >= 70) {
+                        try { if (typeof completedDays !== 'undefined' && !completedDays.has(this.day)) markDayComplete(this.day); } catch(e) {}
+                    }
+                    try { if (typeof launchConfetti === 'function' && pct === 100) launchConfetti(); } catch(e) {}
+                    this.exit();
+                });
+            }
+        };
+        function startLessonSession(day) {
+            try { Session.start(day); } catch(e) { console.warn('Session start failed:', e); }
+        }
+        Session.init();
+
+        // =====================================================
+        // INLINE INVUL-OEFENINGEN (verweven met de theorie)
+        // =====================================================
+        function _inlineNorm(s) {
+            return String(s || '')
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[¿¡!?.,;:'"()]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+        function checkInlineBlank(input) {
+            const expected = input.dataset.answer || '';
+            const ok = input.value.trim() && _inlineNorm(input.value) === _inlineNorm(expected);
+            input.classList.remove('ok', 'fout');
+            if (input.value.trim()) input.classList.add(ok ? 'ok' : 'fout');
+            // Feedback-zin tonen voor zin-vertaling rijen
+            const row = input.closest('.inline-oef-row');
+            if (row && row.classList.contains('zin-vert')) {
+                const fb = row.querySelector('.inline-zin-feedback');
+                if (fb) {
+                    fb.classList.remove('show', 'ok-msg', 'fout-msg');
+                    if (input.value.trim()) {
+                        fb.classList.add('show', ok ? 'ok-msg' : 'fout-msg');
+                        fb.textContent = ok ? '✅ Correct!' : `❌ Juist antwoord: ${expected}`;
+                    }
+                }
+            }
+            // Container alle blanken goed?
+            const container = input.closest('.inline-oef');
+            if (container) {
+                const blanks = container.querySelectorAll('.inline-blank, .inline-zin-input');
+                const allOk = blanks.length > 0 && Array.from(blanks).every(b => b.classList.contains('ok'));
+                const result = container.querySelector('.inline-oef-result');
+                if (result) result.classList.toggle('show', allOk);
+                if (allOk && !container.dataset.awarded) {
+                    container.dataset.awarded = '1';
+                    try { if (typeof addTodayXP === 'function') addTodayXP(5); } catch(e) {}
+                    try { if (typeof updateDailyStrip === 'function') updateDailyStrip(); } catch(e) {}
+                }
+            }
+        }
+        function bindInlineOef(scope) {
+            scope = scope || document;
+            scope.querySelectorAll('.inline-blank, .inline-zin-input').forEach(inp => {
+                if (inp._wired) return;
+                inp._wired = true;
+                inp.addEventListener('blur', () => checkInlineBlank(inp));
+                inp.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') { e.preventDefault(); checkInlineBlank(inp); inp.blur(); }
+                });
+                inp.addEventListener('input', () => {
+                    if (inp.classList.contains('fout')) inp.classList.remove('fout');
+                    const fb = inp.closest('.inline-oef-row')?.querySelector('.inline-zin-feedback');
+                    if (fb) fb.classList.remove('show');
+                });
+            });
+            scope.querySelectorAll('.inline-oef-reveal').forEach(btn => {
+                if (btn._wired) return;
+                btn._wired = true;
+                btn.addEventListener('click', () => {
+                    const row = btn.closest('.inline-oef-row');
+                    const target = row ? row.querySelector('.inline-blank, .inline-zin-input') : null;
+                    if (target) { target.value = target.dataset.answer; checkInlineBlank(target); }
+                });
+            });
+        }
+        // Wire up to MutationObserver so dynamically rendered lessons ook gebonden worden
+        document.addEventListener('DOMContentLoaded', () => bindInlineOef(document));
+
         // Initialize the app when page loads
         init();
     </script>
+
+    <!-- Sessie-modus overlay -->
+    <div class="session-overlay" id="sessionOverlay" role="dialog" aria-modal="true" aria-label="Oefensessie">
+        <div class="session-header">
+            <button class="session-close" id="sessionClose" aria-label="Sluit sessie">×</button>
+            <div class="session-progress-track"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
+            <div class="session-hearts" id="sessionHearts">❤️❤️❤️</div>
+        </div>
+        <div class="session-body" id="sessionBody"></div>
+        <div class="session-footer" id="sessionFooter">
+            <button class="ses-btn" id="sesCheckBtn" disabled onclick="Session.check()">Controleer</button>
+        </div>
+        <div class="session-feedback" id="sessionFeedback"></div>
+    </div>
 </body>
 </html>
