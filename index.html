@@ -1524,7 +1524,7 @@
                 </button>
                 <div class="lang-menu" id="langMenu" hidden>
                     <button class="lang-option active" data-lang="es"><span class="lang-flag">🇪🇸</span>Spaans<span class="lang-status">actief</span></button>
-                    <button class="lang-option" data-lang="it" disabled><span class="lang-flag">🇮🇹</span>Italiaans<span class="lang-status">binnenkort</span></button>
+                    <button class="lang-option" data-lang="it"><span class="lang-flag">🇮🇹</span>Italiaans<span class="lang-status">beschikbaar</span></button>
                     <button class="lang-option" data-lang="fr" disabled><span class="lang-flag">🇫🇷</span>Frans<span class="lang-status">binnenkort</span></button>
                     <button class="lang-option" data-lang="de" disabled><span class="lang-flag">🇩🇪</span>Duits<span class="lang-status">binnenkort</span></button>
                     <button class="lang-option" data-lang="pt" disabled><span class="lang-flag">🇵🇹</span>Portugees<span class="lang-status">binnenkort</span></button>
@@ -1622,8 +1622,8 @@
                   subtitle:'Jouw complete 25-daagse Spaanse cursus',
                   speechLang:'es-ES', ready:true },
             it: { code:'it', name:'Italiaans',  native:'Italiano',  flag:'🇮🇹',
-                  subtitle:'Italiaanse cursus — binnenkort beschikbaar',
-                  speechLang:'it-IT', ready:false },
+                  subtitle:'Jouw Italiaanse cursus',
+                  speechLang:'it-IT', ready:true },
             fr: { code:'fr', name:'Frans',      native:'Français',  flag:'🇫🇷',
                   subtitle:'Franse cursus — binnenkort beschikbaar',
                   speechLang:'fr-FR', ready:false },
@@ -1743,7 +1743,7 @@
         let currentDay = 1;
         let completedDays = new Set();
 
-        const lessonsHTML = {
+        const lessonsHTML_es = {
 1: `
 <h3>🎯 Leerdoelen</h3>
 <ul>
@@ -6380,8 +6380,512 @@
 `,
         };
 
+        // ============================================================
+        // === ITALIAANSE CURSUS (DuoCoengo Italiano) =================
+        // === Eigen leerpad — geen vertaling van het Spaans ==========
+        // ============================================================
+        const lessonsHTML_it = {
+1: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het Italiaanse alfabet en de heldere klinkers uitspreken</li>
+<li>De harde en zachte c en g herkennen (de kernregel van het Italiaans)</li>
+<li>Dubbele medeklinkers en klemtoon correct uitspreken</li>
+<li>Je begroeten, bedanken en voorstellen</li>
+</ul>
+
+<h3>📚 Uitspraak & grammatica</h3>
+
+<h4>1. De vijf klinkers</h4>
+<div class="grammar-box">
+<p>Italiaans wordt vrijwel <strong>geschreven zoals het klinkt</strong>. De klinkers zijn altijd kort en helder — nooit "slissend" zoals soms in het Nederlands:</p>
+<ul>
+<li><strong>a</strong> → als in "k<em>a</em>t": <em>casa</em> (huis)</li>
+<li><strong>e</strong> → als in "b<em>e</em>d": <em>bene</em> (goed)</li>
+<li><strong>i</strong> → als in "d<em>ie</em>p": <em>vino</em> (wijn)</li>
+<li><strong>o</strong> → als in "p<em>o</em>t": <em>sole</em> (zon)</li>
+<li><strong>u</strong> → als in "b<em>oe</em>k": <em>luna</em> (maan)</li>
+</ul>
+</div>
+
+<h4>2. De zachte en harde c en g — DÉ regel</h4>
+<div class="grammar-box">
+<p>Dit is de belangrijkste uitspraakregel van het Italiaans. Voor <strong>e</strong> en <strong>i</strong> worden c en g zacht:</p>
+<ul>
+<li><strong>c + e/i</strong> → "tsj": <em>ciao</em>, <em>cena</em> (avondeten)</li>
+<li><strong>c + a/o/u</strong> → "k": <em>casa</em>, <em>cosa</em> (ding)</li>
+<li><strong>ch + e/i</strong> → "k": <em>chi</em> (wie), <em>perché</em> (waarom)</li>
+<li><strong>g + e/i</strong> → "dzj": <em>gelato</em> (ijs), <em>giorno</em> (dag)</li>
+<li><strong>g + a/o/u</strong> → harde "g": <em>gatto</em> (kat)</li>
+<li><strong>gh + e/i</strong> → harde "g": <em>spaghetti</em>, <em>laghi</em> (meren)</li>
+</ul>
+</div>
+<div class="example-box">
+<div class="example-spanish">Ciao! Come stai?</div>
+<div>Hoi! Hoe gaat het?</div>
+</div>
+
+<h4>3. Bijzondere klanken: gli, gn, sc</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>gli</strong> → als de "lj" in "Italië": <em>famiglia</em> (familie), <em>figlio</em> (zoon)</li>
+<li><strong>gn</strong> → als "nj" in "oranje": <em>signora</em> (mevrouw), <em>gnocchi</em></li>
+<li><strong>sc + e/i</strong> → "sj": <em>pesce</em> (vis), <em>uscita</em> (uitgang)</li>
+<li><strong>sc + a/o/u</strong> → "sk": <em>scuola</em> (school)</li>
+</ul>
+</div>
+
+<h4>4. Dubbele medeklinkers</h4>
+<div class="grammar-box">
+<p>Dubbele medeklinkers spreek je écht langer/steviger uit. Ze veranderen de betekenis!</p>
+<ul>
+<li><em>casa</em> (huis) ↔ <em>cassa</em> (kassa)</li>
+<li><em>nono</em> (negende) ↔ <em>nonno</em> (opa)</li>
+<li><em>pala</em> (schep) ↔ <em>palla</em> (bal)</li>
+</ul>
+</div>
+
+<h4>5. Klemtoon</h4>
+<div class="grammar-box">
+<p>Meestal valt de klemtoon op de <strong>voorlaatste lettergreep</strong>: a<strong>mi</strong>co, <strong>gra</strong>zie. Staat er een accent op de laatste klinker (à, è, ì, ò, ù), dan ligt de klemtoon daar: cit<strong>tà</strong>, per<strong>ché</strong>, caf<strong>fè</strong>.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les1-cg">
+  <div class="inline-oef-header">✍️ Klinkt de letter hard of zacht? Schrijf k, tsj, g of dzj</div>
+  <div class="inline-oef-row">ciao → de c klinkt als <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="tsj" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(c + i)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">casa → de c klinkt als <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="k" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(c + a)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">gelato → de g klinkt als <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="dzj" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(g + e)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">gatto → de g klinkt als <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="g" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(g + a)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">perché → de ch klinkt als <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="k" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(ch + e)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Begroetingen & beleefdheid</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">ciao</div><div class="vocab-meaning">hoi / doei</div></div>
+<div class="vocab-item"><div class="vocab-word">buongiorno</div><div class="vocab-meaning">goedemorgen / goedendag</div></div>
+<div class="vocab-item"><div class="vocab-word">buonasera</div><div class="vocab-meaning">goedenavond</div></div>
+<div class="vocab-item"><div class="vocab-word">buonanotte</div><div class="vocab-meaning">welterusten</div></div>
+<div class="vocab-item"><div class="vocab-word">arrivederci</div><div class="vocab-meaning">tot ziens</div></div>
+<div class="vocab-item"><div class="vocab-word">grazie</div><div class="vocab-meaning">dank je</div></div>
+<div class="vocab-item"><div class="vocab-word">prego</div><div class="vocab-meaning">graag gedaan</div></div>
+<div class="vocab-item"><div class="vocab-word">per favore</div><div class="vocab-meaning">alsjeblieft (verzoek)</div></div>
+<div class="vocab-item"><div class="vocab-word">sì / no</div><div class="vocab-meaning">ja / nee</div></div>
+<div class="vocab-item"><div class="vocab-word">scusa</div><div class="vocab-meaning">sorry / pardon</div></div>
+<div class="vocab-item"><div class="vocab-word">come stai?</div><div class="vocab-meaning">hoe gaat het?</div></div>
+<div class="vocab-item"><div class="vocab-word">bene</div><div class="vocab-meaning">goed</div></div>
+<div class="vocab-item"><div class="vocab-word">mi chiamo...</div><div class="vocab-meaning">ik heet...</div></div>
+<div class="vocab-item"><div class="vocab-word">piacere</div><div class="vocab-meaning">aangenaam</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les1-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Italiaans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoi, hoe gaat het?</span><input type="text" class="inline-zin-input" data-answer="Ciao, come stai?" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Goedemorgen!</span><input type="text" class="inline-zin-input" data-answer="Buongiorno!" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heet Marco.</span><input type="text" class="inline-zin-input" data-answer="Mi chiamo Marco." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Dank je wel.</span><input type="text" class="inline-zin-input" data-answer="Grazie." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Tot ziens!</span><input type="text" class="inline-zin-input" data-answer="Arrivederci!" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Aangenaam.</span><input type="text" class="inline-zin-input" data-answer="Piacere." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de heldere Italiaanse klinkers, de zachte/harde c en g (de kernregel), de klanken gli/gn/sc, dubbele medeklinkers, klemtoon, en de belangrijkste begroetingen.</p>
+`,
+2: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het geslacht van zelfstandige naamwoorden herkennen (-o, -a, -e)</li>
+<li>Het bepaald lidwoord kiezen: il, lo, la, l'</li>
+<li>Meervouden vormen (-i en -e)</li>
+<li>Het onbepaald lidwoord gebruiken: un, uno, una, un'</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Geslacht van zelfstandige naamwoorden</h4>
+<div class="grammar-box">
+<p>Elk Italiaans zelfstandig naamwoord is mannelijk of vrouwelijk. Vaak zie je het aan de uitgang:</p>
+<ul>
+<li>eindigt op <strong>-o</strong> → meestal mannelijk: <em>libro</em> (boek), <em>treno</em> (trein)</li>
+<li>eindigt op <strong>-a</strong> → meestal vrouwelijk: <em>casa</em> (huis), <em>pizza</em></li>
+<li>eindigt op <strong>-e</strong> → kan beide zijn (leer het er los bij): <em>cane</em> (m, hond), <em>notte</em> (v, nacht)</li>
+</ul>
+</div>
+
+<h4>2. Het bepaald lidwoord (de/het)</h4>
+<div class="grammar-box">
+<p>Italiaans heeft meer vormen dan het Nederlandse "de/het". De keuze hangt af van geslacht én de eerste klank van het woord:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Vorm</th><th>Wanneer</th><th>Voorbeeld</th></tr>
+<tr><td><strong>il</strong></td><td>m, voor medeklinker</td><td>il libro</td></tr>
+<tr><td><strong>lo</strong></td><td>m, voor s+medeklinker, z, gn, ps</td><td>lo studente, lo zaino</td></tr>
+<tr><td><strong>l'</strong></td><td>m of v, voor klinker</td><td>l'amico, l'amica</td></tr>
+<tr><td><strong>la</strong></td><td>v, voor medeklinker</td><td>la casa</td></tr>
+</table>
+<div class="example-box">
+<div class="example-spanish">il ragazzo, lo zio, l'albero, la ragazza</div>
+<div>de jongen, de oom, de boom, het meisje</div>
+</div>
+
+<h4>3. Meervoud</h4>
+<div class="grammar-box">
+<p>De uitgang verandert in het meervoud:</p>
+<ul>
+<li>mannelijk <strong>-o → -i</strong>: libro → libr<strong>i</strong></li>
+<li>vrouwelijk <strong>-a → -e</strong>: casa → cas<strong>e</strong></li>
+<li>beide <strong>-e → -i</strong>: cane → can<strong>i</strong>, notte → nott<strong>i</strong></li>
+</ul>
+<p>De lidwoorden worden in het meervoud: <strong>i</strong> (il→i), <strong>gli</strong> (lo/l'→gli), <strong>le</strong> (la/l'→le).</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">i libri, gli studenti, gli amici, le case</div>
+<div>de boeken, de studenten, de vrienden, de huizen</div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les2-lidwoord">
+  <div class="inline-oef-header">✍️ Vul het juiste bepaald lidwoord in: il / lo / la / l'</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="il" maxlength="3" placeholder="?"></span> libro <span class="inline-oef-hint">(m, medeklinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="lo" maxlength="3" placeholder="?"></span> studente <span class="inline-oef-hint">(m, s+medeklinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="la" maxlength="3" placeholder="?"></span> casa <span class="inline-oef-hint">(v, medeklinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="l'" maxlength="3" placeholder="?"></span>amico <span class="inline-oef-hint">(m, klinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="lo" maxlength="3" placeholder="?"></span> zaino <span class="inline-oef-hint">(m, z)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les2-meervoud">
+  <div class="inline-oef-header">✍️ Maak het meervoud</div>
+  <div class="inline-oef-row">libro → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="libri" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(-o → -i)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">casa → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="case" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(-a → -e)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">cane → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="cani" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(-e → -i)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ragazza → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ragazze" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(-a → -e)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h4>4. Het onbepaald lidwoord (een)</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>un</strong> → m, voor klinker of medeklinker: un libro, un amico</li>
+<li><strong>uno</strong> → m, voor s+medeklinker, z, gn, ps: uno studente, uno zio</li>
+<li><strong>una</strong> → v, voor medeklinker: una casa</li>
+<li><strong>un'</strong> → v, voor klinker: un'amica</li>
+</ul>
+</div>
+
+<h3>📖 Vocabulaire — Dingen & mensen</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">il libro</div><div class="vocab-meaning">het boek</div></div>
+<div class="vocab-item"><div class="vocab-word">la casa</div><div class="vocab-meaning">het huis</div></div>
+<div class="vocab-item"><div class="vocab-word">la macchina</div><div class="vocab-meaning">de auto</div></div>
+<div class="vocab-item"><div class="vocab-word">il ragazzo</div><div class="vocab-meaning">de jongen</div></div>
+<div class="vocab-item"><div class="vocab-word">la ragazza</div><div class="vocab-meaning">het meisje</div></div>
+<div class="vocab-item"><div class="vocab-word">lo studente</div><div class="vocab-meaning">de student</div></div>
+<div class="vocab-item"><div class="vocab-word">l'amico</div><div class="vocab-meaning">de vriend</div></div>
+<div class="vocab-item"><div class="vocab-word">il cane</div><div class="vocab-meaning">de hond</div></div>
+<div class="vocab-item"><div class="vocab-word">il gatto</div><div class="vocab-meaning">de kat</div></div>
+<div class="vocab-item"><div class="vocab-word">la città</div><div class="vocab-meaning">de stad</div></div>
+<div class="vocab-item"><div class="vocab-word">la scuola</div><div class="vocab-meaning">de school</div></div>
+<div class="vocab-item"><div class="vocab-word">il tavolo</div><div class="vocab-meaning">de tafel</div></div>
+<div class="vocab-item"><div class="vocab-word">l'acqua</div><div class="vocab-meaning">het water</div></div>
+<div class="vocab-item"><div class="vocab-word">il caffè</div><div class="vocab-meaning">de koffie</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les2-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Italiaans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">het boek</span><input type="text" class="inline-zin-input" data-answer="il libro" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de huizen</span><input type="text" class="inline-zin-input" data-answer="le case" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een vriend</span><input type="text" class="inline-zin-input" data-answer="un amico" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de studenten</span><input type="text" class="inline-zin-input" data-answer="gli studenti" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een vriendin</span><input type="text" class="inline-zin-input" data-answer="un'amica" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de stad</span><input type="text" class="inline-zin-input" data-answer="la città" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: het geslacht (-o/-a/-e), de bepaalde lidwoorden il/lo/la/l' en hun meervouden i/gli/le, het meervoud van zelfstandige naamwoorden, en de onbepaalde lidwoorden un/uno/una/un'.</p>
+`,
+3: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De persoonlijke voornaamwoorden gebruiken</li>
+<li>Het werkwoord essere (zijn) vervoegen</li>
+<li>Zeggen waar je vandaan komt en wie je bent</li>
+<li>Nationaliteiten en beroepen benoemen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Persoonlijke voornaamwoorden</h4>
+<table class="conjugation-table">
+<tr><th>Italiaans</th><th>Nederlands</th></tr>
+<tr><td>io</td><td>ik</td></tr>
+<tr><td>tu</td><td>jij</td></tr>
+<tr><td>lui / lei</td><td>hij / zij</td></tr>
+<tr><td>noi</td><td>wij</td></tr>
+<tr><td>voi</td><td>jullie</td></tr>
+<tr><td>loro</td><td>zij (mv)</td></tr>
+</table>
+<div class="grammar-box">
+<p>Net als in het Spaans laat je het voornaamwoord vaak <strong>weg</strong> — de werkwoordsvorm zegt al wie het is. <em>Sono italiano</em> = "(Ik) ben Italiaans". <strong>Lei</strong> (met hoofdletter) betekent ook het beleefde "u".</p>
+</div>
+
+<h4>2. Essere — zijn (onregelmatig)</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Vorm</th><th>Voorbeeld</th></tr>
+<tr><td>io</td><td><strong>sono</strong></td><td>sono olandese</td></tr>
+<tr><td>tu</td><td><strong>sei</strong></td><td>sei gentile</td></tr>
+<tr><td>lui/lei</td><td><strong>è</strong></td><td>è italiano</td></tr>
+<tr><td>noi</td><td><strong>siamo</strong></td><td>siamo amici</td></tr>
+<tr><td>voi</td><td><strong>siete</strong></td><td>siete pronti</td></tr>
+<tr><td>loro</td><td><strong>sono</strong></td><td>sono studenti</td></tr>
+</table>
+<div class="grammar-box">
+<p>Let op: <strong>è</strong> (is) met accent is iets anders dan <strong>e</strong> (en) zonder accent!</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Di dove sei? — Sono di Amsterdam.</div>
+<div>Waar kom je vandaan? — Ik kom uit Amsterdam.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les3-essere">
+  <div class="inline-oef-header">✍️ Vul essere in: sono / sei / è / siamo / siete / sono</div>
+  <div class="inline-oef-row">Io <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sono" maxlength="6" placeholder="?"></span> olandese <span class="inline-oef-hint">(io)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sei" maxlength="6" placeholder="?"></span> italiano <span class="inline-oef-hint">(tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Lui <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="è" maxlength="6" placeholder="?"></span> studente <span class="inline-oef-hint">(lui)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Noi <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="siamo" maxlength="6" placeholder="?"></span> amici <span class="inline-oef-hint">(noi)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Voi <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="siete" maxlength="6" placeholder="?"></span> gentili <span class="inline-oef-hint">(voi)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Loro <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sono" maxlength="6" placeholder="?"></span> a Roma <span class="inline-oef-hint">(loro)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h4>3. Nationaliteiten</h4>
+<div class="grammar-box">
+<p>Nationaliteiten passen zich aan in geslacht/getal (zoals bijvoeglijke naamwoorden). Geen hoofdletter in het Italiaans!</p>
+<ul>
+<li>italiano / italiana / italiani / italiane</li>
+<li>olandese / olandesi (op -e: geen apart vrouwelijk)</li>
+</ul>
+</div>
+
+<h3>📖 Vocabulaire — Wie ben je?</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">essere</div><div class="vocab-meaning">zijn</div></div>
+<div class="vocab-item"><div class="vocab-word">italiano</div><div class="vocab-meaning">Italiaans</div></div>
+<div class="vocab-item"><div class="vocab-word">olandese</div><div class="vocab-meaning">Nederlands</div></div>
+<div class="vocab-item"><div class="vocab-word">l'uomo</div><div class="vocab-meaning">de man</div></div>
+<div class="vocab-item"><div class="vocab-word">la donna</div><div class="vocab-meaning">de vrouw</div></div>
+<div class="vocab-item"><div class="vocab-word">l'amica</div><div class="vocab-meaning">de vriendin</div></div>
+<div class="vocab-item"><div class="vocab-word">gentile</div><div class="vocab-meaning">aardig / vriendelijk</div></div>
+<div class="vocab-item"><div class="vocab-word">stanco</div><div class="vocab-meaning">moe</div></div>
+<div class="vocab-item"><div class="vocab-word">contento</div><div class="vocab-meaning">blij / tevreden</div></div>
+<div class="vocab-item"><div class="vocab-word">il lavoro</div><div class="vocab-meaning">het werk</div></div>
+<div class="vocab-item"><div class="vocab-word">lo studente</div><div class="vocab-meaning">de student</div></div>
+<div class="vocab-item"><div class="vocab-word">il medico</div><div class="vocab-meaning">de dokter</div></div>
+<div class="vocab-item"><div class="vocab-word">di dove?</div><div class="vocab-meaning">waarvandaan?</div></div>
+<div class="vocab-item"><div class="vocab-word">anche</div><div class="vocab-meaning">ook</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les3-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Italiaans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ben Nederlands.</span><input type="text" class="inline-zin-input" data-answer="Sono olandese." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij is student.</span><input type="text" class="inline-zin-input" data-answer="È studente." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Waar kom je vandaan?</span><input type="text" class="inline-zin-input" data-answer="Di dove sei?" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij zijn in Italië.</span><input type="text" class="inline-zin-input" data-answer="Siamo in Italia." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Jij bent aardig.</span><input type="text" class="inline-zin-input" data-answer="Sei gentile." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij zijn vrienden.</span><input type="text" class="inline-zin-input" data-answer="Sono amici." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de persoonlijke voornaamwoorden, het werkwoord essere volledig, hoe je zegt waar je vandaan komt (di dove sei), en nationaliteiten zonder hoofdletter.</p>
+`,
+4: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het werkwoord avere (hebben) vervoegen</li>
+<li>Vaste uitdrukkingen met avere (avere fame, avere ... anni)</li>
+<li>"Er is / er zijn" zeggen met c'è en ci sono</li>
+<li>Tellen van 0 tot 20</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Avere — hebben (onregelmatig)</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Vorm</th><th>Voorbeeld</th></tr>
+<tr><td>io</td><td><strong>ho</strong></td><td>ho un cane</td></tr>
+<tr><td>tu</td><td><strong>hai</strong></td><td>hai tempo?</td></tr>
+<tr><td>lui/lei</td><td><strong>ha</strong></td><td>ha una casa</td></tr>
+<tr><td>noi</td><td><strong>abbiamo</strong></td><td>abbiamo fame</td></tr>
+<tr><td>voi</td><td><strong>avete</strong></td><td>avete ragione</td></tr>
+<tr><td>loro</td><td><strong>hanno</strong></td><td>hanno due figli</td></tr>
+</table>
+<div class="grammar-box">
+<p>De <strong>h</strong> is altijd stom (je hoort hem niet): <em>ho</em> klinkt als "o", <em>hai</em> als "ai". Hij staat er alleen om deze vormen te onderscheiden van andere woorden.</p>
+</div>
+
+<h4>2. Vaste uitdrukkingen met avere</h4>
+<div class="grammar-box">
+<p>Waar het Nederlands "zijn" gebruikt, gebruikt het Italiaans vaak "avere":</p>
+<ul>
+<li><strong>avere fame / sete</strong> → honger / dorst hebben</li>
+<li><strong>avere ... anni</strong> → ... jaar zijn: <em>Ho vent'anni</em> (ik ben 20)</li>
+<li><strong>avere caldo / freddo</strong> → het warm / koud hebben</li>
+<li><strong>avere ragione</strong> → gelijk hebben</li>
+</ul>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les4-avere">
+  <div class="inline-oef-header">✍️ Vul avere in: ho / hai / ha / abbiamo / avete / hanno</div>
+  <div class="inline-oef-row">Io <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ho" maxlength="7" placeholder="?"></span> un cane <span class="inline-oef-hint">(io)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hai" maxlength="7" placeholder="?"></span> fame? <span class="inline-oef-hint">(tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Lei <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ha" maxlength="7" placeholder="?"></span> vent'anni <span class="inline-oef-hint">(lei)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Noi <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="abbiamo" maxlength="7" placeholder="?"></span> una casa <span class="inline-oef-hint">(noi)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Voi <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="avete" maxlength="7" placeholder="?"></span> tempo? <span class="inline-oef-hint">(voi)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Loro <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="hanno" maxlength="7" placeholder="?"></span> due figli <span class="inline-oef-hint">(loro)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h4>3. C'è en ci sono — er is / er zijn</h4>
+<div class="grammar-box">
+<p><strong>c'è</strong> + enkelvoud, <strong>ci sono</strong> + meervoud.</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">C'è un libro sul tavolo. Ci sono due libri sul tavolo.</div>
+<div>Er ligt een boek op tafel. Er liggen twee boeken op tafel.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les4-cesono">
+  <div class="inline-oef-header">✍️ Vul in: c'è of ci sono</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="c'è" maxlength="8" placeholder="?"></span> un gatto in giardino <span class="inline-oef-hint">(enkelvoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ci sono" maxlength="8" placeholder="?"></span> molte persone <span class="inline-oef-hint">(meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="c'è" maxlength="8" placeholder="?"></span> un problema <span class="inline-oef-hint">(enkelvoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ci sono" maxlength="8" placeholder="?"></span> tre ragazzi <span class="inline-oef-hint">(meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h4>4. Getallen 0–20</h4>
+<div class="grammar-box">
+<p>zero, uno, due, tre, quattro, cinque, sei, sette, otto, nove, dieci, undici, dodici, tredici, quattordici, quindici, sedici, diciassette, diciotto, diciannove, venti.</p>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">avere</div><div class="vocab-meaning">hebben</div></div>
+<div class="vocab-item"><div class="vocab-word">la fame</div><div class="vocab-meaning">de honger</div></div>
+<div class="vocab-item"><div class="vocab-word">il tempo</div><div class="vocab-meaning">de tijd / het weer</div></div>
+<div class="vocab-item"><div class="vocab-word">l'anno</div><div class="vocab-meaning">het jaar</div></div>
+<div class="vocab-item"><div class="vocab-word">il figlio</div><div class="vocab-meaning">de zoon</div></div>
+<div class="vocab-item"><div class="vocab-word">la figlia</div><div class="vocab-meaning">de dochter</div></div>
+<div class="vocab-item"><div class="vocab-word">il problema</div><div class="vocab-meaning">het probleem</div></div>
+<div class="vocab-item"><div class="vocab-word">la persona</div><div class="vocab-meaning">de persoon</div></div>
+<div class="vocab-item"><div class="vocab-word">il giardino</div><div class="vocab-meaning">de tuin</div></div>
+<div class="vocab-item"><div class="vocab-word">molto</div><div class="vocab-meaning">veel</div></div>
+<div class="vocab-item"><div class="vocab-word">due</div><div class="vocab-meaning">twee</div></div>
+<div class="vocab-item"><div class="vocab-word">tre</div><div class="vocab-meaning">drie</div></div>
+<div class="vocab-item"><div class="vocab-word">dieci</div><div class="vocab-meaning">tien</div></div>
+<div class="vocab-item"><div class="vocab-word">venti</div><div class="vocab-meaning">twintig</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les4-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Italiaans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb honger.</span><input type="text" class="inline-zin-input" data-answer="Ho fame." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoe oud ben je?</span><input type="text" class="inline-zin-input" data-answer="Quanti anni hai?" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Er is een probleem.</span><input type="text" class="inline-zin-input" data-answer="C'è un problema." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Er zijn veel mensen.</span><input type="text" class="inline-zin-input" data-answer="Ci sono molte persone." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij hebben tijd.</span><input type="text" class="inline-zin-input" data-answer="Abbiamo tempo." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij hebben twee kinderen.</span><input type="text" class="inline-zin-input" data-answer="Hanno due figli." placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: het werkwoord avere, vaste uitdrukkingen (avere fame, avere ... anni), c'è en ci sono, en de getallen tot 20.</p>
+`,
+5: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Bijvoeglijke naamwoorden laten overeenkomen in geslacht en getal</li>
+<li>De juiste plaats van het bijvoeglijk naamwoord kennen</li>
+<li>Kleuren en veelgebruikte beschrijvingen gebruiken</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Overeenkomst (accordo)</h4>
+<div class="grammar-box">
+<p>Een bijvoeglijk naamwoord past zich aan aan het zelfstandig naamwoord. Twee groepen:</p>
+<ul>
+<li><strong>Groep op -o</strong> (4 vormen): rosso, rossa, rossi, rosse</li>
+<li><strong>Groep op -e</strong> (2 vormen): grande, grandi — geldt voor m én v</li>
+</ul>
+</div>
+<table class="conjugation-table">
+<tr><th></th><th>mannelijk</th><th>vrouwelijk</th></tr>
+<tr><td>enkelvoud</td><td>il libro ross<strong>o</strong></td><td>la casa ross<strong>a</strong></td></tr>
+<tr><td>meervoud</td><td>i libri ross<strong>i</strong></td><td>le case ross<strong>e</strong></td></tr>
+</table>
+
+<h4>2. Plaats van het bijvoeglijk naamwoord</h4>
+<div class="grammar-box">
+<p>Anders dan in het Nederlands staat het bijvoeglijk naamwoord meestal <strong>na</strong> het zelfstandig naamwoord:</p>
+<p><em>una macchina rossa</em> (een rode auto), <em>un ragazzo italiano</em> (een Italiaanse jongen).</p>
+<p>Een paar veelgebruikte komen ervóór: <em>bello, buono, grande, piccolo</em> — <em>una bella città</em>.</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">una bella casa grande</div>
+<div>een mooi groot huis</div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les5-accordo">
+  <div class="inline-oef-header">✍️ Vul de juiste uitgang in (-o, -a, -i of -e)</div>
+  <div class="inline-oef-row">la ragazza è alt<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="a" maxlength="2" placeholder="?"></span> <span class="inline-oef-hint">(v, enkelvoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">il ragazzo è alt<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="o" maxlength="2" placeholder="?"></span> <span class="inline-oef-hint">(m, enkelvoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">le case sono ross<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="e" maxlength="2" placeholder="?"></span> <span class="inline-oef-hint">(v, meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">i libri sono ross<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="i" maxlength="2" placeholder="?"></span> <span class="inline-oef-hint">(m, meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">gli studenti sono brav<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="i" maxlength="2" placeholder="?"></span> <span class="inline-oef-hint">(m, meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Kleuren & beschrijvingen</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">rosso</div><div class="vocab-meaning">rood</div></div>
+<div class="vocab-item"><div class="vocab-word">verde</div><div class="vocab-meaning">groen</div></div>
+<div class="vocab-item"><div class="vocab-word">blu</div><div class="vocab-meaning">blauw</div></div>
+<div class="vocab-item"><div class="vocab-word">giallo</div><div class="vocab-meaning">geel</div></div>
+<div class="vocab-item"><div class="vocab-word">nero</div><div class="vocab-meaning">zwart</div></div>
+<div class="vocab-item"><div class="vocab-word">bianco</div><div class="vocab-meaning">wit</div></div>
+<div class="vocab-item"><div class="vocab-word">grande</div><div class="vocab-meaning">groot</div></div>
+<div class="vocab-item"><div class="vocab-word">piccolo</div><div class="vocab-meaning">klein</div></div>
+<div class="vocab-item"><div class="vocab-word">bello</div><div class="vocab-meaning">mooi</div></div>
+<div class="vocab-item"><div class="vocab-word">buono</div><div class="vocab-meaning">goed / lekker</div></div>
+<div class="vocab-item"><div class="vocab-word">nuovo</div><div class="vocab-meaning">nieuw</div></div>
+<div class="vocab-item"><div class="vocab-word">vecchio</div><div class="vocab-meaning">oud</div></div>
+<div class="vocab-item"><div class="vocab-word">alto</div><div class="vocab-meaning">hoog / lang</div></div>
+<div class="vocab-item"><div class="vocab-word">bravo</div><div class="vocab-meaning">knap / goed (in iets)</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="it-les5-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Italiaans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een rode auto</span><input type="text" class="inline-zin-input" data-answer="una macchina rossa" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de grote huizen</span><input type="text" class="inline-zin-input" data-answer="le case grandi" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een mooie stad</span><input type="text" class="inline-zin-input" data-answer="una bella città" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de Italiaanse jongens</span><input type="text" class="inline-zin-input" data-answer="i ragazzi italiani" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een kleine hond</span><input type="text" class="inline-zin-input" data-answer="un cane piccolo" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de aardige vriendinnen</span><input type="text" class="inline-zin-input" data-answer="le amiche gentili" placeholder="Italiaanse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de overeenkomst van bijvoeglijke naamwoorden (-o/-a/-i/-e en de -e-groep), hun plaats na het zelfstandig naamwoord, en kleuren en beschrijvingen.</p>
+`,
+        };
+
+        // Actieve lesinhoud volgt de gekozen taal (default Spaans).
+        const lessonsHTML = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonsHTML_it : lessonsHTML_es;
+
         // Lesson titles for display
-        const lessonTitles = {
+        const lessonTitles_es = {
             1: "De basis van het Spaans - Persoonlijke voornaamwoorden en ser",
             2: "Geslacht en lidwoorden",
             3: "Bijvoeglijke naamwoorden - Overeenstemming en positie",
@@ -6409,6 +6913,16 @@
             25: "Conditionalis en hypothetische si-zinnen"
         };
 
+        const lessonTitles_it = {
+            1: "Uitspraak, alfabet & begroetingen",
+            2: "Lidwoorden & zelfstandige naamwoorden",
+            3: "Essere (zijn) & persoonlijke voornaamwoorden",
+            4: "Avere (hebben), c'è / ci sono & getallen",
+            5: "Bijvoeglijke naamwoorden & kleuren"
+        };
+
+        const lessonTitles = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonTitles_it : lessonTitles_es;
+
         // Functions to make the app work
         function init() {
             loadXP();
@@ -6422,6 +6936,14 @@
             updateXPDisplay();
             updateStreakDisplay();
             updateDailyStrip();
+            applyLanguageUI();
+        }
+
+        // Taal-specifieke UI: voor Italiaans verbergen we het Thema's-tabblad.
+        function applyLanguageUI() {
+            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it');
+            const themaTab = document.querySelector('.tab[data-tab="themas"]');
+            if (themaTab) themaTab.style.display = isIt ? 'none' : '';
         }
 
         // switchTab werkt zowel via onclick als vanuit code (geen event.target afhankelijkheid)
@@ -6437,13 +6959,17 @@
         }
 
         // Course sections — group of 5 lessons each, named by theme
-        const COURSE_SECTIONS = [
+        const COURSE_SECTIONS_es = [
             { label: 'Sectie 1', title: 'De basis & woordsoorten',     range: [1, 5]   },
             { label: 'Sectie 2', title: 'Werkwoorden uitgebreid',       range: [6, 10]  },
             { label: 'Sectie 3', title: 'Voornaamwoorden & verbinden',  range: [11, 15] },
             { label: 'Sectie 4', title: 'Het verleden',                  range: [16, 20] },
             { label: 'Sectie 5', title: 'Toekomst, wens & voorwaarde',   range: [21, 25] },
         ];
+        const COURSE_SECTIONS_it = [
+            { label: 'Sezione 1', title: 'De basis: klank, lidwoorden, zijn & hebben', range: [1, 5] },
+        ];
+        const COURSE_SECTIONS = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? COURSE_SECTIONS_it : COURSE_SECTIONS_es;
         // Position pattern for the winding path (repeats)
         const PATH_POSITIONS = ['center','right','far-right','right','center','left','far-left','left'];
         function renderLessonPath() {
@@ -6991,7 +7517,10 @@
         }
 
         function getAllDays() {
-            return Array.from({length: 25}, (_, i) => i + 1);
+            const maxDay = (typeof COURSE_SECTIONS !== 'undefined' && COURSE_SECTIONS.length)
+                ? COURSE_SECTIONS.reduce((m, s) => Math.max(m, s.range[1]), 0)
+                : 25;
+            return Array.from({length: maxDay}, (_, i) => i + 1);
         }
 
         // =====================================================
@@ -7026,6 +7555,9 @@
         function loadOefelenMenu() {
             const el = document.getElementById('oefelenContent');
             const herhalenInfo = getHerhalenInfo();
+            // Voor Italiaans tonen we alleen flashcards + woordenlijst (+ foutenlijst);
+            // geen typ/quiz/dagelijkse les/gespreksmodus.
+            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it');
             el.innerHTML = `
                 <div class="lesson-card">
                     <h2>Oefenen</h2>
@@ -7034,23 +7566,25 @@
                         <button class="oef-mode-btn" data-modus="flashcards" onclick="startModus('flashcards')">
                             <span class="oef-icon">🃏</span>Flashcards
                         </button>
+                        <button class="oef-mode-btn" data-modus="woordenlijst" onclick="startModus('woordenlijst')">
+                            <span class="oef-icon">⭐</span>Mijn woordenlijst${starredWords.size > 0 ? ` <span style="font-size:0.8rem;opacity:0.7;">(${starredWords.size})</span>` : ''}
+                        </button>
+                        ${!isIt ? `
                         <button class="oef-mode-btn" data-modus="typen" onclick="startModus('typen')">
                             <span class="oef-icon">⌨️</span>Typ oefening
                         </button>
                         <button class="oef-mode-btn" data-modus="quiz" onclick="startModus('quiz')">
                             <span class="oef-icon">🎯</span>Mini quiz
                         </button>
-                        <button class="oef-mode-btn" data-modus="woordenlijst" onclick="startModus('woordenlijst')">
-                            <span class="oef-icon">⭐</span>Mijn woordenlijst${starredWords.size > 0 ? ` <span style="font-size:0.8rem;opacity:0.7;">(${starredWords.size})</span>` : ''}
-                        </button>
                         <button class="oef-mode-btn" data-modus="dagelijkseles" onclick="startModus('dagelijkseles')">
                             <span class="oef-icon">📅</span>Dagelijkse les
                         </button>
                         <button class="oef-mode-btn" data-modus="gesprek" onclick="startModus('gesprek')">
                             <span class="oef-icon">💬</span>Gespreksmodus
-                        </button>
+                        </button>` : ''}
                         <button class="oef-mode-btn" data-modus="foutenlijst" onclick="startModus('foutenlijst')">
                             <span class="oef-icon">📋</span>Foutenlijst${getErrorLog().length > 0 ? ` <span style="font-size:0.8rem;opacity:0.7;">(${getErrorLog().length})</span>` : ''}
+                        </button>
                     </div>
                     <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:2px solid var(--ochre);">
                         <h3 style="margin-top:0;">🔁 Vandaag herhalen</h3>
