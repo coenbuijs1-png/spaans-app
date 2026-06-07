@@ -8437,10 +8437,14 @@
             loadProgressOverview();
         }
 
+        // Voortgang is per taal: Spaans houdt de oude sleutels (compat), Italiaans krijgt _it.
+        function _progKey(base) {
+            return (typeof activeLangCode !== 'undefined' && activeLangCode !== 'es') ? base + '_' + activeLangCode : base;
+        }
         function saveProgress() {
             try {
-                localStorage.setItem('completed_days', JSON.stringify(Array.from(completedDays)));
-                localStorage.setItem('current_day', currentDay);
+                localStorage.setItem(_progKey('completed_days'), JSON.stringify(Array.from(completedDays)));
+                localStorage.setItem(_progKey('current_day'), currentDay);
             } catch (error) {
                 console.log('Storage not available:', error);
             }
@@ -8448,10 +8452,10 @@
 
         function loadProgress() {
             try {
-                const completed = localStorage.getItem('completed_days');
-                const current = localStorage.getItem('current_day');
-                if (completed) completedDays = new Set(JSON.parse(completed));
-                if (current) currentDay = parseInt(current);
+                const completed = localStorage.getItem(_progKey('completed_days'));
+                const current = localStorage.getItem(_progKey('current_day'));
+                completedDays = completed ? new Set(JSON.parse(completed)) : new Set();
+                currentDay = current ? parseInt(current) : 1;
             } catch (error) {
                 console.log('Storage not available:', error);
             }
@@ -13929,7 +13933,7 @@ ONDERWERP: ${gesprekTopic}`;
         const FIREBASE_READY = !!(firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf('PLAK_HIER') === -1);
 
         const SYNC_KEYS_EXACT = ['spanish_app_state_v1','completed_days','current_day','xp_total','duocoengo_daily_goal','streak_count','streak_best','streak_last_date','starred_words','daily_lesson_date','uitdaging_done_date','duocoengo_active_lang'];
-        const SYNC_KEY_PREFIXES = ['dc-inline-','xp_day_'];
+        const SYNC_KEY_PREFIXES = ['dc-inline-','xp_day_','completed_days_','current_day_'];
         function _isSyncKey(k){ return SYNC_KEYS_EXACT.includes(k) || SYNC_KEY_PREFIXES.some(p => k.startsWith(p)); }
 
         // Bewaar de originele setItem en koppel auto-sync aan elke app-schrijfactie.
@@ -13982,7 +13986,7 @@ ONDERWERP: ${gesprekTopic}`;
                 if (rv == null){ out[k] = lv; return; }
                 if (k === 'xp_total' || k === 'streak_best' || k.startsWith('xp_day_')){
                     out[k] = String(Math.max(parseInt(lv) || 0, parseInt(rv) || 0));
-                } else if (k === 'completed_days' || k === 'starred_words'){
+                } else if (k === 'starred_words' || k.indexOf('completed_days') === 0){
                     out[k] = JSON.stringify(_unionArr(lv, rv));
                 } else if (k === 'spanish_app_state_v1'){
                     out[k] = JSON.stringify(_mergeState(_parseJSON(lv, {}), _parseJSON(rv, {}), newer));
