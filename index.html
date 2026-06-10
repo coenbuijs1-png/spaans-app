@@ -1568,7 +1568,7 @@
                 <div class="lang-menu" id="langMenu" hidden>
                     <button class="lang-option active" data-lang="es"><span class="lang-flag">🇪🇸</span>Spaans<span class="lang-status">actief</span></button>
                     <button class="lang-option" data-lang="it"><span class="lang-flag">🇮🇹</span>Italiaans<span class="lang-status">beschikbaar</span></button>
-                    <button class="lang-option" data-lang="fr" disabled><span class="lang-flag">🇫🇷</span>Frans<span class="lang-status">binnenkort</span></button>
+                    <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span>Frans<span class="lang-status">beschikbaar</span></button>
                     <button class="lang-option" data-lang="de" disabled><span class="lang-flag">🇩🇪</span>Duits<span class="lang-status">binnenkort</span></button>
                     <button class="lang-option" data-lang="pt" disabled><span class="lang-flag">🇵🇹</span>Portugees<span class="lang-status">binnenkort</span></button>
                 </div>
@@ -1668,8 +1668,8 @@
                   subtitle:'Jouw Italiaanse cursus',
                   speechLang:'it-IT', ready:true },
             fr: { code:'fr', name:'Frans',      native:'Français',  flag:'🇫🇷',
-                  subtitle:'Franse cursus — binnenkort beschikbaar',
-                  speechLang:'fr-FR', ready:false },
+                  subtitle:'Jouw Franse cursus',
+                  speechLang:'fr-FR', ready:true },
             de: { code:'de', name:'Duits',      native:'Deutsch',   flag:'🇩🇪',
                   subtitle:'Duitse cursus — binnenkort beschikbaar',
                   speechLang:'de-DE', ready:false },
@@ -8351,8 +8351,1479 @@
 `,
         };
 
+        // ============================================================
+        // === FRANSE CURSUS (DuoCoengo Français) =====================
+        // === Eigen leerpad — geen vertaling van Spaans/Italiaans ====
+        // ============================================================
+        const lessonsHTML_fr = {
+1: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De Franse klanken herkennen: nasalen, stille letters en accenten</li>
+<li>Weten wat liaison is en wanneer je hem hoort</li>
+<li>Je begroeten, bedanken en voorstellen</li>
+</ul>
+
+<h3>📚 Uitspraak & grammatica</h3>
+
+<h4>1. Stille letters — dé eigenaardigheid van het Frans</h4>
+<div class="grammar-box">
+<p>Frans schrijft veel letters die je <strong>niet uitspreekt</strong>. Vooral aan het eind van een woord:</p>
+<ul>
+<li>eind-<strong>s</strong>, -<strong>t</strong>, -<strong>d</strong>, -<strong>x</strong>, -<strong>z</strong> zijn stom: <em>Paris</em> = "parie", <em>petit</em> = "petie"</li>
+<li>eind-<strong>e</strong> is stom: <em>madame</em> = "madam"</li>
+<li><strong>h</strong> is altijd stom: <em>hôtel</em> = "otel"</li>
+</ul>
+</div>
+
+<h4>2. Nasale klanken</h4>
+<div class="grammar-box">
+<p>Klinker + n/m wordt één neusklank (de n/m hoor je niet apart):</p>
+<ul>
+<li><strong>on</strong> → "õ": <em>bonjour, non</em></li>
+<li><strong>an / en</strong> → "ã": <em>France, enfant</em></li>
+<li><strong>in / ain</strong> → "ɛ̃": <em>vin, pain</em></li>
+<li><strong>un</strong> → <em>un, lundi</em></li>
+</ul>
+</div>
+
+<h4>3. Accenten & speciale klanken</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>é</strong> ("ee"): <em>café</em> &nbsp;•&nbsp; <strong>è/ê</strong> ("è"): <em>père, fête</em></li>
+<li><strong>ç</strong> klinkt als "s": <em>français, ça va</em></li>
+<li><strong>ou</strong> = "oe" (<em>bonjour</em>), <strong>u</strong> = "uu" (<em>tu</em>), <strong>oi</strong> = "wa" (<em>moi</em>)</li>
+<li><strong>ch</strong> = "sj" (<em>chat</em>), <strong>j/g+e,i</strong> = "zj" (<em>je, manger</em>)</li>
+</ul>
+</div>
+
+<h4>4. Liaison</h4>
+<div class="grammar-box">
+<p>Een stomme eindletter wordt wél uitgesproken als het volgende woord met een klinker begint:</p>
+<p><em>vous êtes</em> → "voe-<strong>z</strong>èt" &nbsp;•&nbsp; <em>les amis</em> → "lee-<strong>z</strong>amie" &nbsp;•&nbsp; <em>un petit ami</em> → "un petie-<strong>t</strong>amie"</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Bonjour ! Comment ça va ? — Ça va bien, merci.</div>
+<div>Goedendag! Hoe gaat het? — Het gaat goed, dank je.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les1-klank">
+  <div class="inline-oef-header">✍️ Spreek je de laatste letter uit? Schrijf ja of nee</div>
+  <div class="inline-oef-row">Pari<strong>s</strong> → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="nee" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(eind-s)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">peti<strong>t</strong> → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="nee" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(eind-t)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">vous<strong> ê</strong>tes (samen) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ja" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(liaison vóór klinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">merc<strong>i</strong> → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ja" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(klinker hoor je altijd)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Begroetingen & beleefdheid</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">bonjour</div><div class="vocab-meaning">goedendag / hallo</div></div>
+<div class="vocab-item"><div class="vocab-word">bonsoir</div><div class="vocab-meaning">goedenavond</div></div>
+<div class="vocab-item"><div class="vocab-word">salut</div><div class="vocab-meaning">hoi / doei (informeel)</div></div>
+<div class="vocab-item"><div class="vocab-word">au revoir</div><div class="vocab-meaning">tot ziens</div></div>
+<div class="vocab-item"><div class="vocab-word">merci (beaucoup)</div><div class="vocab-meaning">dank je (wel)</div></div>
+<div class="vocab-item"><div class="vocab-word">s'il vous plaît</div><div class="vocab-meaning">alstublieft</div></div>
+<div class="vocab-item"><div class="vocab-word">oui / non</div><div class="vocab-meaning">ja / nee</div></div>
+<div class="vocab-item"><div class="vocab-word">pardon</div><div class="vocab-meaning">sorry / pardon</div></div>
+<div class="vocab-item"><div class="vocab-word">comment ça va ?</div><div class="vocab-meaning">hoe gaat het?</div></div>
+<div class="vocab-item"><div class="vocab-word">ça va bien</div><div class="vocab-meaning">het gaat goed</div></div>
+<div class="vocab-item"><div class="vocab-word">je m'appelle...</div><div class="vocab-meaning">ik heet...</div></div>
+<div class="vocab-item"><div class="vocab-word">enchanté</div><div class="vocab-meaning">aangenaam</div></div>
+<div class="vocab-item"><div class="vocab-word">madame / monsieur</div><div class="vocab-meaning">mevrouw / meneer</div></div>
+<div class="vocab-item"><div class="vocab-word">à bientôt</div><div class="vocab-meaning">tot snel</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les1-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Goedendag, hoe gaat het?</span><input type="text" class="inline-zin-input" data-answer="Bonjour, comment ça va ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het gaat goed, dank je.</span><input type="text" class="inline-zin-input" data-answer="Ça va bien, merci." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heet Marie.</span><input type="text" class="inline-zin-input" data-answer="Je m'appelle Marie." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Tot ziens!</span><input type="text" class="inline-zin-input" data-answer="Au revoir !" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Aangenaam.</span><input type="text" class="inline-zin-input" data-answer="Enchanté." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Dank u wel, mevrouw.</span><input type="text" class="inline-zin-input" data-answer="Merci beaucoup, madame." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: stille eindletters, de nasale klanken (on/an/in), accenten en ç, liaison, en de belangrijkste begroetingen.</p>
+`,
+2: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het geslacht van zelfstandige naamwoorden hanteren</li>
+<li>Le, la, l', les en un, une, des correct kiezen</li>
+<li>Het meervoud vormen (en horen dat de -s stom is)</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Bepaald lidwoord: le, la, l', les</h4>
+<table class="conjugation-table">
+<tr><th>Vorm</th><th>Wanneer</th><th>Voorbeeld</th></tr>
+<tr><td><strong>le</strong></td><td>mannelijk</td><td>le livre (het boek)</td></tr>
+<tr><td><strong>la</strong></td><td>vrouwelijk</td><td>la maison (het huis)</td></tr>
+<tr><td><strong>l'</strong></td><td>vóór klinker/stomme h</td><td>l'ami, l'hôtel</td></tr>
+<tr><td><strong>les</strong></td><td>meervoud (m+v)</td><td>les livres</td></tr>
+</table>
+
+<h4>2. Onbepaald lidwoord: un, une, des</h4>
+<div class="grammar-box">
+<p><strong>un</strong> livre (een boek, m) • <strong>une</strong> maison (een huis, v) • <strong>des</strong> livres (boeken — Frans gebruikt verplicht "des"!).</p>
+</div>
+
+<h4>3. Meervoud</h4>
+<div class="grammar-box">
+<p>Schrijf <strong>-s</strong>, maar spreek hem <strong>niet</strong> uit: <em>le livre → les livres</em> (klinkt allebei "lievr"). Het verschil hóór je aan het lidwoord: le [lə] vs les [lee].</p>
+<p>Uitzonderingen: -eau → -eaux (<em>les bateaux</em>), -al → -aux (<em>les animaux</em>).</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les2-lidwoord">
+  <div class="inline-oef-header">✍️ Vul het juiste lidwoord in: le / la / l' / les / un / une / des</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="le" maxlength="4" placeholder="?"></span> livre <span class="inline-oef-hint">(het boek, m)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="la" maxlength="4" placeholder="?"></span> maison <span class="inline-oef-hint">(het huis, v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="l'" maxlength="4" placeholder="?"></span>ami <span class="inline-oef-hint">(vóór klinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="les" maxlength="4" placeholder="?"></span> livres <span class="inline-oef-hint">(meervoud)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="une" maxlength="4" placeholder="?"></span> voiture <span class="inline-oef-hint">(een auto, v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="des" maxlength="4" placeholder="?"></span> amis <span class="inline-oef-hint">(vrienden — onbepaald mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Dingen & mensen</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">le livre</div><div class="vocab-meaning">het boek</div></div>
+<div class="vocab-item"><div class="vocab-word">la maison</div><div class="vocab-meaning">het huis</div></div>
+<div class="vocab-item"><div class="vocab-word">la voiture</div><div class="vocab-meaning">de auto</div></div>
+<div class="vocab-item"><div class="vocab-word">le garçon</div><div class="vocab-meaning">de jongen</div></div>
+<div class="vocab-item"><div class="vocab-word">la fille</div><div class="vocab-meaning">het meisje</div></div>
+<div class="vocab-item"><div class="vocab-word">l'ami / l'amie</div><div class="vocab-meaning">de vriend / vriendin</div></div>
+<div class="vocab-item"><div class="vocab-word">le chien</div><div class="vocab-meaning">de hond</div></div>
+<div class="vocab-item"><div class="vocab-word">le chat</div><div class="vocab-meaning">de kat</div></div>
+<div class="vocab-item"><div class="vocab-word">la ville</div><div class="vocab-meaning">de stad</div></div>
+<div class="vocab-item"><div class="vocab-word">l'école</div><div class="vocab-meaning">de school</div></div>
+<div class="vocab-item"><div class="vocab-word">la table</div><div class="vocab-meaning">de tafel</div></div>
+<div class="vocab-item"><div class="vocab-word">l'eau</div><div class="vocab-meaning">het water</div></div>
+<div class="vocab-item"><div class="vocab-word">le café</div><div class="vocab-meaning">de koffie</div></div>
+<div class="vocab-item"><div class="vocab-word">le pain</div><div class="vocab-meaning">het brood</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les2-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">het boek</span><input type="text" class="inline-zin-input" data-answer="le livre" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de huizen</span><input type="text" class="inline-zin-input" data-answer="les maisons" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een vriend</span><input type="text" class="inline-zin-input" data-answer="un ami" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een auto</span><input type="text" class="inline-zin-input" data-answer="une voiture" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">boeken (onbepaald)</span><input type="text" class="inline-zin-input" data-answer="des livres" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de school</span><input type="text" class="inline-zin-input" data-answer="l'école" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: le/la/l'/les en un/une/des, het stomme meervouds-s (le livre vs les livres), en de eerste woordenschat.</p>
+`,
+3: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De persoonlijke voornaamwoorden gebruiken (je, tu, il/elle, on ...)</li>
+<li>Être (zijn) volledig vervoegen</li>
+<li>Zeggen wie je bent en waar je vandaan komt; c'est gebruiken</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Persoonlijke voornaamwoorden</h4>
+<table class="conjugation-table">
+<tr><th>Frans</th><th>Nederlands</th></tr>
+<tr><td>je (j')</td><td>ik</td></tr>
+<tr><td>tu</td><td>jij</td></tr>
+<tr><td>il / elle / on</td><td>hij / zij / men (wij, spreektaal)</td></tr>
+<tr><td>nous</td><td>wij</td></tr>
+<tr><td>vous</td><td>jullie / u</td></tr>
+<tr><td>ils / elles</td><td>zij (m/v mv)</td></tr>
+</table>
+<div class="grammar-box">
+<p>Anders dan Spaans/Italiaans laat je het voornaamwoord in het Frans <strong>nooit</strong> weg. <strong>vous</strong> is zowel "jullie" als beleefd "u". <strong>on</strong> betekent in spreektaal vaak "wij": <em>On va au café ?</em></p>
+</div>
+
+<h4>2. Être — zijn</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Vorm</th><th>Voorbeeld</th></tr>
+<tr><td>je</td><td><strong>suis</strong></td><td>je suis néerlandais</td></tr>
+<tr><td>tu</td><td><strong>es</strong></td><td>tu es gentil</td></tr>
+<tr><td>il/elle/on</td><td><strong>est</strong></td><td>elle est française</td></tr>
+<tr><td>nous</td><td><strong>sommes</strong></td><td>nous sommes amis</td></tr>
+<tr><td>vous</td><td><strong>êtes</strong></td><td>vous êtes prêts</td></tr>
+<tr><td>ils/elles</td><td><strong>sont</strong></td><td>ils sont étudiants</td></tr>
+</table>
+<div class="grammar-box">
+<p><strong>c'est</strong> = het is / dit is: <em>C'est mon ami. C'est bon !</em></p>
+<p>Nationaliteiten zonder hoofdletter en met -e voor vrouwelijk: <em>français/française, néerlandais/néerlandaise</em>.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les3-etre">
+  <div class="inline-oef-header">✍️ Vul être in: suis / es / est / sommes / êtes / sont</div>
+  <div class="inline-oef-row">Je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="suis" maxlength="7" placeholder="?"></span> néerlandais <span class="inline-oef-hint">(je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="es" maxlength="7" placeholder="?"></span> gentil <span class="inline-oef-hint">(tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="est" maxlength="7" placeholder="?"></span> française <span class="inline-oef-hint">(elle)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sommes" maxlength="7" placeholder="?"></span> amis <span class="inline-oef-hint">(nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Vous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="êtes" maxlength="7" placeholder="?"></span> prêts <span class="inline-oef-hint">(vous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ils <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sont" maxlength="7" placeholder="?"></span> étudiants <span class="inline-oef-hint">(ils)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Wie ben je?</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">être</div><div class="vocab-meaning">zijn</div></div>
+<div class="vocab-item"><div class="vocab-word">français / française</div><div class="vocab-meaning">Frans (m/v)</div></div>
+<div class="vocab-item"><div class="vocab-word">néerlandais</div><div class="vocab-meaning">Nederlands</div></div>
+<div class="vocab-item"><div class="vocab-word">l'homme</div><div class="vocab-meaning">de man</div></div>
+<div class="vocab-item"><div class="vocab-word">la femme</div><div class="vocab-meaning">de vrouw</div></div>
+<div class="vocab-item"><div class="vocab-word">l'étudiant</div><div class="vocab-meaning">de student</div></div>
+<div class="vocab-item"><div class="vocab-word">gentil / gentille</div><div class="vocab-meaning">aardig (m/v)</div></div>
+<div class="vocab-item"><div class="vocab-word">fatigué</div><div class="vocab-meaning">moe</div></div>
+<div class="vocab-item"><div class="vocab-word">content</div><div class="vocab-meaning">blij</div></div>
+<div class="vocab-item"><div class="vocab-word">prêt</div><div class="vocab-meaning">klaar / gereed</div></div>
+<div class="vocab-item"><div class="vocab-word">d'où ?</div><div class="vocab-meaning">waarvandaan?</div></div>
+<div class="vocab-item"><div class="vocab-word">aussi</div><div class="vocab-meaning">ook</div></div>
+<div class="vocab-item"><div class="vocab-word">c'est</div><div class="vocab-meaning">het is / dit is</div></div>
+<div class="vocab-item"><div class="vocab-word">le médecin</div><div class="vocab-meaning">de dokter</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les3-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ben Nederlands.</span><input type="text" class="inline-zin-input" data-answer="Je suis néerlandais." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij is Frans.</span><input type="text" class="inline-zin-input" data-answer="Elle est française." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij zijn vrienden.</span><input type="text" class="inline-zin-input" data-answer="Nous sommes amis." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Dit is mijn vriend.</span><input type="text" class="inline-zin-input" data-answer="C'est mon ami." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Jij bent aardig.</span><input type="text" class="inline-zin-input" data-answer="Tu es gentil." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ben moe.</span><input type="text" class="inline-zin-input" data-answer="Je suis fatigué." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de voornaamwoorden (incl. on en beleefd vous), être volledig, c'est, en nationaliteiten met vrouwelijke -e.</p>
+`,
+4: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Avoir (hebben) vervoegen en gebruiken</li>
+<li>Il y a ("er is/zijn") toepassen</li>
+<li>Vaste uitdrukkingen: avoir faim, avoir ... ans</li>
+<li>Tellen van 0 tot 20</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Avoir — hebben</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Vorm</th><th>Voorbeeld</th></tr>
+<tr><td>j'</td><td><strong>ai</strong></td><td>j'ai un chien</td></tr>
+<tr><td>tu</td><td><strong>as</strong></td><td>tu as faim ?</td></tr>
+<tr><td>il/elle</td><td><strong>a</strong></td><td>elle a vingt ans</td></tr>
+<tr><td>nous</td><td><strong>avons</strong></td><td>nous avons le temps</td></tr>
+<tr><td>vous</td><td><strong>avez</strong></td><td>vous avez raison</td></tr>
+<tr><td>ils/elles</td><td><strong>ont</strong></td><td>ils ont deux enfants</td></tr>
+</table>
+<div class="grammar-box">
+<p>Let op: <em>je</em> wordt <strong>j'</strong> vóór een klinker: <em>j'ai</em>. Liaison bij <em>nous avons</em> ("noe-zavõ"), <em>vous avez</em>, <em>ils ont</em> ("iel-zõ").</p>
+</div>
+
+<h4>2. Vaste uitdrukkingen met avoir</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>avoir faim / soif</strong> — honger / dorst hebben</li>
+<li><strong>avoir ... ans</strong> — ... jaar zijn: <em>J'ai vingt ans.</em></li>
+<li><strong>avoir chaud / froid</strong> — het warm / koud hebben</li>
+<li><strong>avoir raison / tort</strong> — gelijk / ongelijk hebben</li>
+<li><strong>avoir besoin de</strong> — nodig hebben</li>
+</ul>
+</div>
+
+<h4>3. Il y a — er is / er zijn</h4>
+<div class="grammar-box">
+<p>Eén vaste vorm voor enkelvoud én meervoud: <em>Il y a un livre. Il y a des livres.</em></p>
+</div>
+
+<h4>4. Getallen 0–20</h4>
+<div class="grammar-box">
+<p>zéro, un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix, onze, douze, treize, quatorze, quinze, seize, dix-sept, dix-huit, dix-neuf, vingt.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les4-avoir">
+  <div class="inline-oef-header">✍️ Vul avoir in: ai / as / a / avons / avez / ont</div>
+  <div class="inline-oef-row">J'<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ai" maxlength="6" placeholder="?"></span> un chien <span class="inline-oef-hint">(je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="as" maxlength="6" placeholder="?"></span> faim ? <span class="inline-oef-hint">(tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="a" maxlength="6" placeholder="?"></span> vingt ans <span class="inline-oef-hint">(elle)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="avons" maxlength="6" placeholder="?"></span> le temps <span class="inline-oef-hint">(nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ils <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ont" maxlength="6" placeholder="?"></span> deux enfants <span class="inline-oef-hint">(ils)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Il y <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="a" maxlength="6" placeholder="?"></span> un problème <span class="inline-oef-hint">(er is)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">avoir</div><div class="vocab-meaning">hebben</div></div>
+<div class="vocab-item"><div class="vocab-word">la faim</div><div class="vocab-meaning">de honger</div></div>
+<div class="vocab-item"><div class="vocab-word">le temps</div><div class="vocab-meaning">de tijd / het weer</div></div>
+<div class="vocab-item"><div class="vocab-word">l'an / l'année</div><div class="vocab-meaning">het jaar</div></div>
+<div class="vocab-item"><div class="vocab-word">l'enfant</div><div class="vocab-meaning">het kind</div></div>
+<div class="vocab-item"><div class="vocab-word">le fils / la fille</div><div class="vocab-meaning">de zoon / dochter</div></div>
+<div class="vocab-item"><div class="vocab-word">le problème</div><div class="vocab-meaning">het probleem</div></div>
+<div class="vocab-item"><div class="vocab-word">besoin de</div><div class="vocab-meaning">nodig (avoir besoin de)</div></div>
+<div class="vocab-item"><div class="vocab-word">deux</div><div class="vocab-meaning">twee</div></div>
+<div class="vocab-item"><div class="vocab-word">trois</div><div class="vocab-meaning">drie</div></div>
+<div class="vocab-item"><div class="vocab-word">dix</div><div class="vocab-meaning">tien</div></div>
+<div class="vocab-item"><div class="vocab-word">vingt</div><div class="vocab-meaning">twintig</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les4-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb honger.</span><input type="text" class="inline-zin-input" data-answer="J'ai faim." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoe oud ben je?</span><input type="text" class="inline-zin-input" data-answer="Quel âge as-tu ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ben twintig jaar.</span><input type="text" class="inline-zin-input" data-answer="J'ai vingt ans." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Er is een probleem.</span><input type="text" class="inline-zin-input" data-answer="Il y a un problème." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij hebben tijd.</span><input type="text" class="inline-zin-input" data-answer="Nous avons le temps." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Je hebt gelijk.</span><input type="text" class="inline-zin-input" data-answer="Tu as raison." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: avoir volledig (j'ai, tu as ...), de vaste uitdrukkingen (avoir faim, avoir ... ans), il y a, en de getallen tot 20.</p>
+`,
+5: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Bijvoeglijke naamwoorden laten overeenkomen (-e, -s)</li>
+<li>De juiste plaats kennen (na het zn., behalve petit/grand/beau ...)</li>
+<li>Kleuren en beschrijvingen gebruiken</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Overeenkomst (accord)</h4>
+<div class="grammar-box">
+<p>Het bijvoeglijk naamwoord past zich aan: vrouwelijk <strong>+e</strong>, meervoud <strong>+s</strong> (vaak onhoorbaar!):</p>
+</div>
+<table class="conjugation-table">
+<tr><th></th><th>mannelijk</th><th>vrouwelijk</th></tr>
+<tr><td>enkelvoud</td><td>un livre vert</td><td>une voiture vert<strong>e</strong></td></tr>
+<tr><td>meervoud</td><td>des livres vert<strong>s</strong></td><td>des voitures vert<strong>es</strong></td></tr>
+</table>
+<div class="grammar-box">
+<p>De -e maakt de medeklinker hoorbaar: <em>vert</em> ("vèr") → <em>verte</em> ("vèrt"), <em>petit</em> → <em>petite</em>. Eindigt het woord al op -e (<em>rouge, jaune</em>)? Dan blijft het gelijk. Onregelmatig: <em>beau/belle, blanc/blanche, vieux/vieille</em>.</p>
+</div>
+
+<h4>2. Plaats: meestal ná het zelfstandig naamwoord</h4>
+<div class="grammar-box">
+<p><em>une voiture <strong>rouge</strong></em>, <em>un livre <strong>intéressant</strong></em>.</p>
+<p>Maar korte veelgebruikte adjectieven staan ervóór: <strong>petit, grand, beau, bon, jeune, vieux, nouveau</strong> → <em>un <strong>petit</strong> chien, une <strong>belle</strong> ville</em>.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les5-accord">
+  <div class="inline-oef-header">✍️ Vul de juiste vorm van het adjectief in</div>
+  <div class="inline-oef-row">une voiture <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="verte" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(vert, v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">un <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="petit" maxlength="9" placeholder="?"></span> chien <span class="inline-oef-hint">(petit, m — vóór het zn.)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">une <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="petite" maxlength="9" placeholder="?"></span> maison <span class="inline-oef-hint">(petit, v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">une <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="belle" maxlength="9" placeholder="?"></span> ville <span class="inline-oef-hint">(beau, v!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">des livres <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="intéressants" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(intéressant, m mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Kleuren & beschrijvingen</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">rouge</div><div class="vocab-meaning">rood</div></div>
+<div class="vocab-item"><div class="vocab-word">vert / verte</div><div class="vocab-meaning">groen</div></div>
+<div class="vocab-item"><div class="vocab-word">bleu</div><div class="vocab-meaning">blauw</div></div>
+<div class="vocab-item"><div class="vocab-word">jaune</div><div class="vocab-meaning">geel</div></div>
+<div class="vocab-item"><div class="vocab-word">noir</div><div class="vocab-meaning">zwart</div></div>
+<div class="vocab-item"><div class="vocab-word">blanc / blanche</div><div class="vocab-meaning">wit</div></div>
+<div class="vocab-item"><div class="vocab-word">grand</div><div class="vocab-meaning">groot</div></div>
+<div class="vocab-item"><div class="vocab-word">petit</div><div class="vocab-meaning">klein</div></div>
+<div class="vocab-item"><div class="vocab-word">beau / belle</div><div class="vocab-meaning">mooi</div></div>
+<div class="vocab-item"><div class="vocab-word">bon / bonne</div><div class="vocab-meaning">goed / lekker</div></div>
+<div class="vocab-item"><div class="vocab-word">nouveau / nouvelle</div><div class="vocab-meaning">nieuw</div></div>
+<div class="vocab-item"><div class="vocab-word">vieux / vieille</div><div class="vocab-meaning">oud</div></div>
+<div class="vocab-item"><div class="vocab-word">jeune</div><div class="vocab-meaning">jong</div></div>
+<div class="vocab-item"><div class="vocab-word">intéressant</div><div class="vocab-meaning">interessant</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les5-vert2">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een rode auto</span><input type="text" class="inline-zin-input" data-answer="une voiture rouge" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een kleine hond</span><input type="text" class="inline-zin-input" data-answer="un petit chien" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een mooie stad</span><input type="text" class="inline-zin-input" data-answer="une belle ville" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">het witte huis</span><input type="text" class="inline-zin-input" data-answer="la maison blanche" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de groene boeken</span><input type="text" class="inline-zin-input" data-answer="les livres verts" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">een goed boek</span><input type="text" class="inline-zin-input" data-answer="un bon livre" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de accord (+e/+s, vert→verte), de plaats van het adjectief (na het zn., behalve petit/grand/beau/bon ...), en de kleuren.</p>
+`,
+6: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Regelmatige -er werkwoorden vervoegen</li>
+<li>De spellingsregels kennen (nous mangeons, je m'appelle)</li>
+<li>Over dagelijkse activiteiten praten</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. De tegenwoordige tijd van -er</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Uitgang</th><th>parler (praten)</th></tr>
+<tr><td>je</td><td>-e</td><td>parl<strong>e</strong></td></tr>
+<tr><td>tu</td><td>-es</td><td>parl<strong>es</strong></td></tr>
+<tr><td>il/elle</td><td>-e</td><td>parl<strong>e</strong></td></tr>
+<tr><td>nous</td><td>-ons</td><td>parl<strong>ons</strong></td></tr>
+<tr><td>vous</td><td>-ez</td><td>parl<strong>ez</strong></td></tr>
+<tr><td>ils/elles</td><td>-ent</td><td>parl<strong>ent</strong></td></tr>
+</table>
+<div class="grammar-box">
+<p>Cruciaal voor je uitspraak: <em>parle, parles, parlent</em> klinken <strong>precies hetzelfde</strong> ("parl"). Alleen -ons en -ez hoor je.</p>
+<p>Spelling: <em>manger → nous mang<strong>e</strong>ons</em>, <em>commencer → nous commen<strong>ç</strong>ons</em>, <em>s'appeler → je m'appe<strong>ll</strong>e</em>.</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Je parle français et j'habite à Paris.</div>
+<div>Ik spreek Frans en woon in Parijs.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les6-er">
+  <div class="inline-oef-header">✍️ Vervoeg het -er werkwoord</div>
+  <div class="inline-oef-row">je (parler) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="parle" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(praten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">tu (habiter) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="habites" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(wonen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">elle (travailler) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="travaille" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(werken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">nous (manger) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="mangeons" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(eten — let op de e!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">vous (écouter) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="écoutez" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(luisteren)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ils (regarder) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="regardent" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(kijken)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Werkwoorden op -er</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">parler</div><div class="vocab-meaning">praten / spreken</div></div>
+<div class="vocab-item"><div class="vocab-word">habiter</div><div class="vocab-meaning">wonen</div></div>
+<div class="vocab-item"><div class="vocab-word">travailler</div><div class="vocab-meaning">werken</div></div>
+<div class="vocab-item"><div class="vocab-word">manger</div><div class="vocab-meaning">eten</div></div>
+<div class="vocab-item"><div class="vocab-word">écouter</div><div class="vocab-meaning">luisteren</div></div>
+<div class="vocab-item"><div class="vocab-word">regarder</div><div class="vocab-meaning">kijken</div></div>
+<div class="vocab-item"><div class="vocab-word">aimer</div><div class="vocab-meaning">houden van</div></div>
+<div class="vocab-item"><div class="vocab-word">étudier</div><div class="vocab-meaning">studeren</div></div>
+<div class="vocab-item"><div class="vocab-word">acheter</div><div class="vocab-meaning">kopen</div></div>
+<div class="vocab-item"><div class="vocab-word">chanter</div><div class="vocab-meaning">zingen</div></div>
+<div class="vocab-item"><div class="vocab-word">la musique</div><div class="vocab-meaning">de muziek</div></div>
+<div class="vocab-item"><div class="vocab-word">le travail</div><div class="vocab-meaning">het werk</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les6-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik spreek Frans.</span><input type="text" class="inline-zin-input" data-answer="Je parle français." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Woon je in Parijs?</span><input type="text" class="inline-zin-input" data-answer="Tu habites à Paris ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij eten brood.</span><input type="text" class="inline-zin-input" data-answer="Nous mangeons du pain." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij werken veel.</span><input type="text" class="inline-zin-input" data-answer="Ils travaillent beaucoup." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik luister naar muziek.</span><input type="text" class="inline-zin-input" data-answer="J'écoute de la musique." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij (zij) koopt een boek.</span><input type="text" class="inline-zin-input" data-answer="Elle achète un livre." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de -er vervoeging (waarvan je alleen -ons en -ez hoort), de spellingsregels (mangeons, m'appelle), en een set dagelijkse werkwoorden.</p>
+`,
+7: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>-ir werkwoorden vervoegen (finir, met -issons)</li>
+<li>-re werkwoorden vervoegen (vendre, attendre)</li>
+<li>Drie veelgebruikte onregelmatige: faire, aller, prendre</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. -ir werkwoorden (finir-type)</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>finir (eindigen)</th></tr>
+<tr><td>je</td><td>fin<strong>is</strong></td></tr>
+<tr><td>tu</td><td>fin<strong>is</strong></td></tr>
+<tr><td>il/elle</td><td>fin<strong>it</strong></td></tr>
+<tr><td>nous</td><td>fin<strong>issons</strong></td></tr>
+<tr><td>vous</td><td>fin<strong>issez</strong></td></tr>
+<tr><td>ils/elles</td><td>fin<strong>issent</strong></td></tr>
+</table>
+<div class="grammar-box">
+<p>Herkenbaar aan <strong>-iss-</strong> in het meervoud: <em>nous finissons, ils choisissent</em>.</p>
+</div>
+
+<h4>2. -re werkwoorden (vendre-type)</h4>
+<div class="grammar-box">
+<p><em>vendre</em>: je vend<strong>s</strong>, tu vend<strong>s</strong>, il vend (geen uitgang!), nous vend<strong>ons</strong>, vous vend<strong>ez</strong>, ils vend<strong>ent</strong>. Zo ook: <em>attendre</em> (wachten), <em>répondre</em> (antwoorden), <em>entendre</em> (horen).</p>
+</div>
+
+<h4>3. Drie onmisbare onregelmatige</h4>
+<table class="conjugation-table">
+<tr><th></th><th>faire (doen)</th><th>aller (gaan)</th><th>prendre (nemen)</th></tr>
+<tr><td>je</td><td>fais</td><td>vais</td><td>prends</td></tr>
+<tr><td>tu</td><td>fais</td><td>vas</td><td>prends</td></tr>
+<tr><td>il</td><td>fait</td><td>va</td><td>prend</td></tr>
+<tr><td>nous</td><td>faisons</td><td>allons</td><td>prenons</td></tr>
+<tr><td>vous</td><td>faites</td><td>allez</td><td>prenez</td></tr>
+<tr><td>ils</td><td>font</td><td>vont</td><td>prennent</td></tr>
+</table>
+
+<div class="inline-oef" data-oef-id="fr-les7-irre">
+  <div class="inline-oef-header">✍️ Vervoeg het werkwoord</div>
+  <div class="inline-oef-row">je (finir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="finis" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(eindigen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">nous (choisir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="choisissons" maxlength="12" placeholder="?"></span> <span class="inline-oef-hint">(kiezen — -iss-!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">il (attendre) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="attend" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(wachten — geen uitgang)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">je (faire) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="fais" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(doen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">nous (aller) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="allons" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(gaan)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ils (prendre) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="prennent" maxlength="11" placeholder="?"></span> <span class="inline-oef-hint">(nemen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">finir</div><div class="vocab-meaning">eindigen / afmaken</div></div>
+<div class="vocab-item"><div class="vocab-word">choisir</div><div class="vocab-meaning">kiezen</div></div>
+<div class="vocab-item"><div class="vocab-word">réussir</div><div class="vocab-meaning">slagen</div></div>
+<div class="vocab-item"><div class="vocab-word">vendre</div><div class="vocab-meaning">verkopen</div></div>
+<div class="vocab-item"><div class="vocab-word">attendre</div><div class="vocab-meaning">wachten (op)</div></div>
+<div class="vocab-item"><div class="vocab-word">répondre</div><div class="vocab-meaning">antwoorden</div></div>
+<div class="vocab-item"><div class="vocab-word">entendre</div><div class="vocab-meaning">horen</div></div>
+<div class="vocab-item"><div class="vocab-word">faire</div><div class="vocab-meaning">doen / maken</div></div>
+<div class="vocab-item"><div class="vocab-word">aller</div><div class="vocab-meaning">gaan</div></div>
+<div class="vocab-item"><div class="vocab-word">prendre</div><div class="vocab-meaning">nemen</div></div>
+<div class="vocab-item"><div class="vocab-word">le bus</div><div class="vocab-meaning">de bus</div></div>
+<div class="vocab-item"><div class="vocab-word">le sport</div><div class="vocab-meaning">de sport</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les7-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik wacht op de bus.</span><input type="text" class="inline-zin-input" data-answer="J'attends le bus." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij kiezen een boek.</span><input type="text" class="inline-zin-input" data-answer="Nous choisissons un livre." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij doet sport.</span><input type="text" class="inline-zin-input" data-answer="Il fait du sport." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik neem de bus.</span><input type="text" class="inline-zin-input" data-answer="Je prends le bus." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij antwoorden niet.</span><input type="text" class="inline-zin-input" data-answer="Ils ne répondent pas." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij gaan naar Parijs.</span><input type="text" class="inline-zin-input" data-answer="Nous allons à Paris." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: finir (-issons), vendre/attendre (il zonder uitgang), en de onregelmatige faire, aller en prendre.</p>
+`,
+8: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Vragen stellen op drie manieren (intonatie, est-ce que, inversie)</li>
+<li>De vraagwoorden gebruiken (qui, que, où, quand ...)</li>
+<li>Ontkennen met ne ... pas (en jamais/rien)</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Drie manieren om een vraag te stellen</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>Intonatie</strong> (spreektaal): <em>Tu parles français ?</em></li>
+<li><strong>Est-ce que</strong> (neutraal): <em>Est-ce que tu parles français ?</em></li>
+<li><strong>Inversie</strong> (formeel): <em>Parles-tu français ?</em></li>
+</ul>
+</div>
+
+<h4>2. Vraagwoorden</h4>
+<table class="conjugation-table">
+<tr><th>Frans</th><th>Nederlands</th></tr>
+<tr><td>qui ?</td><td>wie?</td></tr>
+<tr><td>que / qu'est-ce que ?</td><td>wat?</td></tr>
+<tr><td>où ?</td><td>waar?</td></tr>
+<tr><td>quand ?</td><td>wanneer?</td></tr>
+<tr><td>comment ?</td><td>hoe?</td></tr>
+<tr><td>pourquoi ?</td><td>waarom?</td></tr>
+<tr><td>combien (de) ?</td><td>hoeveel?</td></tr>
+<tr><td>quel / quelle ?</td><td>welke?</td></tr>
+</table>
+
+<h4>3. Ontkenning: ne ... pas</h4>
+<div class="grammar-box">
+<p>De ontkenning bestaat uit <strong>twee delen</strong> om het werkwoord heen:</p>
+<p><em>Je <strong>ne</strong> parle <strong>pas</strong> anglais.</em> &nbsp;•&nbsp; vóór klinker: <em>Je <strong>n'</strong>aime <strong>pas</strong> ça.</em></p>
+<p>Varianten: <strong>ne ... jamais</strong> (nooit), <strong>ne ... rien</strong> (niets), <strong>ne ... plus</strong> (niet meer), <strong>ne ... personne</strong> (niemand).</p>
+<p>Na een ontkenning wordt un/une/des → <strong>de</strong>: <em>Je n'ai pas <strong>de</strong> voiture.</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les8-vraag">
+  <div class="inline-oef-header">✍️ Vul het vraagwoord of de ontkenning in</div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="Où" maxlength="10" placeholder="?"></span> habites-tu ? <span class="inline-oef-hint">(waar)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="Comment" maxlength="10" placeholder="?"></span> ça va ? <span class="inline-oef-hint">(hoe)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row"><span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="Combien" maxlength="10" placeholder="?"></span> ça coûte ? <span class="inline-oef-hint">(hoeveel)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ne" maxlength="6" placeholder="?"></span> parle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="pas" maxlength="6" placeholder="?"></span> anglais <span class="inline-oef-hint">(niet)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je n'ai pas <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de" maxlength="6" placeholder="?"></span> voiture <span class="inline-oef-hint">(na ontkenning)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">qui</div><div class="vocab-meaning">wie</div></div>
+<div class="vocab-item"><div class="vocab-word">que / quoi</div><div class="vocab-meaning">wat</div></div>
+<div class="vocab-item"><div class="vocab-word">où</div><div class="vocab-meaning">waar</div></div>
+<div class="vocab-item"><div class="vocab-word">quand</div><div class="vocab-meaning">wanneer</div></div>
+<div class="vocab-item"><div class="vocab-word">comment</div><div class="vocab-meaning">hoe</div></div>
+<div class="vocab-item"><div class="vocab-word">pourquoi</div><div class="vocab-meaning">waarom</div></div>
+<div class="vocab-item"><div class="vocab-word">combien</div><div class="vocab-meaning">hoeveel</div></div>
+<div class="vocab-item"><div class="vocab-word">parce que</div><div class="vocab-meaning">omdat</div></div>
+<div class="vocab-item"><div class="vocab-word">ne ... pas</div><div class="vocab-meaning">niet</div></div>
+<div class="vocab-item"><div class="vocab-word">ne ... jamais</div><div class="vocab-meaning">nooit</div></div>
+<div class="vocab-item"><div class="vocab-word">ne ... rien</div><div class="vocab-meaning">niets</div></div>
+<div class="vocab-item"><div class="vocab-word">coûter</div><div class="vocab-meaning">kosten</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les8-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Waar woon je?</span><input type="text" class="inline-zin-input" data-answer="Où habites-tu ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik spreek geen Engels.</span><input type="text" class="inline-zin-input" data-answer="Je ne parle pas anglais." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoeveel kost het?</span><input type="text" class="inline-zin-input" data-answer="Combien ça coûte ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Waarom niet?</span><input type="text" class="inline-zin-input" data-answer="Pourquoi pas ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb geen auto.</span><input type="text" class="inline-zin-input" data-answer="Je n'ai pas de voiture." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij werkt nooit op zondag.</span><input type="text" class="inline-zin-input" data-answer="Il ne travaille jamais le dimanche." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: drie vraagvormen (intonatie, est-ce que, inversie), de vraagwoorden, en de tweedelige ontkenning ne ... pas (+ pas de).</p>
+`,
+9: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De voorzetsels à en de gebruiken en samentrekken (au, aux, du, des)</li>
+<li>In/naar landen en steden zeggen (à Paris, en France)</li>
+<li>Plaatsen beschrijven (sur, sous, dans, devant ...)</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Samentrekkingen — verplicht!</h4>
+<table class="conjugation-table">
+<tr><th>Combinatie</th><th>Wordt</th><th>Voorbeeld</th></tr>
+<tr><td>à + le</td><td><strong>au</strong></td><td>Je vais au cinéma.</td></tr>
+<tr><td>à + les</td><td><strong>aux</strong></td><td>Il parle aux enfants.</td></tr>
+<tr><td>de + le</td><td><strong>du</strong></td><td>le livre du garçon</td></tr>
+<tr><td>de + les</td><td><strong>des</strong></td><td>la maison des amis</td></tr>
+</table>
+<div class="grammar-box">
+<p>à la / à l' / de la / de l' blijven gewoon: <em>à la maison, de l'école</em>.</p>
+</div>
+
+<h4>2. Steden en landen</h4>
+<div class="grammar-box">
+<ul>
+<li>Stad: <strong>à</strong> → <em>à Paris, à Amsterdam</em></li>
+<li>Land (v, op -e): <strong>en</strong> → <em>en France, en Italie</em></li>
+<li>Land (m): <strong>au</strong> → <em>au Portugal, au Canada</em></li>
+<li>Land (mv): <strong>aux</strong> → <em>aux Pays-Bas</em> (Nederland!)</li>
+</ul>
+</div>
+
+<h4>3. Plaatsbepalingen</h4>
+<div class="grammar-box">
+<p><strong>sur</strong> (op), <strong>sous</strong> (onder), <strong>dans</strong> (in), <strong>devant</strong> (voor), <strong>derrière</strong> (achter), <strong>entre</strong> (tussen), <strong>chez</strong> (bij ... thuis): <em>Le livre est sur la table. Je suis chez Marie.</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les9-prep">
+  <div class="inline-oef-header">✍️ Vul het (samengetrokken) voorzetsel in</div>
+  <div class="inline-oef-row">Je vais <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="au" maxlength="6" placeholder="?"></span> cinéma <span class="inline-oef-hint">(à + le)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">le livre <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="du" maxlength="6" placeholder="?"></span> garçon <span class="inline-oef-hint">(de + le)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">J'habite <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="aux" maxlength="6" placeholder="?"></span> Pays-Bas <span class="inline-oef-hint">(à + les)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle va <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="en" maxlength="6" placeholder="?"></span> France <span class="inline-oef-hint">(land op -e)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Le chat est <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="sous" maxlength="8" placeholder="?"></span> la table <span class="inline-oef-hint">(onder)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je suis <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="chez" maxlength="8" placeholder="?"></span> Marie <span class="inline-oef-hint">(bij ... thuis)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">sur / sous</div><div class="vocab-meaning">op / onder</div></div>
+<div class="vocab-item"><div class="vocab-word">dans</div><div class="vocab-meaning">in</div></div>
+<div class="vocab-item"><div class="vocab-word">devant / derrière</div><div class="vocab-meaning">voor / achter</div></div>
+<div class="vocab-item"><div class="vocab-word">entre</div><div class="vocab-meaning">tussen</div></div>
+<div class="vocab-item"><div class="vocab-word">chez</div><div class="vocab-meaning">bij ... (thuis)</div></div>
+<div class="vocab-item"><div class="vocab-word">avec / sans</div><div class="vocab-meaning">met / zonder</div></div>
+<div class="vocab-item"><div class="vocab-word">pour</div><div class="vocab-meaning">voor</div></div>
+<div class="vocab-item"><div class="vocab-word">le cinéma</div><div class="vocab-meaning">de bioscoop</div></div>
+<div class="vocab-item"><div class="vocab-word">la gare</div><div class="vocab-meaning">het station</div></div>
+<div class="vocab-item"><div class="vocab-word">le magasin</div><div class="vocab-meaning">de winkel</div></div>
+<div class="vocab-item"><div class="vocab-word">la France</div><div class="vocab-meaning">Frankrijk</div></div>
+<div class="vocab-item"><div class="vocab-word">les Pays-Bas</div><div class="vocab-meaning">Nederland</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les9-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ga naar de bioscoop.</span><input type="text" class="inline-zin-input" data-answer="Je vais au cinéma." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het boek ligt op de tafel.</span><input type="text" class="inline-zin-input" data-answer="Le livre est sur la table." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik woon in Nederland.</span><input type="text" class="inline-zin-input" data-answer="J'habite aux Pays-Bas." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij gaat naar Frankrijk.</span><input type="text" class="inline-zin-input" data-answer="Elle va en France." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ben bij Marie (thuis).</span><input type="text" class="inline-zin-input" data-answer="Je suis chez Marie." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">de auto van de jongen</span><input type="text" class="inline-zin-input" data-answer="la voiture du garçon" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de verplichte samentrekkingen au/aux/du/des, à+stad / en+land / aux Pays-Bas, en de plaatsbepalingen (sur, sous, dans, chez ...).</p>
+`,
+10: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Bezittelijke voornaamwoorden gebruiken (mon/ma/mes ...)</li>
+<li>De klinkerregel kennen (mon amie!)</li>
+<li>Over je familie vertellen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Bezittelijke voornaamwoorden</h4>
+<table class="conjugation-table">
+<tr><th></th><th>m enk</th><th>v enk</th><th>mv</th></tr>
+<tr><td>mijn</td><td>mon</td><td>ma</td><td>mes</td></tr>
+<tr><td>jouw</td><td>ton</td><td>ta</td><td>tes</td></tr>
+<tr><td>zijn/haar</td><td>son</td><td>sa</td><td>ses</td></tr>
+<tr><td>ons/onze</td><td colspan="2">notre</td><td>nos</td></tr>
+<tr><td>jullie/uw</td><td colspan="2">votre</td><td>vos</td></tr>
+<tr><td>hun</td><td colspan="2">leur</td><td>leurs</td></tr>
+</table>
+<div class="grammar-box">
+<p>Net als in het Italiaans richt het zich op het <strong>bezit</strong>, niet de bezitter: <em>son livre</em> = zijn óf haar boek.</p>
+<p><strong>Klinkerregel:</strong> vóór een klinker gebruik je altijd mon/ton/son — ook bij vrouwelijke woorden: <em><strong>mon</strong> amie, <strong>son</strong> école</em>.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les10-poss">
+  <div class="inline-oef-header">✍️ Vul het bezittelijk voornaamwoord in</div>
+  <div class="inline-oef-row">mijn boek → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="mon" maxlength="7" placeholder="?"></span> livre <span class="inline-oef-hint">(m)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">mijn huis → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ma" maxlength="7" placeholder="?"></span> maison <span class="inline-oef-hint">(v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">mijn vriendin → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="mon" maxlength="7" placeholder="?"></span> amie <span class="inline-oef-hint">(v, maar klinker!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">jouw ouders → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="tes" maxlength="7" placeholder="?"></span> parents <span class="inline-oef-hint">(mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">hun huis → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="leur" maxlength="7" placeholder="?"></span> maison <span class="inline-oef-hint">(hun, enk)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">onze vrienden → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="nos" maxlength="7" placeholder="?"></span> amis <span class="inline-oef-hint">(mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Familie</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">la famille</div><div class="vocab-meaning">de familie</div></div>
+<div class="vocab-item"><div class="vocab-word">la mère</div><div class="vocab-meaning">de moeder</div></div>
+<div class="vocab-item"><div class="vocab-word">le père</div><div class="vocab-meaning">de vader</div></div>
+<div class="vocab-item"><div class="vocab-word">les parents</div><div class="vocab-meaning">de ouders</div></div>
+<div class="vocab-item"><div class="vocab-word">le frère</div><div class="vocab-meaning">de broer</div></div>
+<div class="vocab-item"><div class="vocab-word">la sœur</div><div class="vocab-meaning">de zus</div></div>
+<div class="vocab-item"><div class="vocab-word">le grand-père</div><div class="vocab-meaning">de opa</div></div>
+<div class="vocab-item"><div class="vocab-word">la grand-mère</div><div class="vocab-meaning">de oma</div></div>
+<div class="vocab-item"><div class="vocab-word">le mari</div><div class="vocab-meaning">de echtgenoot</div></div>
+<div class="vocab-item"><div class="vocab-word">la femme</div><div class="vocab-meaning">de vrouw / echtgenote</div></div>
+<div class="vocab-item"><div class="vocab-word">l'oncle / la tante</div><div class="vocab-meaning">de oom / tante</div></div>
+<div class="vocab-item"><div class="vocab-word">le cousin</div><div class="vocab-meaning">de neef</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les10-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">mijn moeder</span><input type="text" class="inline-zin-input" data-answer="ma mère" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">mijn vriendin (let op!)</span><input type="text" class="inline-zin-input" data-answer="mon amie" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">zijn boek</span><input type="text" class="inline-zin-input" data-answer="son livre" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">onze ouders</span><input type="text" class="inline-zin-input" data-answer="nos parents" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Mijn broer heet Tom.</span><input type="text" class="inline-zin-input" data-answer="Mon frère s'appelle Tom." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">hun huis</span><input type="text" class="inline-zin-input" data-answer="leur maison" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: mon/ma/mes t/m leur/leurs, de klinkerregel (mon amie), en de familieleden.</p>
+`,
+11: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De nabije toekomst maken: aller + infinitief</li>
+<li>Venir (komen) en venir de + infinitief (net gedaan hebben)</li>
+<li>Plannen en afspraken uitdrukken</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Futur proche: aller + infinitief</h4>
+<div class="grammar-box">
+<p>Dé manier om over de toekomst te praten in gesproken Frans:</p>
+<p><em>Je <strong>vais manger</strong>.</em> (Ik ga eten.) • <em>Nous <strong>allons partir</strong> demain.</em> (Wij gaan morgen vertrekken.)</p>
+<p>Ontkenning om aller heen: <em>Je <strong>ne</strong> vais <strong>pas</strong> venir.</em></p>
+</div>
+
+<h4>2. Venir + venir de</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>venir</th></tr>
+<tr><td>je</td><td>viens</td></tr>
+<tr><td>tu</td><td>viens</td></tr>
+<tr><td>il/elle</td><td>vient</td></tr>
+<tr><td>nous</td><td>venons</td></tr>
+<tr><td>vous</td><td>venez</td></tr>
+<tr><td>ils/elles</td><td>viennent</td></tr>
+</table>
+<div class="grammar-box">
+<p><strong>venir de + infinitief</strong> = net iets gedaan hebben: <em>Je <strong>viens de manger</strong>.</em> (Ik heb net gegeten.)</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les11-futur">
+  <div class="inline-oef-header">✍️ Vul de juiste vorm in</div>
+  <div class="inline-oef-row">Je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vais" maxlength="9" placeholder="?"></span> manger <span class="inline-oef-hint">(aller, je — ik ga eten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="allons" maxlength="9" placeholder="?"></span> partir demain <span class="inline-oef-hint">(aller, nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="viens" maxlength="9" placeholder="?"></span> avec moi ? <span class="inline-oef-hint">(venir, tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ils <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="viennent" maxlength="9" placeholder="?"></span> ce soir <span class="inline-oef-hint">(venir, ils)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je viens <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de" maxlength="6" placeholder="?"></span> manger <span class="inline-oef-hint">(net gegeten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">venir</div><div class="vocab-meaning">komen</div></div>
+<div class="vocab-item"><div class="vocab-word">partir</div><div class="vocab-meaning">vertrekken</div></div>
+<div class="vocab-item"><div class="vocab-word">arriver</div><div class="vocab-meaning">aankomen</div></div>
+<div class="vocab-item"><div class="vocab-word">rester</div><div class="vocab-meaning">blijven</div></div>
+<div class="vocab-item"><div class="vocab-word">demain</div><div class="vocab-meaning">morgen</div></div>
+<div class="vocab-item"><div class="vocab-word">ce soir</div><div class="vocab-meaning">vanavond</div></div>
+<div class="vocab-item"><div class="vocab-word">ce week-end</div><div class="vocab-meaning">dit weekend</div></div>
+<div class="vocab-item"><div class="vocab-word">la semaine prochaine</div><div class="vocab-meaning">volgende week</div></div>
+<div class="vocab-item"><div class="vocab-word">ensemble</div><div class="vocab-meaning">samen</div></div>
+<div class="vocab-item"><div class="vocab-word">bientôt</div><div class="vocab-meaning">binnenkort</div></div>
+<div class="vocab-item"><div class="vocab-word">la fête</div><div class="vocab-meaning">het feest</div></div>
+<div class="vocab-item"><div class="vocab-word">le voyage</div><div class="vocab-meaning">de reis</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les11-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik ga eten.</span><input type="text" class="inline-zin-input" data-answer="Je vais manger." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij gaan morgen vertrekken.</span><input type="text" class="inline-zin-input" data-answer="Nous allons partir demain." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Kom je vanavond?</span><input type="text" class="inline-zin-input" data-answer="Tu viens ce soir ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb net gegeten.</span><input type="text" class="inline-zin-input" data-answer="Je viens de manger." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij gaan niet komen.</span><input type="text" class="inline-zin-input" data-answer="Ils ne vont pas venir." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">We gaan samen reizen.</span><input type="text" class="inline-zin-input" data-answer="Nous allons voyager ensemble." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: futur proche (aller + infinitief), venir volledig, en venir de + infinitief voor "net gedaan".</p>
+`,
+12: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De klok lezen (quelle heure est-il ?)</li>
+<li>De dagen en maanden gebruiken</li>
+<li>Afspraken en routines in de tijd plaatsen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Hoe laat is het?</h4>
+<div class="grammar-box">
+<p><strong>Quelle heure est-il ? — Il est ... heure(s).</strong></p>
+<ul>
+<li><em>Il est une heure.</em> (1 uur) • <em>Il est trois heures.</em> (3 uur)</li>
+<li>kwart over: <em>et quart</em> • half: <em>et demie</em> • kwart voor: <em>moins le quart</em></li>
+<li><em>Il est midi / minuit.</em> (12 uur 's middags / 's nachts)</li>
+</ul>
+<p>Om een tijdstip: <strong>à</strong> → <em>à huit heures</em> (om 8 uur).</p>
+</div>
+
+<h4>2. Dagen & maanden (klein geschreven)</h4>
+<div class="grammar-box">
+<p><strong>Dagen:</strong> lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.</p>
+<p><strong>Maanden:</strong> janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre.</p>
+<p><em>le lundi</em> = op maandagen (gewoonte): <em>Je travaille le lundi.</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les12-heure">
+  <div class="inline-oef-header">✍️ Vul in</div>
+  <div class="inline-oef-row">Hoe laat is het? → Quelle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="heure" maxlength="8" placeholder="?"></span> est-il ? <span class="inline-oef-hint">(uur)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Het is 3 uur → Il est trois <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="heures" maxlength="8" placeholder="?"></span> <span class="inline-oef-hint">(meervoud!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">half vier → trois heures et <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="demie" maxlength="8" placeholder="?"></span> <span class="inline-oef-hint">(half)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">om 8 uur → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="à" maxlength="4" placeholder="?"></span> huit heures <span class="inline-oef-hint">(om)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">vrijdag → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vendredi" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(dag)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">l'heure</div><div class="vocab-meaning">het uur / de tijd</div></div>
+<div class="vocab-item"><div class="vocab-word">le jour</div><div class="vocab-meaning">de dag</div></div>
+<div class="vocab-item"><div class="vocab-word">la semaine</div><div class="vocab-meaning">de week</div></div>
+<div class="vocab-item"><div class="vocab-word">le mois</div><div class="vocab-meaning">de maand</div></div>
+<div class="vocab-item"><div class="vocab-word">lundi</div><div class="vocab-meaning">maandag</div></div>
+<div class="vocab-item"><div class="vocab-word">samedi</div><div class="vocab-meaning">zaterdag</div></div>
+<div class="vocab-item"><div class="vocab-word">dimanche</div><div class="vocab-meaning">zondag</div></div>
+<div class="vocab-item"><div class="vocab-word">aujourd'hui</div><div class="vocab-meaning">vandaag</div></div>
+<div class="vocab-item"><div class="vocab-word">hier</div><div class="vocab-meaning">gisteren</div></div>
+<div class="vocab-item"><div class="vocab-word">maintenant</div><div class="vocab-meaning">nu</div></div>
+<div class="vocab-item"><div class="vocab-word">midi / minuit</div><div class="vocab-meaning">12 u 's middags / 's nachts</div></div>
+<div class="vocab-item"><div class="vocab-word">le matin / le soir</div><div class="vocab-meaning">de ochtend / avond</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les12-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoe laat is het?</span><input type="text" class="inline-zin-input" data-answer="Quelle heure est-il ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het is twee uur.</span><input type="text" class="inline-zin-input" data-answer="Il est deux heures." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik werk op maandag.</span><input type="text" class="inline-zin-input" data-answer="Je travaille le lundi." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Tot morgen!</span><input type="text" class="inline-zin-input" data-answer="À demain !" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">De les is om negen uur.</span><input type="text" class="inline-zin-input" data-answer="Le cours est à neuf heures." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Vandaag is het zondag.</span><input type="text" class="inline-zin-input" data-answer="Aujourd'hui, c'est dimanche." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: il est ... heure(s) (+ et quart/et demie/moins le quart), à + tijdstip, en de dagen en maanden.</p>
+`,
+13: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Het delend lidwoord (partitif) gebruiken: du, de la, de l', des</li>
+<li>"Pas de" na ontkenning toepassen</li>
+<li>Over eten en boodschappen praten</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Het partitif — "een beetje van"</h4>
+<div class="grammar-box">
+<p>Voor onbepaalde hoeveelheden (in het Nederlands vaak géén lidwoord):</p>
+<ul>
+<li><strong>du</strong> (m): <em>Je mange du pain.</em> (Ik eet brood.)</li>
+<li><strong>de la</strong> (v): <em>Je mange de la confiture.</em></li>
+<li><strong>de l'</strong> (klinker): <em>Je bois de l'eau.</em></li>
+<li><strong>des</strong> (mv): <em>Je mange des frites.</em></li>
+</ul>
+</div>
+
+<h4>2. Na ontkenning en hoeveelheden: de</h4>
+<div class="grammar-box">
+<p><em>Je ne mange pas <strong>de</strong> pain. Je ne bois pas <strong>d'</strong>eau.</em></p>
+<p>Ook na hoeveelheden: <em>beaucoup <strong>de</strong> café, un kilo <strong>de</strong> pommes, un peu <strong>d'</strong>eau</em>.</p>
+</div>
+<div class="example-box">
+<div class="example-spanish">Je voudrais du fromage, s'il vous plaît.</div>
+<div>Ik wil graag kaas, alstublieft.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les13-partitif">
+  <div class="inline-oef-header">✍️ Vul het partitif in: du / de la / de l' / des / de</div>
+  <div class="inline-oef-row">Je mange <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="du" maxlength="6" placeholder="?"></span> pain <span class="inline-oef-hint">(m)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je bois <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de l'" maxlength="6" placeholder="?"></span>eau <span class="inline-oef-hint">(klinker)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu veux <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de la" maxlength="6" placeholder="?"></span> confiture ? <span class="inline-oef-hint">(v)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Il mange <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="des" maxlength="6" placeholder="?"></span> frites <span class="inline-oef-hint">(mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Je ne mange pas <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de" maxlength="6" placeholder="?"></span> viande <span class="inline-oef-hint">(na ontkenning)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">beaucoup <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="de" maxlength="6" placeholder="?"></span> café <span class="inline-oef-hint">(na hoeveelheid)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Eten & drinken</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">le pain</div><div class="vocab-meaning">het brood</div></div>
+<div class="vocab-item"><div class="vocab-word">le fromage</div><div class="vocab-meaning">de kaas</div></div>
+<div class="vocab-item"><div class="vocab-word">la viande</div><div class="vocab-meaning">het vlees</div></div>
+<div class="vocab-item"><div class="vocab-word">le poisson</div><div class="vocab-meaning">de vis</div></div>
+<div class="vocab-item"><div class="vocab-word">les légumes</div><div class="vocab-meaning">de groenten</div></div>
+<div class="vocab-item"><div class="vocab-word">la pomme</div><div class="vocab-meaning">de appel</div></div>
+<div class="vocab-item"><div class="vocab-word">l'eau</div><div class="vocab-meaning">het water</div></div>
+<div class="vocab-item"><div class="vocab-word">le lait</div><div class="vocab-meaning">de melk</div></div>
+<div class="vocab-item"><div class="vocab-word">le vin</div><div class="vocab-meaning">de wijn</div></div>
+<div class="vocab-item"><div class="vocab-word">boire</div><div class="vocab-meaning">drinken</div></div>
+<div class="vocab-item"><div class="vocab-word">le petit déjeuner</div><div class="vocab-meaning">het ontbijt</div></div>
+<div class="vocab-item"><div class="vocab-word">le dîner</div><div class="vocab-meaning">het avondeten</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les13-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik eet brood.</span><input type="text" class="inline-zin-input" data-answer="Je mange du pain." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik drink water.</span><input type="text" class="inline-zin-input" data-answer="Je bois de l'eau." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wil je kaas?</span><input type="text" class="inline-zin-input" data-answer="Tu veux du fromage ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik eet geen vlees.</span><input type="text" class="inline-zin-input" data-answer="Je ne mange pas de viande." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij drinkt veel koffie.</span><input type="text" class="inline-zin-input" data-answer="Il boit beaucoup de café." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij eten groenten.</span><input type="text" class="inline-zin-input" data-answer="Nous mangeons des légumes." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: het partitif (du/de la/de l'/des), de regel "pas de / beaucoup de", en eten & drinken vocabulaire.</p>
+`,
+14: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Pouvoir, vouloir en devoir vervoegen</li>
+<li>Ze combineren met een infinitief</li>
+<li>Beleefd vragen met je voudrais</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. De drie modale werkwoorden</h4>
+<table class="conjugation-table">
+<tr><th></th><th>pouvoir (kunnen)</th><th>vouloir (willen)</th><th>devoir (moeten)</th></tr>
+<tr><td>je</td><td>peux</td><td>veux</td><td>dois</td></tr>
+<tr><td>tu</td><td>peux</td><td>veux</td><td>dois</td></tr>
+<tr><td>il/elle</td><td>peut</td><td>veut</td><td>doit</td></tr>
+<tr><td>nous</td><td>pouvons</td><td>voulons</td><td>devons</td></tr>
+<tr><td>vous</td><td>pouvez</td><td>voulez</td><td>devez</td></tr>
+<tr><td>ils/elles</td><td>peuvent</td><td>veulent</td><td>doivent</td></tr>
+</table>
+<div class="grammar-box">
+<p>Erna komt een <strong>infinitief</strong>: <em>Je veux manger. Tu peux venir ? Nous devons partir.</em></p>
+<p>Beleefd: <strong>Je voudrais</strong> un café. (Ik zou graag ... willen — netter dan je veux.)</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les14-modaux">
+  <div class="inline-oef-header">✍️ Vervoeg het modale werkwoord</div>
+  <div class="inline-oef-row">je (vouloir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="veux" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(willen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">tu (pouvoir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="peux" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(kunnen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">elle (devoir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="doit" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(moeten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">nous (devoir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="devons" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(moeten)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">ils (vouloir) → <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="veulent" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(willen)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ik zou graag → je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="voudrais" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(beleefd)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">pouvoir</div><div class="vocab-meaning">kunnen / mogen</div></div>
+<div class="vocab-item"><div class="vocab-word">vouloir</div><div class="vocab-meaning">willen</div></div>
+<div class="vocab-item"><div class="vocab-word">devoir</div><div class="vocab-meaning">moeten</div></div>
+<div class="vocab-item"><div class="vocab-word">je voudrais</div><div class="vocab-meaning">ik zou graag willen</div></div>
+<div class="vocab-item"><div class="vocab-word">aider</div><div class="vocab-meaning">helpen</div></div>
+<div class="vocab-item"><div class="vocab-word">sortir</div><div class="vocab-meaning">uitgaan</div></div>
+<div class="vocab-item"><div class="vocab-word">l'addition</div><div class="vocab-meaning">de rekening</div></div>
+<div class="vocab-item"><div class="vocab-word">bien sûr</div><div class="vocab-meaning">natuurlijk</div></div>
+<div class="vocab-item"><div class="vocab-word">peut-être</div><div class="vocab-meaning">misschien</div></div>
+<div class="vocab-item"><div class="vocab-word">tout de suite</div><div class="vocab-meaning">meteen</div></div>
+<div class="vocab-item"><div class="vocab-word">volontiers</div><div class="vocab-meaning">graag</div></div>
+<div class="vocab-item"><div class="vocab-word">d'accord</div><div class="vocab-meaning">akkoord / oké</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les14-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik wil eten.</span><input type="text" class="inline-zin-input" data-answer="Je veux manger." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Kun je me helpen?</span><input type="text" class="inline-zin-input" data-answer="Tu peux m'aider ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij moeten vertrekken.</span><input type="text" class="inline-zin-input" data-answer="Nous devons partir." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik zou graag een koffie willen, alstublieft.</span><input type="text" class="inline-zin-input" data-answer="Je voudrais un café, s'il vous plaît." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij willen vanavond uitgaan.</span><input type="text" class="inline-zin-input" data-answer="Ils veulent sortir ce soir." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">De rekening, alstublieft.</span><input type="text" class="inline-zin-input" data-answer="L'addition, s'il vous plaît." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: pouvoir/vouloir/devoir + infinitief, en het beleefde je voudrais.</p>
+`,
+15: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De passé composé maken met avoir</li>
+<li>Voltooide deelwoorden vormen (-é, -i, -u)</li>
+<li>De belangrijkste onregelmatige deelwoorden kennen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Passé composé: avoir + voltooid deelwoord</h4>
+<div class="grammar-box">
+<p>Dé verleden tijd van het gesproken Frans. Vorm het deelwoord zo:</p>
+<ul>
+<li>-er → <strong>-é</strong>: parler → parl<strong>é</strong></li>
+<li>-ir → <strong>-i</strong>: finir → fin<strong>i</strong></li>
+<li>-re → <strong>-u</strong>: vendre → vend<strong>u</strong></li>
+</ul>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>parler → parlé</th></tr>
+<tr><td>j'</td><td>ai parlé</td></tr>
+<tr><td>tu</td><td>as parlé</td></tr>
+<tr><td>il/elle</td><td>a parlé</td></tr>
+<tr><td>nous</td><td>avons parlé</td></tr>
+<tr><td>vous</td><td>avez parlé</td></tr>
+<tr><td>ils/elles</td><td>ont parlé</td></tr>
+</table>
+<div class="grammar-box">
+<p>Onregelmatig: <em>faire → <strong>fait</strong>, prendre → <strong>pris</strong>, voir → <strong>vu</strong>, boire → <strong>bu</strong>, avoir → <strong>eu</strong>, être → <strong>été</strong>, lire → <strong>lu</strong>, écrire → <strong>écrit</strong></em>.</p>
+<p>Ontkenning om avoir heen: <em>Je <strong>n'</strong>ai <strong>pas</strong> mangé.</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les15-pc">
+  <div class="inline-oef-header">✍️ Vorm het voltooid deelwoord</div>
+  <div class="inline-oef-row">parler → j'ai <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="parlé" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(-er → -é)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">finir → tu as <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="fini" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(-ir → -i)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">vendre → il a <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vendu" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(-re → -u)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">faire → nous avons <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="fait" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(onregelmatig!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">voir → j'ai <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="vu" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(onregelmatig!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">boire → ils ont <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="bu" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(onregelmatig!)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">hier</div><div class="vocab-meaning">gisteren</div></div>
+<div class="vocab-item"><div class="vocab-word">ce matin</div><div class="vocab-meaning">vanochtend</div></div>
+<div class="vocab-item"><div class="vocab-word">la semaine dernière</div><div class="vocab-meaning">vorige week</div></div>
+<div class="vocab-item"><div class="vocab-word">voir</div><div class="vocab-meaning">zien</div></div>
+<div class="vocab-item"><div class="vocab-word">lire</div><div class="vocab-meaning">lezen</div></div>
+<div class="vocab-item"><div class="vocab-word">écrire</div><div class="vocab-meaning">schrijven</div></div>
+<div class="vocab-item"><div class="vocab-word">fait</div><div class="vocab-meaning">gedaan (deelw.)</div></div>
+<div class="vocab-item"><div class="vocab-word">pris</div><div class="vocab-meaning">genomen (deelw.)</div></div>
+<div class="vocab-item"><div class="vocab-word">vu</div><div class="vocab-meaning">gezien (deelw.)</div></div>
+<div class="vocab-item"><div class="vocab-word">le film</div><div class="vocab-meaning">de film</div></div>
+<div class="vocab-item"><div class="vocab-word">le restaurant</div><div class="vocab-meaning">het restaurant</div></div>
+<div class="vocab-item"><div class="vocab-word">déjà</div><div class="vocab-meaning">al / reeds</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les15-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Gisteren heb ik gewerkt.</span><input type="text" class="inline-zin-input" data-answer="Hier, j'ai travaillé." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij hebben een film gezien.</span><input type="text" class="inline-zin-input" data-answer="Nous avons vu un film." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Heb je gegeten?</span><input type="text" class="inline-zin-input" data-answer="Tu as mangé ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb de bus genomen.</span><input type="text" class="inline-zin-input" data-answer="J'ai pris le bus." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij hebben veel gewerkt.</span><input type="text" class="inline-zin-input" data-answer="Ils ont beaucoup travaillé." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik heb niet geslapen. (dormir → dormi)</span><input type="text" class="inline-zin-input" data-answer="Je n'ai pas dormi." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: passé composé met avoir, de deelwoorden -é/-i/-u, en de onregelmatige fait/pris/vu/bu/eu/été.</p>
+`,
+16: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Weten welke werkwoorden être gebruiken in de passé composé</li>
+<li>Het deelwoord laten overeenkomen met het onderwerp</li>
+<li>Over reizen en verplaatsingen in het verleden vertellen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Passé composé met être</h4>
+<div class="grammar-box">
+<p>Werkwoorden van <strong>beweging en verandering</strong> nemen être: <em>aller, venir, arriver, partir, entrer, sortir, monter, descendre, rester, tomber, naître, mourir, retourner</em> — plus alle wederkerende werkwoorden.</p>
+<p>Het deelwoord komt <strong>overeen met het onderwerp</strong>:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Onderwerp</th><th>aller → allé</th></tr>
+<tr><td>je (m/v)</td><td>suis allé / allée</td></tr>
+<tr><td>il / elle</td><td>est allé / allée</td></tr>
+<tr><td>nous (m/v)</td><td>sommes allés / allées</td></tr>
+<tr><td>ils / elles</td><td>sont allés / allées</td></tr>
+</table>
+<div class="example-box">
+<div class="example-spanish">Marie est allée à Paris et elle est rentrée hier.</div>
+<div>Marie is naar Parijs gegaan en gisteren thuisgekomen.</div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les16-etre">
+  <div class="inline-oef-header">✍️ Vul het deelwoord met de juiste uitgang in</div>
+  <div class="inline-oef-row">Marie est all<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ée" maxlength="4" placeholder="?"></span> à Paris <span class="inline-oef-hint">(v enk)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Paul est arriv<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="é" maxlength="4" placeholder="?"></span> tard <span class="inline-oef-hint">(m enk)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elles sont parti<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="es" maxlength="4" placeholder="?"></span> <span class="inline-oef-hint">(v mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ils sont rest<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="és" maxlength="4" placeholder="?"></span> à la maison <span class="inline-oef-hint">(m mv)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">arriver</div><div class="vocab-meaning">aankomen</div></div>
+<div class="vocab-item"><div class="vocab-word">entrer</div><div class="vocab-meaning">binnengaan</div></div>
+<div class="vocab-item"><div class="vocab-word">sortir</div><div class="vocab-meaning">naar buiten gaan</div></div>
+<div class="vocab-item"><div class="vocab-word">monter</div><div class="vocab-meaning">omhoog gaan / instappen</div></div>
+<div class="vocab-item"><div class="vocab-word">descendre</div><div class="vocab-meaning">naar beneden / uitstappen</div></div>
+<div class="vocab-item"><div class="vocab-word">tomber</div><div class="vocab-meaning">vallen</div></div>
+<div class="vocab-item"><div class="vocab-word">naître</div><div class="vocab-meaning">geboren worden</div></div>
+<div class="vocab-item"><div class="vocab-word">rentrer</div><div class="vocab-meaning">thuiskomen</div></div>
+<div class="vocab-item"><div class="vocab-word">tard / tôt</div><div class="vocab-meaning">laat / vroeg</div></div>
+<div class="vocab-item"><div class="vocab-word">le train</div><div class="vocab-meaning">de trein</div></div>
+<div class="vocab-item"><div class="vocab-word">l'aéroport</div><div class="vocab-meaning">de luchthaven</div></div>
+<div class="vocab-item"><div class="vocab-word">ensuite</div><div class="vocab-meaning">daarna</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les16-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik (v) ben naar Parijs gegaan.</span><input type="text" class="inline-zin-input" data-answer="Je suis allée à Paris." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij is laat aangekomen.</span><input type="text" class="inline-zin-input" data-answer="Il est arrivé tard." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij (m) zijn thuisgebleven.</span><input type="text" class="inline-zin-input" data-answer="Nous sommes restés à la maison." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij (v mv) zijn gisteren vertrokken.</span><input type="text" class="inline-zin-input" data-answer="Elles sont parties hier." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wanneer ben je geboren?</span><input type="text" class="inline-zin-input" data-answer="Quand es-tu né ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">De trein is vertrokken.</span><input type="text" class="inline-zin-input" data-answer="Le train est parti." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de être-werkwoorden (beweging/verandering), de overeenkomst van het deelwoord (allée, parties), en reizen in het verleden.</p>
+`,
+17: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Wederkerende werkwoorden vervoegen (je me lève)</li>
+<li>Je dagelijkse routine beschrijven</li>
+<li>Wederkerende werkwoorden in de passé composé (met être)</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. Wederkerende werkwoorden</h4>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>se lever (opstaan)</th><th>s'appeler (heten)</th></tr>
+<tr><td>je</td><td>me lève</td><td>m'appelle</td></tr>
+<tr><td>tu</td><td>te lèves</td><td>t'appelles</td></tr>
+<tr><td>il/elle</td><td>se lève</td><td>s'appelle</td></tr>
+<tr><td>nous</td><td>nous levons</td><td>nous appelons</td></tr>
+<tr><td>vous</td><td>vous levez</td><td>vous appelez</td></tr>
+<tr><td>ils/elles</td><td>se lèvent</td><td>s'appellent</td></tr>
+</table>
+<div class="grammar-box">
+<p>me/te/se worden <strong>m'/t'/s'</strong> vóór een klinker. In de passé composé altijd <strong>être</strong>: <em>Je me suis levé(e) tôt.</em></p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les17-refl">
+  <div class="inline-oef-header">✍️ Vul het wederkerende deel + werkwoord in</div>
+  <div class="inline-oef-row">Je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="me lève" maxlength="12" placeholder="?"></span> à sept heures <span class="inline-oef-hint">(se lever, je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="t'appelles" maxlength="12" placeholder="?"></span> comment ? <span class="inline-oef-hint">(s'appeler, tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="se couche" maxlength="12" placeholder="?"></span> tard <span class="inline-oef-hint">(se coucher, elle)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="nous amusons" maxlength="14" placeholder="?"></span> <span class="inline-oef-hint">(s'amuser, nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire — Dagelijkse routine</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">se réveiller</div><div class="vocab-meaning">wakker worden</div></div>
+<div class="vocab-item"><div class="vocab-word">se lever</div><div class="vocab-meaning">opstaan</div></div>
+<div class="vocab-item"><div class="vocab-word">se laver</div><div class="vocab-meaning">zich wassen</div></div>
+<div class="vocab-item"><div class="vocab-word">s'habiller</div><div class="vocab-meaning">zich aankleden</div></div>
+<div class="vocab-item"><div class="vocab-word">se coucher</div><div class="vocab-meaning">naar bed gaan</div></div>
+<div class="vocab-item"><div class="vocab-word">se reposer</div><div class="vocab-meaning">uitrusten</div></div>
+<div class="vocab-item"><div class="vocab-word">s'amuser</div><div class="vocab-meaning">zich vermaken</div></div>
+<div class="vocab-item"><div class="vocab-word">se dépêcher</div><div class="vocab-meaning">zich haasten</div></div>
+<div class="vocab-item"><div class="vocab-word">le matin</div><div class="vocab-meaning">de ochtend</div></div>
+<div class="vocab-item"><div class="vocab-word">le soir</div><div class="vocab-meaning">de avond</div></div>
+<div class="vocab-item"><div class="vocab-word">le lit</div><div class="vocab-meaning">het bed</div></div>
+<div class="vocab-item"><div class="vocab-word">ensuite</div><div class="vocab-meaning">daarna</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les17-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik sta om zeven uur op.</span><input type="text" class="inline-zin-input" data-answer="Je me lève à sept heures." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hoe heet je?</span><input type="text" class="inline-zin-input" data-answer="Tu t'appelles comment ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij gaat laat naar bed.</span><input type="text" class="inline-zin-input" data-answer="Elle se couche tard." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij vermaken ons.</span><input type="text" class="inline-zin-input" data-answer="Nous nous amusons." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik (v) ben vroeg opgestaan.</span><input type="text" class="inline-zin-input" data-answer="Je me suis levée tôt." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Haast je!</span><input type="text" class="inline-zin-input" data-answer="Dépêche-toi !" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de wederkerende werkwoorden (je me lève, tu t'appelles), de routine-woordenschat, en de passé composé met être (je me suis levée).</p>
+`,
+18: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De imparfait vormen (-ais, -ait, -ions ...)</li>
+<li>Gewoontes en beschrijvingen in het verleden uitdrukken</li>
+<li>Het verschil met de passé composé aanvoelen</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. De imparfait</h4>
+<div class="grammar-box">
+<p>Neem de <strong>nous-vorm</strong> van het presens, haal -ons eraf, en plak de uitgangen erop: <em>nous parl(ons) → je parlais</em>.</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>Uitgang</th><th>parler</th><th>faire (nous fais-)</th></tr>
+<tr><td>je</td><td>-ais</td><td>parlais</td><td>faisais</td></tr>
+<tr><td>tu</td><td>-ais</td><td>parlais</td><td>faisais</td></tr>
+<tr><td>il/elle</td><td>-ait</td><td>parlait</td><td>faisait</td></tr>
+<tr><td>nous</td><td>-ions</td><td>parlions</td><td>faisions</td></tr>
+<tr><td>vous</td><td>-iez</td><td>parliez</td><td>faisiez</td></tr>
+<tr><td>ils/elles</td><td>-aient</td><td>parlaient</td><td>faisaient</td></tr>
+</table>
+<div class="grammar-box">
+<p>Enige uitzondering: <em>être → j'<strong>étais</strong>, c'<strong>était</strong></em>.</p>
+<p><strong>Gebruik:</strong> gewoontes (<em>je jouais</em> = ik speelde altijd), beschrijvingen, weer/tijd/leeftijd (<em>il faisait beau, j'avais dix ans</em>). De passé composé = de eenmalige gebeurtenis.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les18-imparfait">
+  <div class="inline-oef-header">✍️ Vul de imparfait in</div>
+  <div class="inline-oef-row">Quand j'étais petit, je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="jouais" maxlength="10" placeholder="?"></span> <span class="inline-oef-hint">(jouer, je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Il <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="faisait" maxlength="10" placeholder="?"></span> beau <span class="inline-oef-hint">(faire — het was mooi weer)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">C'<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="était" maxlength="10" placeholder="?"></span> super <span class="inline-oef-hint">(être)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="habitions" maxlength="10" placeholder="?"></span> à Lyon <span class="inline-oef-hint">(habiter, nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">J'<span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="avais" maxlength="10" placeholder="?"></span> dix ans <span class="inline-oef-hint">(avoir, je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">quand</div><div class="vocab-meaning">toen / wanneer</div></div>
+<div class="vocab-item"><div class="vocab-word">jouer</div><div class="vocab-meaning">spelen</div></div>
+<div class="vocab-item"><div class="vocab-word">toujours</div><div class="vocab-meaning">altijd</div></div>
+<div class="vocab-item"><div class="vocab-word">souvent</div><div class="vocab-meaning">vaak</div></div>
+<div class="vocab-item"><div class="vocab-word">parfois</div><div class="vocab-meaning">soms</div></div>
+<div class="vocab-item"><div class="vocab-word">pendant</div><div class="vocab-meaning">tijdens</div></div>
+<div class="vocab-item"><div class="vocab-word">l'enfance</div><div class="vocab-meaning">de kindertijd</div></div>
+<div class="vocab-item"><div class="vocab-word">petit / petite</div><div class="vocab-meaning">klein / jong</div></div>
+<div class="vocab-item"><div class="vocab-word">il faisait beau</div><div class="vocab-meaning">het was mooi weer</div></div>
+<div class="vocab-item"><div class="vocab-word">c'était</div><div class="vocab-meaning">het was</div></div>
+<div class="vocab-item"><div class="vocab-word">heureux / heureuse</div><div class="vocab-meaning">gelukkig</div></div>
+<div class="vocab-item"><div class="vocab-word">la vie</div><div class="vocab-meaning">het leven</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les18-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Toen ik klein was, speelde ik altijd.</span><input type="text" class="inline-zin-input" data-answer="Quand j'étais petit, je jouais toujours." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het was mooi weer.</span><input type="text" class="inline-zin-input" data-answer="Il faisait beau." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij woonden in Lyon.</span><input type="text" class="inline-zin-input" data-answer="Nous habitions à Lyon." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Ik was tien jaar.</span><input type="text" class="inline-zin-input" data-answer="J'avais dix ans." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het was super.</span><input type="text" class="inline-zin-input" data-answer="C'était super." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wat deed je? (faire)</span><input type="text" class="inline-zin-input" data-answer="Qu'est-ce que tu faisais ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: de imparfait via de nous-stam (+ -ais/-ait/-ions), j'étais/c'était, en het gebruik voor gewoontes en beschrijvingen.</p>
+`,
+19: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>Vergelijken met plus, moins en aussi ... que</li>
+<li>Meilleur en mieux uit elkaar houden</li>
+<li>De overtreffende trap maken (le plus ...)</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. De vergrotende trap</h4>
+<div class="grammar-box">
+<ul>
+<li><strong>plus ... que</strong> → meer/...-er dan: <em>Paul est plus grand que Luc.</em></li>
+<li><strong>moins ... que</strong> → minder dan: <em>Le bus est moins rapide que le train.</em></li>
+<li><strong>aussi ... que</strong> → even ... als: <em>Elle est aussi grande que moi.</em></li>
+</ul>
+<p>Onregelmatig: bon → <strong>meilleur</strong> (beter, bijv. nw) en bien → <strong>mieux</strong> (beter, bijwoord): <em>Ce café est meilleur. Il parle mieux.</em></p>
+</div>
+
+<h4>2. De overtreffende trap</h4>
+<div class="grammar-box">
+<p><strong>le/la/les plus</strong> + adjectief (+ de): <em>C'est la plus grande ville de France.</em></p>
+<p><em>le meilleur</em> = de beste. Versterken: <em>très</em> (heel): <em>très bon</em>.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les19-comp">
+  <div class="inline-oef-header">✍️ Vul in: plus, moins, aussi, que, meilleur of mieux</div>
+  <div class="inline-oef-row">Paul est <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="plus" maxlength="9" placeholder="?"></span> grand que Luc <span class="inline-oef-hint">(groter dan)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle est aussi grande <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="que" maxlength="9" placeholder="?"></span> moi <span class="inline-oef-hint">(als)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ce café est <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="meilleur" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(beter — bijv. nw)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Il parle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="mieux" maxlength="9" placeholder="?"></span> <span class="inline-oef-hint">(beter — bijwoord)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">C'est la <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="plus" maxlength="9" placeholder="?"></span> grande ville de France <span class="inline-oef-hint">(overtreffend)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">plus / moins</div><div class="vocab-meaning">meer / minder</div></div>
+<div class="vocab-item"><div class="vocab-word">aussi ... que</div><div class="vocab-meaning">even ... als</div></div>
+<div class="vocab-item"><div class="vocab-word">meilleur</div><div class="vocab-meaning">beter (bijv. nw)</div></div>
+<div class="vocab-item"><div class="vocab-word">mieux</div><div class="vocab-meaning">beter (bijwoord)</div></div>
+<div class="vocab-item"><div class="vocab-word">rapide / lent</div><div class="vocab-meaning">snel / langzaam</div></div>
+<div class="vocab-item"><div class="vocab-word">cher / chère</div><div class="vocab-meaning">duur</div></div>
+<div class="vocab-item"><div class="vocab-word">facile / difficile</div><div class="vocab-meaning">makkelijk / moeilijk</div></div>
+<div class="vocab-item"><div class="vocab-word">fort / faible</div><div class="vocab-meaning">sterk / zwak</div></div>
+<div class="vocab-item"><div class="vocab-word">important</div><div class="vocab-meaning">belangrijk</div></div>
+<div class="vocab-item"><div class="vocab-word">le monde</div><div class="vocab-meaning">de wereld</div></div>
+<div class="vocab-item"><div class="vocab-word">très</div><div class="vocab-meaning">heel / zeer</div></div>
+<div class="vocab-item"><div class="vocab-word">trop</div><div class="vocab-meaning">te (veel)</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les19-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Paul is groter dan Luc.</span><input type="text" class="inline-zin-input" data-answer="Paul est plus grand que Luc." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij is even groot als ik.</span><input type="text" class="inline-zin-input" data-answer="Elle est aussi grande que moi." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Deze koffie is beter.</span><input type="text" class="inline-zin-input" data-answer="Ce café est meilleur." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Hij spreekt beter Frans dan ik.</span><input type="text" class="inline-zin-input" data-answer="Il parle mieux français que moi." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Het is de grootste stad van Frankrijk.</span><input type="text" class="inline-zin-input" data-answer="C'est la plus grande ville de France." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">De trein is sneller dan de bus.</span><input type="text" class="inline-zin-input" data-answer="Le train est plus rapide que le bus." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Je hebt geleerd: plus/moins/aussi ... que, het verschil meilleur (bijv. nw) vs mieux (bijwoord), en de overtreffende trap (le plus ... de).</p>
+`,
+20: `
+<h3>🎯 Leerdoelen</h3>
+<ul>
+<li>De futur simple vormen (je parlerai)</li>
+<li>De onregelmatige stammen kennen (serai, aurai, irai, ferai)</li>
+<li>Plannen, beloftes en voorspellingen uitdrukken</li>
+</ul>
+
+<h3>📚 Grammatica</h3>
+
+<h4>1. De futur simple</h4>
+<div class="grammar-box">
+<p>Infinitief + uitgangen van avoir (-ai, -as, -a, -ons, -ez, -ont). Bij -re valt de e weg:</p>
+</div>
+<table class="conjugation-table">
+<tr><th>Persoon</th><th>parler</th><th>finir</th><th>prendre</th></tr>
+<tr><td>je</td><td>parler<strong>ai</strong></td><td>finir<strong>ai</strong></td><td>prendr<strong>ai</strong></td></tr>
+<tr><td>tu</td><td>parler<strong>as</strong></td><td>finir<strong>as</strong></td><td>prendr<strong>as</strong></td></tr>
+<tr><td>il/elle</td><td>parler<strong>a</strong></td><td>finir<strong>a</strong></td><td>prendr<strong>a</strong></td></tr>
+<tr><td>nous</td><td>parler<strong>ons</strong></td><td>finir<strong>ons</strong></td><td>prendr<strong>ons</strong></td></tr>
+<tr><td>vous</td><td>parler<strong>ez</strong></td><td>finir<strong>ez</strong></td><td>prendr<strong>ez</strong></td></tr>
+<tr><td>ils/elles</td><td>parler<strong>ont</strong></td><td>finir<strong>ont</strong></td><td>prendr<strong>ont</strong></td></tr>
+</table>
+<div class="grammar-box">
+<p>Onregelmatige stammen: être → <strong>ser-</strong> (je serai), avoir → <strong>aur-</strong>, aller → <strong>ir-</strong> (j'irai), faire → <strong>fer-</strong>, venir → <strong>viendr-</strong>, pouvoir → <strong>pourr-</strong>, voir → <strong>verr-</strong>.</p>
+<p>Futur proche (je vais partir) = concreet plan; futur simple = verder weg, beloftes, voorspellingen.</p>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les20-futur">
+  <div class="inline-oef-header">✍️ Vul de futur simple in</div>
+  <div class="inline-oef-row">Demain je <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="parlerai" maxlength="11" placeholder="?"></span> avec lui <span class="inline-oef-hint">(parler, je)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Tu <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="seras" maxlength="11" placeholder="?"></span> content <span class="inline-oef-hint">(être, tu)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Elle <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="ira" maxlength="11" placeholder="?"></span> à Paris <span class="inline-oef-hint">(aller, elle)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Nous <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="aurons" maxlength="11" placeholder="?"></span> le temps <span class="inline-oef-hint">(avoir, nous)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-row">Ils <span class="inline-blank-wrap"><input type="text" class="inline-blank" data-answer="feront" maxlength="11" placeholder="?"></span> un voyage <span class="inline-oef-hint">(faire, ils)</span> <button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>📖 Vocabulaire</h3>
+<div class="vocab-grid">
+<div class="vocab-item"><div class="vocab-word">demain</div><div class="vocab-meaning">morgen</div></div>
+<div class="vocab-item"><div class="vocab-word">après-demain</div><div class="vocab-meaning">overmorgen</div></div>
+<div class="vocab-item"><div class="vocab-word">l'avenir</div><div class="vocab-meaning">de toekomst</div></div>
+<div class="vocab-item"><div class="vocab-word">le projet</div><div class="vocab-meaning">het plan / project</div></div>
+<div class="vocab-item"><div class="vocab-word">l'année prochaine</div><div class="vocab-meaning">volgend jaar</div></div>
+<div class="vocab-item"><div class="vocab-word">bientôt</div><div class="vocab-meaning">binnenkort</div></div>
+<div class="vocab-item"><div class="vocab-word">visiter</div><div class="vocab-meaning">bezoeken</div></div>
+<div class="vocab-item"><div class="vocab-word">le rêve</div><div class="vocab-meaning">de droom</div></div>
+<div class="vocab-item"><div class="vocab-word">l'espoir</div><div class="vocab-meaning">de hoop</div></div>
+<div class="vocab-item"><div class="vocab-word">promettre</div><div class="vocab-meaning">beloven</div></div>
+<div class="vocab-item"><div class="vocab-word">peut-être</div><div class="vocab-meaning">misschien</div></div>
+<div class="vocab-item"><div class="vocab-word">un jour</div><div class="vocab-meaning">op een dag</div></div>
+</div>
+
+<div class="inline-oef" data-oef-id="fr-les20-vert">
+  <div class="inline-oef-header">✍️ Vertaal naar het Frans — de grote finale</div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Morgen ga ik (zal ik gaan) naar Parijs.</span><input type="text" class="inline-zin-input" data-answer="Demain, j'irai à Paris." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wij zullen tijd hebben.</span><input type="text" class="inline-zin-input" data-answer="Nous aurons le temps." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Volgend jaar zal ik Frankrijk bezoeken.</span><input type="text" class="inline-zin-input" data-answer="L'année prochaine, je visiterai la France." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Zij zal blij zijn.</span><input type="text" class="inline-zin-input" data-answer="Elle sera contente." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Wat zul je doen?</span><input type="text" class="inline-zin-input" data-answer="Qu'est-ce que tu feras ?" placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-row zin-vert"><span class="inline-prompt">Op een dag zal ik goed Frans spreken.</span><input type="text" class="inline-zin-input" data-answer="Un jour, je parlerai bien français." placeholder="Franse vertaling..."><button type="button" class="inline-oef-reveal" aria-label="Toon antwoord">💡</button><div class="inline-zin-feedback"></div></div>
+  <div class="inline-oef-result"></div>
+</div>
+
+<h3>✨ Samenvatting</h3>
+<p>Félicitations ! 🎉 Je hebt de Franse basiscursus afgerond: uitspraak, lidwoorden, alle werkwoordsgroepen, passé composé & imparfait, vergelijken en de toekomst. Blijf oefenen met je flashcards en woordenlijst!</p>
+`,
+        };
+
         // Actieve lesinhoud volgt de gekozen taal (default Spaans).
-        const lessonsHTML = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonsHTML_it : lessonsHTML_es;
+        const lessonsHTML = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonsHTML_it
+                          : (typeof activeLangCode !== 'undefined' && activeLangCode === 'fr') ? lessonsHTML_fr
+                          : lessonsHTML_es;
 
         // Lesson titles for display
         const lessonTitles_es = {
@@ -8411,7 +9882,32 @@
             25: "Als-zinnen (periodo ipotetico) & finale"
         };
 
-        const lessonTitles = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonTitles_it : lessonTitles_es;
+        const lessonTitles_fr = {
+            1: "Uitspraak, liaison & begroetingen",
+            2: "Lidwoorden: le, la, les, un, une, des",
+            3: "Être (zijn) & persoonlijke voornaamwoorden",
+            4: "Avoir (hebben), il y a & getallen",
+            5: "Bijvoeglijke naamwoorden & kleuren",
+            6: "Regelmatige werkwoorden op -er",
+            7: "Werkwoorden op -ir en -re (+ faire, aller)",
+            8: "Vragen stellen & ontkenning (ne ... pas)",
+            9: "Voorzetsels & samentrekkingen (au, du, aux)",
+            10: "Bezittelijke voornaamwoorden & familie",
+            11: "Futur proche: aller + infinitief & venir",
+            12: "De klok, dagen & maanden",
+            13: "Het partitif (du, de la) & eten",
+            14: "Modale werkwoorden: pouvoir, vouloir, devoir",
+            15: "Passé composé met avoir",
+            16: "Passé composé met être",
+            17: "Wederkerende werkwoorden & routine",
+            18: "Imparfait — gewoontes in het verleden",
+            19: "Vergelijken: plus, moins, meilleur, mieux",
+            20: "Futur simple — plannen & beloftes"
+        };
+
+        const lessonTitles = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? lessonTitles_it
+                           : (typeof activeLangCode !== 'undefined' && activeLangCode === 'fr') ? lessonTitles_fr
+                           : lessonTitles_es;
 
         // Functions to make the app work
         function init() {
@@ -8429,11 +9925,11 @@
             applyLanguageUI();
         }
 
-        // Taal-specifieke UI: voor Italiaans verbergen we het Thema's-tabblad.
+        // Taal-specifieke UI: alleen Spaans heeft thema's; IT/FR niet.
         function applyLanguageUI() {
-            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it');
+            const isEs = (typeof activeLangCode === 'undefined' || activeLangCode === 'es');
             const themaTab = document.querySelector('.tab[data-tab="themas"]');
-            if (themaTab) themaTab.style.display = isIt ? 'none' : '';
+            if (themaTab) themaTab.style.display = isEs ? '' : 'none';
         }
 
         // switchTab werkt zowel via onclick als vanuit code (geen event.target afhankelijkheid)
@@ -8463,7 +9959,15 @@
             { label: 'Sezione 4', title: 'Verleden, routine, vergelijken & toekomst', range: [16, 20] },
             { label: 'Sezione 5', title: 'Voornaamwoorden, wens & voorwaarde', range: [21, 25] },
         ];
-        const COURSE_SECTIONS = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? COURSE_SECTIONS_it : COURSE_SECTIONS_es;
+        const COURSE_SECTIONS_fr = [
+            { label: 'Section 1', title: 'De basis: klank, lidwoorden, zijn & hebben', range: [1, 5] },
+            { label: 'Section 2', title: 'Werkwoorden, vragen & verbinden', range: [6, 10] },
+            { label: 'Section 3', title: 'Plannen, tijd, eten & eerste verleden tijd', range: [11, 15] },
+            { label: 'Section 4', title: 'Verleden, routine, vergelijken & toekomst', range: [16, 20] },
+        ];
+        const COURSE_SECTIONS = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? COURSE_SECTIONS_it
+                              : (typeof activeLangCode !== 'undefined' && activeLangCode === 'fr') ? COURSE_SECTIONS_fr
+                              : COURSE_SECTIONS_es;
         // Position pattern for the winding path (repeats)
         const PATH_POSITIONS = ['center','right','far-right','right','center','left','far-left','left'];
         // Handmatige open/dicht-keuzes per sectie (index → true/false); standaard is
@@ -9069,9 +10573,9 @@
         function loadOefelenMenu() {
             const el = document.getElementById('oefelenContent');
             const herhalenInfo = getHerhalenInfo();
-            // Voor Italiaans tonen we alleen flashcards + woordenlijst (+ foutenlijst);
-            // geen typ/quiz/dagelijkse les/gespreksmodus.
-            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it');
+            // Voor Italiaans/Frans tonen we alleen flashcards + woordenlijst (+ foutenlijst);
+            // geen typ/quiz/gespreksmodus.
+            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode !== 'es');
             el.innerHTML = `
                 <div class="lesson-card">
                     <h2>Oefenen</h2>
