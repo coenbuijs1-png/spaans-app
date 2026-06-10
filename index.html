@@ -666,6 +666,49 @@
         .path-section-banner .section-label { font-size: 0.7rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px; display: block; }
         .path-section-banner .section-title { font-size: 1.05rem; line-height: 1.2; display: block; }
         .path-section-banner .section-progress { font-family: system-ui; font-size: 0.85rem; opacity: 0.9; white-space: nowrap; }
+        .path-section-banner { cursor: pointer; user-select: none; }
+        .path-section-banner:active { transform: translateY(1px); }
+        .path-section-banner .section-chev { display: inline-block; transition: transform 0.25s ease; font-size: 0.9rem; }
+        .path-section-banner.open .section-chev { transform: rotate(90deg); }
+        .path-section-nodes { animation: sectionOpen 0.25s ease; }
+        .path-section-nodes.collapsed { display: none; }
+        @keyframes sectionOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+        /* Compact pad op mobiel: kleinere nodes en marges = veel minder scrollen */
+        @media (max-width: 768px) {
+            .lesson-path { padding: 0.3rem 0 2rem; max-width: 320px; }
+            .path-section-banner { margin: 0.8rem 0 0.5rem; padding: 0.6rem 1rem; border-radius: 12px; }
+            .path-section-banner .section-title { font-size: 0.95rem; }
+            .path-node-wrap { padding: 0.3rem 0; }
+            .path-node-wrap[data-pos="far-left"]   { transform: translateX(-56px); }
+            .path-node-wrap[data-pos="left"]       { transform: translateX(-30px); }
+            .path-node-wrap[data-pos="right"]      { transform: translateX(30px); }
+            .path-node-wrap[data-pos="far-right"]  { transform: translateX(56px); }
+            .path-node-button { width: 54px; height: 54px; font-size: 1rem; box-shadow: 0 4px 0 #c8c2b8; }
+            .path-node-button.completed { box-shadow: 0 4px 0 #46a302; }
+            .path-node-button.current { box-shadow: 0 4px 0 #922b21; }
+            .path-node-button.future { box-shadow: 0 4px 0 #d5dbdc; }
+            .path-node-button .crown-overlay { top: -13px; font-size: 1.05rem; }
+        }
+        /* === Micro-animaties bij goed/fout (Duolingo-gevoel) === */
+        @keyframes dcPop { 0% { transform: scale(1); } 45% { transform: scale(1.14); } 100% { transform: scale(1); } }
+        @keyframes dcShake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(3px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+        .inline-blank.ok, .inline-zin-input.ok { animation: dcPop 0.35s ease; }
+        .inline-blank.fout, .inline-zin-input.fout { animation: dcShake 0.4s ease; }
+        .dc-sparkle {
+            position: fixed; z-index: 500; pointer-events: none; font-size: 1.2rem;
+            animation: dcSparkleFly 0.9s ease-out forwards;
+        }
+        @keyframes dcSparkleFly {
+            0%   { opacity: 0; transform: translateY(4px)  scale(0.6); }
+            25%  { opacity: 1; transform: translateY(-8px) scale(1.15); }
+            100% { opacity: 0; transform: translateY(-34px) scale(0.9); }
+        }
+        .inline-oef-result.show { animation: dcPop 0.45s ease; }
         .path-node-wrap { position: relative; display: flex; justify-content: center; padding: 0.65rem 0; }
         .path-node-wrap[data-pos="far-left"]   { transform: translateX(-78px); }
         .path-node-wrap[data-pos="left"]       { transform: translateX(-44px); }
@@ -8073,24 +8116,38 @@
         const COURSE_SECTIONS = (typeof activeLangCode !== 'undefined' && activeLangCode === 'it') ? COURSE_SECTIONS_it : COURSE_SECTIONS_es;
         // Position pattern for the winding path (repeats)
         const PATH_POSITIONS = ['center','right','far-right','right','center','left','far-left','left'];
+        // Handmatige open/dicht-keuzes per sectie (index → true/false); standaard is
+        // alleen de sectie met de huidige les open, zodat het pad compact blijft.
+        let _pathSectionToggles = {};
         function renderLessonPath() {
             const path = document.getElementById('lessonPath');
             if (!path) { return renderDaySelector(); /* fallback */ }
             path.innerHTML = '';
-            COURSE_SECTIONS.forEach(section => {
+            COURSE_SECTIONS.forEach((section, sIdx) => {
                 const [from, to] = section.range;
                 const total = to - from + 1;
                 const completedInSection = [...completedDays].filter(d => d >= from && d <= to).length;
+                const hasCurrent = currentDay >= from && currentDay <= to;
+                const isOpen = (sIdx in _pathSectionToggles) ? _pathSectionToggles[sIdx] : hasCurrent;
                 const banner = document.createElement('div');
-                banner.className = 'path-section-banner';
+                banner.className = 'path-section-banner' + (isOpen ? ' open' : '');
+                banner.setAttribute('role', 'button');
+                banner.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
                 banner.innerHTML = `
                     <div>
                         <span class="section-label">${section.label}</span>
                         <span class="section-title">${section.title}</span>
                     </div>
-                    <span class="section-progress">${completedInSection}/${total}</span>
+                    <span class="section-progress">${completedInSection === total ? '✓ ' : ''}${completedInSection}/${total} <span class="section-chev">▸</span></span>
                 `;
+                banner.onclick = () => {
+                    _pathSectionToggles[sIdx] = !isOpen;
+                    renderLessonPath();
+                };
                 path.appendChild(banner);
+                const nodesWrap = document.createElement('div');
+                nodesWrap.className = 'path-section-nodes' + (isOpen ? '' : ' collapsed');
+                path.appendChild(nodesWrap);
                 for (let i = from; i <= to; i++) {
                     const wrap = document.createElement('div');
                     wrap.className = 'path-node-wrap';
@@ -8125,14 +8182,14 @@
                     tooltip.innerHTML = `<strong>Dag ${i}</strong><br>${title}`;
                     wrap.appendChild(btn);
                     wrap.appendChild(tooltip);
-                    path.appendChild(wrap);
+                    nodesWrap.appendChild(wrap);
                 }
             });
             // Keep legacy daySelector in sync (used by progress overview links)
             const legacy = document.getElementById('daySelector');
             if (legacy) {
                 legacy.innerHTML = '';
-                for (let i = 1; i <= 25; i++) {
+                for (let i = 1; i <= getAllDays().length; i++) {
                     const button = document.createElement('button');
                     button.className = 'day-button';
                     if (completedDays.has(i)) button.classList.add('completed');
@@ -8163,8 +8220,10 @@
         function displayLesson(day) {
             const content = document.getElementById('lessonContent');
 
-            const hasCards = (typeof lesInvulOef !== 'undefined' && lesInvulOef[day] && lesInvulOef[day].length)
-                          || (typeof lesZinOef   !== 'undefined' && lesZinOef[day]   && lesZinOef[day].length);
+            // lesInvulOef/lesZinOef/lesMiniOef zijn Spaanse data — alleen tonen in de Spaanse cursus
+            const isEsCourse = (typeof activeLangCode === 'undefined' || activeLangCode === 'es');
+            const hasCards = isEsCourse && ((typeof lesInvulOef !== 'undefined' && lesInvulOef[day] && lesInvulOef[day].length)
+                          || (typeof lesZinOef   !== 'undefined' && lesZinOef[day]   && lesZinOef[day].length));
             const ctaHTML = hasCards ? `
                 <div class="session-cta">
                     <div class="cta-icon">🎯</div>
@@ -8680,9 +8739,6 @@
                         </button>
                         <button class="oef-mode-btn" data-modus="quiz" onclick="startModus('quiz')">
                             <span class="oef-icon">🎯</span>Mini quiz
-                        </button>
-                        <button class="oef-mode-btn" data-modus="dagelijkseles" onclick="startModus('dagelijkseles')">
-                            <span class="oef-icon">📅</span>Dagelijkse les
                         </button>
                         <button class="oef-mode-btn" data-modus="gesprek" onclick="startModus('gesprek')">
                             <span class="oef-icon">💬</span>Gespreksmodus
@@ -9754,7 +9810,7 @@ ONDERWERP: ${gesprekTopic}`;
 
         function generateDuolingoExercises(count, difficulty, days) {
             const exercises = [];
-            const types = ['meerkeuze', 'volgorde', 'foutzoeken', 'luister', 'typen', 'koppel', 'zin'];
+            const types = ['meerkeuze', 'foutzoeken', 'luister', 'typen', 'koppel', 'zin'];
 
             for (let d of days) {
                 // Collect exercises from this day
@@ -10065,36 +10121,46 @@ ONDERWERP: ${gesprekTopic}`;
                 else accTxt += ` · 🟢 Over ${daysUntil}d`;
             }
 
-            const dirLabel = isEsNl ? '🇪🇸 → 🇳🇱' : '🇳🇱 → 🇪🇸';
-            const placeholder = isEsNl ? 'Typ de Nederlandse betekenis…' : 'Typ het Spaanse woord…';
+            const dirLabel = isEsNl ? '🌍 → 🇳🇱' : '🇳🇱 → 🌍';
+            const placeholder = isEsNl ? 'Typ de Nederlandse betekenis…' : 'Typ de vertaling…';
 
             sub.innerHTML = `
                 <div class="lesson-card" style="margin-top:1.5rem;">
                     <div class="fc-progress-label">Kaart ${fcIndex+1} van ${fcDeck.length} &nbsp;|&nbsp; ${dirLabel} &nbsp;|&nbsp; Goed: ${fcTodayCorrect}</div>
-                    <div class="progress-bar" style="margin-bottom:1.5rem;">
+                    <div class="progress-bar" style="margin-bottom:1rem;">
                         <div class="progress-fill" style="width:${Math.round((fcIndex/fcDeck.length)*100)}%"></div>
                     </div>
-                    <div style="text-align:center; margin-bottom:1.5rem;">
-                        <div style="font-size:2rem; font-weight:700; color:var(--terracotta); font-family:'Playfair Display',serif; margin-bottom:0.3rem;">${kaart.prompt}</div>
-                        <div style="font-size:0.85rem; opacity:0.6;">Dag ${kaart.day} &nbsp;·&nbsp; ${accTxt}</div>
-                    </div>
-                    <div style="text-align:center;">
-                        <input class="typ-input" id="fcTypInput" placeholder="${placeholder}" style="margin-bottom:0.8rem; max-width:400px;">
-                        <div id="fcFeedback" style="margin-top:0.5rem; min-height:2rem;"></div>
-                        <button id="fcVolgendeBtn" class="btn" onclick="fcVolgende()" style="display:none; margin-top:0.8rem;">Volgende →</button>
-                    </div>
+                    <div class="flashcard-wrap"><div class="flashcard" id="fcCard">
+                        <div class="flashcard-face flashcard-front">
+                            <div class="fc-hint" style="margin-top:0;">${dirLabel}</div>
+                            <div class="fc-word">${kaart.prompt}</div>
+                            <div class="fc-hint">Dag ${kaart.day} &nbsp;·&nbsp; ${accTxt}</div>
+                        </div>
+                        <div class="flashcard-face flashcard-back" id="fcBack"></div>
+                    </div></div>
+                    <form id="fcForm" autocomplete="off" style="text-align:center;">
+                        <input class="typ-input" id="fcTypInput" placeholder="${placeholder}" enterkeyhint="go" autocapitalize="off" autocorrect="off" spellcheck="false" style="margin-bottom:0.8rem; max-width:400px;">
+                        <button type="submit" style="position:absolute; left:-9999px;" tabindex="-1" aria-hidden="true">OK</button>
+                        <div id="fcFeedback" style="margin-top:0.3rem; min-height:1.6rem; font-size:0.9rem; opacity:0.75;"></div>
+                        <button type="button" id="fcVolgendeBtn" class="btn" onclick="fcVolgende()" style="display:none; margin-top:0.5rem;">Volgende →</button>
+                    </form>
                 </div>`;
 
+            const form = document.getElementById('fcForm');
+            // Mobiel 'gereed/ga' en desktop Enter komen allebei binnen als form-submit:
+            // eerste keer = controleren, tweede keer = volgende kaart. Zo blijf je typen
+            // zonder te scrollen of te klikken.
+            if (form) form.addEventListener('submit', e => { e.preventDefault(); fcSubmit(); });
             const typInp = document.getElementById('fcTypInput');
             if (typInp) {
-                setTimeout(() => typInp.focus(), 50);
-                typInp.addEventListener('keydown', e => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        fcCheckAnswer();
-                    }
-                });
+                typInp.focus(); // synchroon: houdt het mobiele toetsenbord open tussen kaarten
+                setTimeout(() => { try { typInp.focus(); } catch(e) {} }, 60);
             }
+        }
+
+        function fcSubmit() {
+            if (!fcChecked) fcCheckAnswer();
+            else fcVolgende();
         }
 
         function fcVolgende() {
@@ -10113,30 +10179,35 @@ ONDERWERP: ${gesprekTopic}`;
 
             const userAnswer = inp.value.trim();
             const result = checkAnswer(userAnswer, kaart.answer);
-            inp.disabled = true;
+            inp.readOnly = true; // niet disabled: zo blijft de focus (en het toetsenbord) staan
             fcTodaySeen++;
 
+            const back = document.getElementById('fcBack');
+            const card = document.getElementById('fcCard');
+            let backHTML = '';
             if (result === 'correct') {
                 fcTodayCorrect++;
                 awardXP(5, 'Flashcard goed');
-                fb.innerHTML = `<div style="color:#27ae60; font-weight:600; font-size:1.1rem;">✅ Correct! <strong>${kaart.answer}</strong></div>`;
+                backHTML = `<div style="font-size:2.4rem;">✅</div><div class="fc-meaning">${kaart.answer}</div><div class="fc-hint" style="opacity:0.85;">Goed zo!</div>`;
                 recordWordResult(kaart.spanish, kaart.meaning, 'correct');
             } else if (result === 'accent') {
                 fcTodayCorrect++;
                 awardXP(3, 'Flashcard bijna');
-                fb.innerHTML = `<div style="color:var(--ochre); font-weight:600; font-size:1.1rem;">⚠️ Bijna! Let op accenten: <strong>${kaart.answer}</strong></div>`;
+                backHTML = `<div style="font-size:2.4rem;">⚠️</div><div class="fc-meaning">${kaart.answer}</div><div class="fc-hint" style="opacity:0.85;">Bijna — let op de accenten</div>`;
                 recordWordResult(kaart.spanish, kaart.meaning, 'accent');
             } else {
-                fb.innerHTML = `<div style="color:#e74c3c; font-weight:600; font-size:1.1rem;">❌ Het juiste antwoord: <strong>${kaart.answer}</strong></div>`;
+                backHTML = `<div style="font-size:2.4rem;">❌</div><div class="fc-meaning">${kaart.answer}</div><div class="fc-hint" style="opacity:0.85;">Jouw antwoord: ${userAnswer || '(leeg)'}</div>`;
                 recordWordResult(kaart.spanish, kaart.meaning, 'fout');
                 logError({ spanish: kaart.spanish, meaning: kaart.meaning, userAnswer: userAnswer, correctAnswer: kaart.answer, exerciseType: 'flashcard' });
             }
+            if (back) back.innerHTML = backHTML;
+            if (card) card.classList.add('flipped');
+            fb.textContent = '↵ Enter / Ga = volgende kaart';
 
             const volgendeBtn = document.getElementById('fcVolgendeBtn');
-            if (volgendeBtn) {
-                volgendeBtn.style.display = 'inline-block';
-                setTimeout(() => volgendeBtn.focus(), 50);
-            }
+            if (volgendeBtn) volgendeBtn.style.display = 'inline-block';
+            // Focus blijft bewust in het invoerveld — geen scroll/klik nodig voor de volgende kaart
+            try { inp.focus(); } catch(e) {}
         }
 
         function flipCard() {
@@ -11056,11 +11127,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Vengo ___ trabajo. (van het)', opties: ['en el', 'al', 'del', 'por el'], correct: 2 },
                     { vraag: 'Estoy ___ la oficina. (in)', opties: ['en', 'a', 'de', 'por'], correct: 0 },
                 ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['Voy', 'a', 'la', 'tienda'], correct: 'Voy a la tienda' },
-                    { woorden: ['de', 'Vengo', 'la', 'oficina'], correct: 'Vengo de la oficina' },
-                    { woorden: ['en', 'Estamos', 'el', 'parque'], correct: 'Estamos en el parque' },
-                ]},
             ],
             14: [
                 { type: 'meerkeuze', titel: 'Por of para?', vragen: [
@@ -11100,11 +11166,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Ella ___ una carta. (escribir)', opties: ['escribí', 'escribiste', 'escribió', 'escribieron'], correct: 2 },
                     { vraag: 'Nosotros ___. (comer)', opties: ['comí', 'comiste', 'comió', 'comimos'], correct: 3 },
                 ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['Ayer', 'hablé', 'con', 'mi', 'madre'], correct: 'Ayer hablé con mi madre' },
-                    { woorden: ['comimos', 'paella', 'Nosotros', 'ayer'], correct: 'Nosotros comimos paella ayer' },
-                    { woorden: ['Ella', 'una', 'carta', 'escribió'], correct: 'Ella escribió una carta' },
-                ]},
             ],
             17: [
                 { type: 'meerkeuze', titel: 'Onregelmatige pretérito', vragen: [
@@ -11138,11 +11199,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'Este libro es ___ que el otro. (beter)', opties: ['más bueno', 'mejor', 'buenísimo', 'más bien'], correct: 1 },
                     { vraag: 'Juan es tan alto ___ Pedro.', opties: ['que', 'como', 'de', 'más'], correct: 1 },
                     { vraag: 'Es el más alto ___ la clase.', opties: ['que', 'como', 'de', 'en'], correct: 2 },
-                ]},
-                { type: 'volgorde', titel: 'Zet in de juiste volgorde', zinnen: [
-                    { woorden: ['alto', 'Juan', 'más', 'es', 'que', 'Pedro'], correct: 'Juan es más alto que Pedro' },
-                    { woorden: ['tan', 'Ella', 'como', 'es', 'inteligente', 'él'], correct: 'Ella es tan inteligente como él' },
-                    { woorden: ['es', 'Esta', 'la', 'mejor', 'paella'], correct: 'Esta es la mejor paella' },
                 ]},
             ],
             20: [
@@ -11202,11 +11258,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { vraag: 'hablar → tú (ontkennend)', opties: ['no habla', 'no hablas', 'no hables', 'no hablé'], correct: 2 },
                     { vraag: 'venir → tú (bevestigend)', opties: ['viene', 'ven', 'vienes', 'vengas'], correct: 1 },
                 ]},
-                { type: 'volgorde', titel: 'Zet het bevel in de juiste volgorde', zinnen: [
-                    { woorden: ['la', 'Abre', 'ventana'], correct: 'Abre la ventana' },
-                    { woorden: ['aquí', 'Ven', 'por', 'favor'], correct: 'Ven aquí por favor' },
-                    { woorden: ['comas', 'No', 'eso'], correct: 'No comas eso' },
-                ]},
             ],
             24: [
                 { type: 'meerkeuze', titel: 'Pretérito perfecto of indefinido?', vragen: [
@@ -11232,11 +11283,6 @@ ONDERWERP: ${gesprekTopic}`;
                     { hint: 'comer → ella', antwoord: 'comería' },
                     { hint: 'tener → tú', antwoord: 'tendrías' },
                     { hint: 'hacer → nosotros', antwoord: 'haríamos' },
-                ]},
-                { type: 'volgorde', titel: 'Zet de si-zin in de juiste volgorde', zinnen: [
-                    { woorden: ['llueve', 'Si', 'me', 'quedo', 'en', 'casa'], correct: 'Si llueve me quedo en casa' },
-                    { woorden: ['pudiera', 'Si', 'viajaría', 'a', 'Japón'], correct: 'Si pudiera viajaría a Japón' },
-                    { woorden: ['ganaría', 'Si', 'estudiara', 'más', 'el', 'examen'], correct: 'Si estudiara más ganaría el examen' },
                 ]},
             ],
         };
@@ -11295,13 +11341,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Yo ___ un regalo para mi madre.', opties: ['pono', 'pone', 'pongo', 'ponemos'], correct: 2 },
             { vraag: 'Yo ___ muchas ganas de viajar.', opties: ['tengo', 'tiene', 'tenemos', 'tienen'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'El fin de semana', context: 'Salgo de casa temprano el sábado. Voy al parque a hacer deporte. Encuentro a mis amigos en el café. Volvemos juntos a casa.',
-            zinnen: [
-              { tekst: 'Volvemos juntos a casa riendo y hablando de la diversión.', correct_idx: 3 },
-              { tekst: 'Salgo de casa temprano el sábado por la mañana.', correct_idx: 0 },
-              { tekst: 'Voy al parque central para hacer ejercicio con un amigo.', correct_idx: 1 },
-              { tekst: 'Encuentro a mis amigos en el café de la esquina.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[7].push(
@@ -11311,13 +11350,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Mi hermano ___ en la cama hasta tarde.', opties: ['duermas', 'duerme', 'dormimos', 'duermen'], correct: 1 },
             { vraag: 'Nosotros ___ en el museo.', opties: ['pensamos', 'piensan', 'piensa', 'pienso'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Lo que queremos hacer', context: 'Yo quiero viajar a España este verano. Mi hermano quiere aprender a jugar la guitarra. Nuestros padres piensan que debemos estudiar. Todos tenemos sueños diferentes.',
-            zinnen: [
-              { tekst: 'Todos tenemos sueños diferentes pero nos apoyamos mutuamente.', correct_idx: 3 },
-              { tekst: 'Yo quiero viajar a España para aprender la lengua y cultura.', correct_idx: 0 },
-              { tekst: 'Mi hermano quiere aprender a tocar la guitarra española.', correct_idx: 1 },
-              { tekst: 'Nuestros padres piensan que debemos enfocarnos en la escuela.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[8].push(
@@ -11327,13 +11359,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'La tienda ___ cerrada hoy porque es domingo.', opties: ['es', 'está', 'son', 'están'], correct: 1 },
             { vraag: 'Nosotros ___ en la playa disfrutando del sol.', opties: ['somos', 'estamos', 'sois', 'estáis'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Un domingo especial', context: 'Es un día especial en la familia. Mi abuela está visitando desde Madrid. Nos reunimos en la playa que está cerca. Todos estamos muy contentos.',
-            zinnen: [
-              { tekst: 'Todos estamos muy contentos de pasar tiempo juntos en la naturaleza.', correct_idx: 3 },
-              { tekst: 'Es un domingo especial porque mi abuela viene a visitarnos.', correct_idx: 0 },
-              { tekst: 'Mi abuela está llegando desde Madrid en el tren de la mañana.', correct_idx: 1 },
-              { tekst: 'Nos reunimos en la playa que está a 30 kilómetros de aquí.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[9].push(
@@ -11343,13 +11368,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: '___ muchas personas en la plaza hoy.', opties: ['Hay', 'Está', 'Es', 'Están'], correct: 0 },
             { vraag: 'La farmacia ___ enfrente de la estación de autobús.', opties: ['hay', 'está', 'es', 'son'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Explorando la ciudad', context: 'Hay muchos lugares bonitos en mi ciudad. La biblioteca está en la calle principal. El parque está lleno de árboles y flores. Todos me dicen que es una ciudad muy especial.',
-            zinnen: [
-              { tekst: 'Todos me dicen que es una ciudad muy especial para vivir.', correct_idx: 3 },
-              { tekst: 'Hay muchos lugares interesantes y hermosos en mi ciudad.', correct_idx: 0 },
-              { tekst: 'La biblioteca pública está ubicada en la calle principal.', correct_idx: 1 },
-              { tekst: 'El parque está lleno de árboles antiguos, flores y bancos.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[10].push(
@@ -11359,13 +11377,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'A mi hermano le ___ el chocolate caliente.', opties: ['gusta', 'gustan', 'gustamos', 'gustáis'], correct: 0 },
             { vraag: 'A nosotros nos ___ las frutas tropicales.', opties: ['gusta', 'gustan', 'gustamos', 'gustáis'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Los sabores que nos gustan', context: 'En mi familia cada uno tiene sus gustos culinarios favoritos. A mi padre le encanta la paella. A mi madre le gustan las verduras frescas. A mí me fascinan los postres dulces.',
-            zinnen: [
-              { tekst: 'A mí me fascinan los postres dulces, especialmente el flan.', correct_idx: 3 },
-              { tekst: 'En mi familia cada uno tiene gustos culinarios diferentes.', correct_idx: 0 },
-              { tekst: 'A mi padre le encanta la paella de marisco.', correct_idx: 1 },
-              { tekst: 'A mi madre le gustan las verduras frescas del mercado.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[11].push(
@@ -11375,13 +11386,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Nos ___ los idiomas y las culturas diferentes.', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 3 },
             { vraag: 'Os ___ mucho que lleguen a tiempo.', opties: ['encanta', 'molesta', 'importa', 'interesa'], correct: 2 },
           ]},
-          { type: 'verhaal', titel: 'Lo que nos apasiona', context: 'Me encanta tocar el violín desde pequeño. A mi hermana le interesan los idiomas. A mi padre le molesta el desorden. A todos nos importa la familia.',
-            zinnen: [
-              { tekst: 'A todos nos importa mucho la familia y el bienestar de cada uno.', correct_idx: 3 },
-              { tekst: 'Me encanta tocar el violín desde que tengo cinco años.', correct_idx: 0 },
-              { tekst: 'A mi hermana le interesan los idiomas antiguos y modernos.', correct_idx: 1 },
-              { tekst: 'A mi padre le molesta el desorden en la casa.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[12].push(
@@ -11391,13 +11395,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Ella ___ escribe un email a ti.', opties: ['lo', 'le', 'te', 'se'], correct: 2 },
             { vraag: 'Mi madre ___ prepara la comida a nosotros.', opties: ['nos', 'me', 'le', 'se'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Ayudar es importante', context: 'Mi amiga necesita ayuda con sus tareas. Le doy mi libro de español. Mi hermano necesita ropa limpia. Le lavo su uniforme escolar.',
-            zinnen: [
-              { tekst: 'Le lavo su uniforme escolar porque es mi hermano menor.', correct_idx: 3 },
-              { tekst: 'Mi amiga necesita ayuda con sus tareas de matemáticas.', correct_idx: 0 },
-              { tekst: 'Le doy mi libro de español para que pueda estudiar.', correct_idx: 1 },
-              { tekst: 'Mi hermano necesita ropa limpia para la escuela.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[13].push(
@@ -11407,13 +11404,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Estoy ___ la estación de trenes.', opties: ['en', 'a', 'de', 'por'], correct: 0 },
             { vraag: 'El hotel está debajo ___ el puente.', opties: ['en', 'al', 'de', 'por'], correct: 2 },
           ]},
-          { type: 'verhaal', titel: 'Un viaje memorable', context: 'Viajamos a España en verano. Vamos al sur para visitar la costa. Estamos en un pueblo pequeño cerca de Málaga. Pasamos días maravillosos en la playa.',
-            zinnen: [
-              { tekst: 'Pasamos días maravillosos en la playa con mi familia.', correct_idx: 3 },
-              { tekst: 'Viajamos a España en verano para un mes completo.', correct_idx: 0 },
-              { tekst: 'Vamos al sur de España para visitar la costa.', correct_idx: 1 },
-              { tekst: 'Estamos en un pueblo pequeño y bonito cerca de Málaga.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[14].push(
@@ -11423,13 +11413,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Gracias ___ tu ayuda tan importante.', opties: ['por', 'para'], correct: 0 },
             { vraag: 'Este regalo es ___ mi tía que cumple años.', opties: ['por', 'para'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Mis metas personales', context: 'Estudio español para conseguir un trabajo mejor. Trabajo por la mañana en una tienda. Hago ejercicio para mantenerme saludable. Mi objetivo es viajar por el mundo.',
-            zinnen: [
-              { tekst: 'Mi objetivo es viajar por todo el mundo algún día.', correct_idx: 3 },
-              { tekst: 'Estudio español para conseguir un trabajo en Madrid.', correct_idx: 0 },
-              { tekst: 'Trabajo por la mañana en una tienda de ropa.', correct_idx: 1 },
-              { tekst: 'Hago ejercicio para mantenerme saludable y fuerte.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[15].push(
@@ -11439,13 +11422,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: '___ padres viven en el norte de España.', opties: ['Mis', 'Míos', 'Sus', 'Suyos'], correct: 2 },
             { vraag: '¿Es este cuaderno ___?', opties: ['mi', 'mío', 'tu', 'tuyo'], correct: 3 },
           ]},
-          { type: 'verhaal', titel: 'Mis posesiones favoritas', context: 'Mi casa tiene muchas cosas especiales. Mi habitación es muy personal. Mis libros favoritos están en el estante. Mi familia guarda cosas antiguas.',
-            zinnen: [
-              { tekst: 'Mi familia guarda muchas cosas antiguas y valiosas.', correct_idx: 3 },
-              { tekst: 'Mi casa tiene muchas cosas especiales y memorables.', correct_idx: 0 },
-              { tekst: 'Mi habitación es muy personal con mis gustos reflejados.', correct_idx: 1 },
-              { tekst: 'Mis libros favoritos están en el estante de la izquierda.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[16].push(
@@ -11455,13 +11431,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Nosotros ___ paella para la cena del sábado.', opties: ['comí', 'comiste', 'comió', 'comimos'], correct: 3 },
             { vraag: 'Los niños ___ en el parque toda la tarde.', opties: ['jugué', 'jugaste', 'jugó', 'jugaron'], correct: 3 },
           ]},
-          { type: 'verhaal', titel: 'El fin de semana pasado', context: 'El sábado trabajé en casa de la mañana. Comí con mi familia al mediodía. Por la tarde viajé a la playa con amigos. Volvimos a casa muy contentos.',
-            zinnen: [
-              { tekst: 'Volvimos a casa muy contentos y cansados por la noche.', correct_idx: 3 },
-              { tekst: 'El sábado trabajé en la casa haciendo tareas domésticas.', correct_idx: 0 },
-              { tekst: 'Comí con mi familia un delicioso almuerzo al mediodía.', correct_idx: 1 },
-              { tekst: 'Por la tarde viajé a la playa con algunos amigos.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[17].push(
@@ -11471,13 +11440,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Yo ___ que estudiar para el examen importante.', opties: ['tuve', 'tuvo', 'tuvimos', 'tuvieron'], correct: 0 },
             { vraag: 'Ellos me ___ que mi viaje fue maravilloso.', opties: ['dijeron', 'dijo', 'dije', 'dijimos'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Un día inolvidable', context: 'Fui a una fiesta especial el viernes pasado. Tuve que comprar un regalo. Hice un viaje en coche con mis amigos. Fue el mejor día del año.',
-            zinnen: [
-              { tekst: 'Fue el mejor día del año según todos mis amigos.', correct_idx: 3 },
-              { tekst: 'Fui a una fiesta especial el viernes pasado.', correct_idx: 0 },
-              { tekst: 'Tuve que comprar un regalo para la anfitriona.', correct_idx: 1 },
-              { tekst: 'Hice un viaje en coche con algunos amigos al salir.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[18].push(
@@ -11487,13 +11449,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Nosotros ___ mucho en el patio de la escuela.', opties: ['jugaba', 'jugabas', 'jugábamos', 'jugaban'], correct: 2 },
             { vraag: 'Mis amigos ___ en casas cerca de la mía.', opties: ['vivía', 'vivías', 'vivíamos', 'vivían'], correct: 3 },
           ]},
-          { type: 'verhaal', titel: 'Cuando era niño', context: 'Era muy pequeño cuando vivía en el pueblo. Mi abuela cocinaba comida deliciosa. Jugábamos con los vecinos cada tarde. Fueron días muy felices de mi infancia.',
-            zinnen: [
-              { tekst: 'Fueron días muy felices y despreocupados de mi infancia.', correct_idx: 3 },
-              { tekst: 'Era muy pequeño cuando vivía en un pueblo tranquilo.', correct_idx: 0 },
-              { tekst: 'Mi abuela cocinaba comida deliciosa todos los días.', correct_idx: 1 },
-              { tekst: 'Jugábamos con los vecinos cada tarde en la plaza.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[19].push(
@@ -11503,13 +11458,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Juan es tan ___ como Pedro.', opties: ['altísimo', 'alto', 'más alto', 'menos alto'], correct: 1 },
             { vraag: 'Es el ___ día de mi vida.', opties: ['mejor', 'más mejor', 'mejorísimo', 'mejor de los'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Comparando deportistas', context: 'En mi escuela hay muchos atletas talentosos. Juan es más rápido que su hermano. Rosa es la mejor corredora del colegio. Todos compiten pero nos apoyamos.',
-            zinnen: [
-              { tekst: 'Todos compiten amistosamente pero se apoyan mutuamente.', correct_idx: 3 },
-              { tekst: 'En mi escuela hay muchos atletas talentosos y dedicados.', correct_idx: 0 },
-              { tekst: 'Juan es más rápido que su hermano en las carreras.', correct_idx: 1 },
-              { tekst: 'Rosa es la mejor corredora de toda la escuela.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[20].push(
@@ -11519,13 +11467,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Hace ___ calor en verano.', opties: ['muy', 'mucho'], correct: 1 },
             { vraag: 'Este ejercicio es ___ fácil para mí.', opties: ['muy', 'mucho'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Cómo lo hacemos bien', context: 'Mi hermana canta hermosamente. Mi padre conduce cuidadosamente. Yo estudio diariamente. Todos trabajamos responsablemente.',
-            zinnen: [
-              { tekst: 'Todos trabajamos responsablemente para alcanzar nuestros objetivos.', correct_idx: 3 },
-              { tekst: 'Mi hermana canta hermosamente en el coro de la escuela.', correct_idx: 0 },
-              { tekst: 'Mi padre conduce cuidadosamente por las calles de la ciudad.', correct_idx: 1 },
-              { tekst: 'Yo estudio diariamente para mejorar mis notas.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[21].push(
@@ -11535,13 +11476,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Algún día ___ famoso y rico.', opties: ['voy a ser', 'seré', 'soy', 'sea'], correct: 1 },
             { vraag: 'Esta noche ___ pizza con mis amigos.', opties: ['voy a comer', 'comeré', 'como', 'comería'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Mi futuro', context: 'Pronto terminaré la escuela. Voy a estudiar medicina en la universidad. Quiero vivir en una ciudad grande. Espero ser un médico exitoso.',
-            zinnen: [
-              { tekst: 'Espero ser un médico exitoso y ayudar a muchas personas.', correct_idx: 3 },
-              { tekst: 'Pronto terminaré mis estudios en la escuela secundaria.', correct_idx: 0 },
-              { tekst: 'Voy a estudiar medicina en una universidad de renombre.', correct_idx: 1 },
-              { tekst: 'Quiero vivir en una ciudad grande con muchas oportunidades.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[22].push(
@@ -11551,13 +11485,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Quiero que ___ aquí mañana.', opties: ['estás', 'estés'], correct: 1 },
             { vraag: 'Dudo que ___ posible.', opties: ['es', 'sea'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Lo que espero y dudo', context: 'Espero que mi amigo venga a la fiesta. Dudo que sea posible viajar tan pronto. Quiero que todos se diviertan. Es posible que llueva mañana.',
-            zinnen: [
-              { tekst: 'Es posible que llueva mañana según el pronóstico.', correct_idx: 3 },
-              { tekst: 'Espero que mi mejor amigo venga a mi fiesta.', correct_idx: 0 },
-              { tekst: 'Dudo que sea posible viajar a España tan pronto.', correct_idx: 1 },
-              { tekst: 'Quiero que todos se diviertan en la celebración.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[23].push(
@@ -11567,13 +11494,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'No ___ ese pastel todavía.', opties: ['comas', 'comes', 'coma', 'comer'], correct: 0 },
             { vraag: '___ tus deberes primero.', opties: ['Haces', 'Haz', 'Hagas', 'Hacer'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Consejos útiles', context: 'Mi madre me da instrucciones cada mañana. Abre las cortinas para la luz. Haz tu cama y ordena tu cuarto. No olvides llevar tu mochila.',
-            zinnen: [
-              { tekst: 'No olvides llevar tu mochila y tu teléfono.', correct_idx: 3 },
-              { tekst: 'Mi madre me da varias instrucciones cada mañana.', correct_idx: 0 },
-              { tekst: 'Abre las cortinas para dejar entrar la luz natural.', correct_idx: 1 },
-              { tekst: 'Haz tu cama y ordena tu habitación perfectamente.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[24].push(
@@ -11583,13 +11503,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: 'Nunca ___ a Madrid.', opties: ['he ido', 'fui', 'iba', 'iré'], correct: 0 },
             { vraag: 'Este año ___ mucho.', opties: ['hemos aprendido', 'aprendimos', 'aprendíamos', 'aprenderemos'], correct: 0 },
           ]},
-          { type: 'verhaal', titel: 'Lo que hemos logrado', context: 'Este año hemos hecho muchas cosas. He completado varios proyectos importantes. Mi hermana ha ganado una competición. Nuestros padres han viajado a tres países.',
-            zinnen: [
-              { tekst: 'Nuestros padres han viajado a tres países diferentes.', correct_idx: 3 },
-              { tekst: 'Este año hemos hecho muchas actividades emocionantes.', correct_idx: 0 },
-              { tekst: 'He completado varios proyectos importantes para la escuela.', correct_idx: 1 },
-              { tekst: 'Mi hermana ha ganado una competición de natación.', correct_idx: 2 }
-            ]}
         );
 
         lesMiniOef[25].push(
@@ -11599,13 +11512,6 @@ ONDERWERP: ${gesprekTopic}`;
             { vraag: '___ mucho si tuviera tiempo.', opties: ['Leería', 'Leo', 'Leeré', 'Leí'], correct: 0 },
             { vraag: 'Si llueve mañana, ___ en casa.', opties: ['me quedaría', 'me quedo', 'me quedaré', 'me quedé'], correct: 1 },
           ]},
-          { type: 'verhaal', titel: 'Si la vida fuera diferente', context: 'Si tuviera superpoderes, volaría por el cielo. Si pudiera viajar en el tiempo, visitaría el Renacimiento. Si fuera millonario, donaría dinero a pobres. Si nada cambiara, sería feliz de todas formas.',
-            zinnen: [
-              { tekst: 'Si nada cambiara en mi vida, sería completamente feliz.', correct_idx: 3 },
-              { tekst: 'Si tuviera superpoderes, volaría libremente por el cielo.', correct_idx: 0 },
-              { tekst: 'Si pudiera viajar en el tiempo, visitaría el Renacimiento.', correct_idx: 1 },
-              { tekst: 'Si fuera millonario, donaría dinero a personas pobres.', correct_idx: 2 }
-            ]}
         );
 
         // Gesprekssimulaties per dag
@@ -11800,6 +11706,8 @@ ONDERWERP: ${gesprekTopic}`;
         // Rendert de interactieve oefensectie onderaan een les
         // Bouw les-oefeningen via DOM (geen inline onclick-strings met speciale tekens)
         function renderLesOefeningen(day) {
+            // Deze oefendata is Spaans; in andere cursussen niets tonen
+            if (typeof activeLangCode !== 'undefined' && activeLangCode !== 'es') return '';
             const invul = lesInvulOef[day] || [];
             const zinnen = lesZinOef[day] || [];
             const sim = lesSims[day] || null;
@@ -13550,7 +13458,7 @@ ONDERWERP: ${gesprekTopic}`;
             const onLessen = document.getElementById('lessen-tab')?.classList.contains('active');
             if (!onLessen) return;
             if (e.key === 'ArrowLeft' && currentDay > 1) { loadLesson(currentDay - 1); return; }
-            if (e.key === 'ArrowRight' && currentDay < 25) { loadLesson(currentDay + 1); return; }
+            if (e.key === 'ArrowRight' && currentDay < getAllDays().length) { loadLesson(currentDay + 1); return; }
         });
 
         // =====================================================
@@ -13822,11 +13730,28 @@ ONDERWERP: ${gesprekTopic}`;
                 .replace(/\s+/g, ' ')
                 .trim();
         }
+        // Klein feest-effect bij een goed antwoord (zwevende emoji boven het veld)
+        function _dcSparkle(el) {
+            try {
+                const r = el.getBoundingClientRect();
+                const emo = ['✨','🎉','⭐','💫','🔥'][Math.floor(Math.random()*5)];
+                const s = document.createElement('span');
+                s.className = 'dc-sparkle';
+                s.textContent = emo;
+                s.style.left = (r.left + r.width/2 - 10 + (Math.random()*24-12)) + 'px';
+                s.style.top = (r.top - 6) + 'px';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 950);
+            } catch(e) {}
+        }
         function checkInlineBlank(input) {
             const expected = input.dataset.answer || '';
             const ok = input.value.trim() && _inlineNorm(input.value) === _inlineNorm(expected);
             input.classList.remove('ok', 'fout');
+            void input.offsetWidth; // reflow zodat de pop/shake animatie opnieuw afspeelt
             if (input.value.trim()) input.classList.add(ok ? 'ok' : 'fout');
+            if (ok && !input.dataset.restoring && !input._sparkled) { input._sparkled = true; _dcSparkle(input); }
+            if (!ok) input._sparkled = false;
             // Feedback-zin tonen voor zin-vertaling rijen
             const row = input.closest('.inline-oef-row');
             if (row && row.classList.contains('zin-vert')) {
@@ -13876,7 +13801,9 @@ ONDERWERP: ${gesprekTopic}`;
                 const v = localStorage.getItem(_inlineStorageKey(input));
                 if (v) {
                     input.value = v;
+                    input.dataset.restoring = '1';
                     checkInlineBlank(input);
+                    delete input.dataset.restoring;
                 }
             } catch(e) {}
         }
