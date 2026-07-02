@@ -10023,12 +10023,12 @@
                     btn.onclick = () => {
                         currentDay = i;
                         renderLessonPath();
-                        loadLesson(i);
-                        // Smooth-scroll to lesson content after render
-                        setTimeout(() => {
+                        loadLesson(i); // theoriepagina alvast klaarzetten (voor de 📖-knop)
+                        // Start direct de interactieve les-flow
+                        try { LeerFlow.start(i); } catch(e) {
                             const lc = document.getElementById('lessonContent');
                             if (lc) lc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 60);
+                        }
                     };
                     const tooltip = document.createElement('div');
                     tooltip.className = 'path-node-tooltip';
@@ -14979,11 +14979,13 @@ ONDERWERP: ${gesprekTopic}`;
             if (!('speechSynthesis' in window)) return;
             speechSynthesis.cancel();
             const utt = new SpeechSynthesisUtterance(tekst);
-            utt.lang = 'es-ES';
+            // Volg de actieve cursustaal (es-ES / it-IT / fr-FR)
+            const lang = (typeof getActiveLanguage === 'function') ? getActiveLanguage().speechLang : 'es-ES';
+            utt.lang = lang;
             utt.rate = 0.9;
             const voices = speechSynthesis.getVoices();
-            const esVoice = voices.find(v => v.lang.startsWith('es'));
-            if (esVoice) utt.voice = esVoice;
+            const voice = voices.find(v => v.lang.startsWith(lang.slice(0,2)));
+            if (voice) utt.voice = voice;
             speechSynthesis.speak(utt);
         }
         // Warm up voices list (some browsers need this)
@@ -15569,9 +15571,410 @@ ONDERWERP: ${gesprekTopic}`;
             }
         };
         function startLessonSession(day) {
-            try { Session.start(day); } catch(e) { console.warn('Session start failed:', e); }
+            try { LeerFlow.start(day); } catch(e) { console.warn('LeerFlow start failed:', e); }
         }
         Session.init();
+
+        // ============================================================
+        // === LEERFLOW — interactieve les-engine (Sessie 2.0) =======
+        // Elke les = theorie-kaartjes afgewisseld met gevarieerde
+        // oefeningen. Relaxed: geen levens; fouten kosten je combo en
+        // komen aan het eind terug. Werkt voor alle talen (parse uit
+        // lessonsHTML), met geluid, XP-multiplier en eindscherm.
+        // ============================================================
+        const LeerSounds = {
+            get muted() { return localStorage.getItem('dc_sound_uit') === '1'; },
+            set muted(v) { try { localStorage.setItem('dc_sound_uit', v ? '1' : '0'); } catch(e) {} },
+            _ctx: null,
+            ctx() {
+                if (!this._ctx) { try { this._ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} }
+                if (this._ctx && this._ctx.state === 'suspended') { try { this._ctx.resume(); } catch(e) {} }
+                return this._ctx;
+            },
+            _toon(freq, start, dur, vol, type) {
+                const ctx = this.ctx(); if (!ctx) return;
+                const o = ctx.createOscillator(), g = ctx.createGain();
+                o.type = type || 'sine'; o.frequency.value = freq;
+                g.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+                g.gain.exponentialRampToValueAtTime(vol || 0.12, ctx.currentTime + start + 0.02);
+                g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
+                o.connect(g); g.connect(ctx.destination);
+                o.start(ctx.currentTime + start); o.stop(ctx.currentTime + start + dur + 0.05);
+            },
+            goed()    { if (this.muted) return; this._toon(660, 0, 0.12); this._toon(880, 0.09, 0.16); },
+            fout()    { if (this.muted) return; this._toon(220, 0, 0.2, 0.1, 'square'); this._toon(180, 0.12, 0.22, 0.08, 'square'); },
+            combo()   { if (this.muted) return; this._toon(660, 0, 0.1); this._toon(830, 0.08, 0.1); this._toon(990, 0.16, 0.18); },
+            fanfare() { if (this.muted) return; [523, 659, 784, 1047].forEach((f, i) => this._toon(f, i * 0.12, 0.22, 0.14)); },
+            tik()     { if (this.muted) return; this._toon(500, 0, 0.05, 0.05, 'triangle'); }
+        };
+
+        const LeerFlow = {
+            day: null, steps: [], idx: 0, goedCount: 0, foutCount: 0,
+            combo: 0, maxCombo: 0, xp: 0, startTime: 0, _active: false, _fbActive: false,
+            els: {},
+            init() {
+                this.els.overlay = document.getElementById('sessionOverlay');
+                if (!this.els.overlay) return false;
+                this.els.body = document.getElementById('sessionBody');
+                this.els.fill = document.getElementById('sessionProgressFill');
+                this.els.combo = document.getElementById('sessionHearts');
+                this.els.footer = document.getElementById('sessionFooter');
+                this.els.feedback = document.getElementById('sessionFeedback');
+                this.els.check = document.getElementById('sesCheckBtn');
+                const boek = document.getElementById('sesBoekBtn');
+                if (boek && !boek._w) { boek._w = 1; boek.addEventListener('click', () => this.openBoek()); }
+                const snd = document.getElementById('sesSoundBtn');
+                if (snd && !snd._w) {
+                    snd._w = 1;
+                    snd.textContent = LeerSounds.muted ? '🔇' : '🔊';
+                    snd.addEventListener('click', () => { LeerSounds.muted = !LeerSounds.muted; snd.textContent = LeerSounds.muted ? '🔇' : '🔊'; });
+                }
+                const close = document.getElementById('sessionClose');
+                if (close && !close._lfw) { close._lfw = 1; close.addEventListener('click', () => { if (this._active) this.exit(); }); }
+                if (!this._keyW) {
+                    this._keyW = 1;
+                    document.addEventListener('keydown', (e) => {
+                        if (!this._active || e.key !== 'Enter') return;
+                        if (this._fbActive) { e.preventDefault(); const n = document.getElementById('lfNextBtn'); if (n) n.click(); }
+                    });
+                }
+                return true;
+            },
+            // ---------- normalisatie & controle ----------
+            norm(s) {
+                return String(s || '').toLowerCase()
+                    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                    .replace(/[¿¡!?.,;:"'’()«»]/g, '')
+                    .replace(/\s+/g, ' ').trim();
+            },
+            klopt(ans, expected) {
+                const a = this.norm(ans);
+                if (!a) return false;
+                if (a === this.norm(expected)) return true;
+                // alternatieven "x / y" en tussen haakjes weglaten
+                const kaal = String(expected).replace(/\([^)]*\)/g, '').trim();
+                if (a === this.norm(kaal)) return true;
+                return String(expected).split(/[\/]/).some(p => this.norm(p) && a === this.norm(p));
+            },
+            // ---------- data: parse de les ----------
+            parseLes(day) {
+                const html = (typeof lessonsHTML !== 'undefined' && lessonsHTML[day]) || '';
+                const div = document.createElement('div'); div.innerHTML = html;
+                const theorie = [];
+                div.querySelectorAll('h4').forEach(h => {
+                    if (theorie.length >= 4) return;
+                    let inhoud = '', el = h.nextElementSibling, opgenomen = 0;
+                    while (el && opgenomen < 2 && !/^H[34]$/.test(el.tagName)) {
+                        if (el.classList && (el.classList.contains('grammar-box') || el.classList.contains('example-box') || el.tagName === 'TABLE')) {
+                            inhoud += el.outerHTML; opgenomen++;
+                        }
+                        el = el.nextElementSibling;
+                    }
+                    if (inhoud) theorie.push({ titel: h.textContent.trim(), html: inhoud });
+                });
+                const vocab = [...div.querySelectorAll('.vocab-item')].map(it => ({
+                    w: (it.querySelector('.vocab-word') || {}).textContent || '',
+                    m: (it.querySelector('.vocab-meaning') || {}).textContent || ''
+                })).filter(v => v.w && v.m);
+                const blanks = [], zinnen = [];
+                div.querySelectorAll('.inline-oef-row').forEach(row => {
+                    const zi = row.querySelector('.inline-zin-input');
+                    if (zi) {
+                        const p = row.querySelector('.inline-prompt');
+                        if (p && zi.dataset.answer) zinnen.push({ nl: p.textContent.trim(), doel: zi.dataset.answer });
+                        return;
+                    }
+                    const bl = row.querySelector('.inline-blank');
+                    if (bl && bl.dataset.answer) {
+                        const kloon = row.cloneNode(true);
+                        kloon.querySelectorAll('.inline-oef-hint, .inline-oef-reveal, .inline-zin-feedback').forEach(x => x.remove());
+                        const inp = kloon.querySelector('.inline-blank-wrap') || kloon.querySelector('.inline-blank');
+                        if (inp) inp.replaceWith(document.createTextNode(' ___ '));
+                        const hint = row.querySelector('.inline-oef-hint');
+                        blanks.push({ prompt: kloon.textContent.replace(/💡/g, '').replace(/\s+/g, ' ').trim(), answer: bl.dataset.answer, hint: hint ? hint.textContent.replace(/[()]/g, '').trim() : '' });
+                    }
+                });
+                return { theorie, vocab, blanks, zinnen };
+            },
+            shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; },
+            // ---------- stappen samenstellen ----------
+            buildSteps(day) {
+                const d = this.parseLes(day);
+                const doelTaal = (typeof getActiveLanguage === 'function') ? getActiveLanguage().name : 'de doeltaal';
+                const ttsOk = ('speechSynthesis' in window);
+                const oef = [];
+                const voc = this.shuffle(d.vocab);
+                // vocab-oefeningen in afwisselende vormen
+                voc.slice(0, 8).forEach((v, i) => {
+                    const anderen = voc.filter(x => x.w !== v.w);
+                    const vorm = i % 4;
+                    if (vorm === 0) {
+                        oef.push({ type: 'mc', vraag: v.w, juist: v.m, opties: this.shuffle([v.m, ...this.shuffle(anderen).slice(0, 3).map(x => x.m)]), tag: 'Wat betekent dit?' });
+                    } else if (vorm === 1) {
+                        oef.push({ type: 'mc', vraag: v.m, juist: v.w, opties: this.shuffle([v.w, ...this.shuffle(anderen).slice(0, 3).map(x => x.w)]), tag: doelTaal + 's woord kiezen', spreek: true });
+                    } else if (vorm === 2 && ttsOk) {
+                        oef.push({ type: 'luister', woord: v.w, betekenis: v.m });
+                    } else {
+                        oef.push({ type: 'typen', vraag: v.m, antwoord: v.w, tag: 'Typ in het ' + doelTaal });
+                    }
+                });
+                // match-stap met 4 paren
+                if (voc.length >= 4) oef.splice(2, 0, { type: 'match', paren: voc.slice(0, 4) });
+                // zinnen: woordbank + typen
+                this.shuffle(d.zinnen).slice(0, 4).forEach((z, i) => {
+                    if (i < 3) {
+                        const woorden = z.doel.replace(/[.!?—;:]/g, '').split(/\s+/).filter(Boolean);
+                        if (woorden.length >= 2) {
+                            const pool = d.zinnen.filter(x => x !== z).flatMap(x => x.doel.replace(/[.!?—;:]/g, '').split(/\s+/));
+                            const afleiders = this.shuffle([...new Set(pool.filter(w => !woorden.map(x => this.norm(x)).includes(this.norm(w))))]).slice(0, Math.min(3, Math.max(2, 6 - woorden.length)));
+                            oef.push({ type: 'woordbank', nl: z.nl, woorden, tegels: this.shuffle([...woorden, ...afleiders]), zin: z.doel });
+                        } else {
+                            oef.push({ type: 'typen', vraag: z.nl, antwoord: z.doel, tag: 'Vertaal naar het ' + doelTaal });
+                        }
+                    } else {
+                        oef.push({ type: 'typen', vraag: z.nl, antwoord: z.doel, tag: 'Vertaal naar het ' + doelTaal });
+                    }
+                });
+                // invul-stappen
+                this.shuffle(d.blanks).slice(0, 3).forEach(b => oef.push({ type: 'invul', prompt: b.prompt, antwoord: b.answer, hint: b.hint }));
+                // theorie-kaarten verweven: kaart → 3-4 oefeningen → kaart → ...
+                const stappen = [];
+                const oefPerBlok = Math.max(2, Math.ceil(oef.length / Math.max(1, d.theorie.length)));
+                let oi = 0;
+                d.theorie.forEach(t => {
+                    stappen.push({ type: 'theorie', titel: t.titel, html: t.html });
+                    for (let k = 0; k < oefPerBlok && oi < oef.length; k++) stappen.push(oef[oi++]);
+                });
+                while (oi < oef.length) stappen.push(oef[oi++]);
+                return stappen.slice(0, 19);
+            },
+            // ---------- flow ----------
+            start(day) {
+                if (!this.init()) return;
+                this.day = day;
+                this.steps = this.buildSteps(day);
+                if (!this.steps.length) { alert('Deze les heeft nog geen oefeningen.'); return; }
+                this.idx = 0; this.goedCount = 0; this.foutCount = 0;
+                this.combo = 0; this.maxCombo = 0; this.xp = 0;
+                this.startTime = Date.now();
+                this._active = true;
+                this.els.overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                this.updateCombo();
+                this.render();
+            },
+            exit() {
+                this._active = false;
+                this.els.overlay.classList.remove('is-open');
+                document.body.style.overflow = '';
+                this.hideFb();
+                try { speechSynthesis.cancel(); } catch(e) {}
+            },
+            openBoek() {
+                const d = this.day;
+                this.exit();
+                try { currentDay = d; renderLessonPath(); loadLesson(d); switchTab('lessen'); } catch(e) {}
+            },
+            multiplier() { return this.combo >= 6 ? 2 : this.combo >= 3 ? 1.5 : 1; },
+            updateCombo() {
+                if (!this.els.combo) return;
+                const m = this.multiplier();
+                this.els.combo.innerHTML = this.combo > 0
+                    ? `<span class="lf-combo ${this.combo >= 3 ? 'hot' : ''}">🔥 ${this.combo}${m > 1 ? ' <small>×' + m + ' XP</small>' : ''}</span>`
+                    : '<span class="lf-combo koud">✨</span>';
+            },
+            voortgang() { this.els.fill.style.width = Math.round((this.idx / this.steps.length) * 100) + '%'; },
+            render() {
+                this.voortgang(); this.hideFb();
+                const s = this.steps[this.idx];
+                if (!s) { this.finish(); return; }
+                const b = this.els.body;
+                this.els.footer.style.display = 'flex';
+                const check = this.els.check;
+                check.textContent = 'Controleer'; check.disabled = true;
+                check.onclick = () => this.check();
+                if (s.type === 'theorie') {
+                    b.innerHTML = `<div class="session-card lf-theorie"><span class="ses-tag">📚 ${s.titel}</span><div class="lf-theorie-inhoud">${s.html}</div></div>`;
+                    check.textContent = 'Verder'; check.disabled = false;
+                    check.onclick = () => { LeerSounds.tik(); this.idx++; this.render(); };
+                } else if (s.type === 'mc') {
+                    b.innerHTML = `<div class="session-card"><span class="ses-tag">${s.tag}</span><p class="ses-prompt lf-groot">${s.vraag} ${s.spreek === false ? '' : ''}</p><div class="lf-mc">${s.opties.map(o => `<button class="lf-mc-opt" data-v="${o.replace(/"/g, '&quot;')}">${o}</button>`).join('')}</div></div>`;
+                    this.els.footer.style.display = 'none';
+                    b.querySelectorAll('.lf-mc-opt').forEach(btn => btn.addEventListener('click', () => {
+                        b.querySelectorAll('.lf-mc-opt').forEach(x => x.disabled = true);
+                        const ok = this.klopt(btn.dataset.v, s.juist);
+                        btn.classList.add(ok ? 'goed' : 'fout');
+                        this.beoordeel(ok, s.juist, s);
+                    }));
+                } else if (s.type === 'typen') {
+                    b.innerHTML = `<div class="session-card"><span class="ses-tag">${s.tag}</span><p class="ses-prompt lf-groot">${s.vraag}</p><input type="text" class="ses-input" id="lfInput" placeholder="Typ je antwoord…" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="ses-hint">Accenten zijn niet verplicht</div></div>`;
+                    this.wireInput(s.antwoord, s);
+                } else if (s.type === 'invul') {
+                    b.innerHTML = `<div class="session-card"><span class="ses-tag">Vul aan</span><div class="ses-zin">${s.prompt}</div><input type="text" class="ses-input" id="lfInput" placeholder="Het ontbrekende woord…" autocomplete="off" autocapitalize="off" spellcheck="false">${s.hint ? `<div class="ses-hint">${s.hint}</div>` : ''}</div>`;
+                    this.wireInput(s.antwoord, s);
+                } else if (s.type === 'luister') {
+                    b.innerHTML = `<div class="session-card" style="text-align:center;"><span class="ses-tag">🎧 Luister en typ</span><button class="lf-speel" id="lfSpeel">🔊</button><p class="ses-hint">Tik op de knop en typ wat je hoort</p><input type="text" class="ses-input" id="lfInput" placeholder="Typ wat je hoort…" autocomplete="off" autocapitalize="off" spellcheck="false"></div>`;
+                    const sp = document.getElementById('lfSpeel');
+                    sp.addEventListener('click', () => spreekZin(s.woord));
+                    setTimeout(() => spreekZin(s.woord), 350);
+                    this.wireInput(s.woord, s, s.woord + ' — ' + s.betekenis);
+                } else if (s.type === 'woordbank') {
+                    b.innerHTML = `<div class="session-card"><span class="ses-tag">Bouw de zin</span><p class="ses-prompt lf-groot">${s.nl}</p><div class="lf-wb-antwoord" id="lfWbAns"></div><div class="lf-wb-tegels" id="lfWbTiles">${s.tegels.map((w, i) => `<button class="volgorde-tile" data-i="${i}" data-w="${w.replace(/"/g, '&quot;')}">${w}</button>`).join('')}</div></div>`;
+                    const ans = document.getElementById('lfWbAns'), tiles = document.getElementById('lfWbTiles');
+                    const upd = () => { check.disabled = !ans.children.length; };
+                    tiles.querySelectorAll('.volgorde-tile').forEach(t => t.addEventListener('click', () => {
+                        LeerSounds.tik();
+                        if (t.parentElement === tiles) ans.appendChild(t); else tiles.appendChild(t);
+                        upd();
+                    }));
+                    check.onclick = () => {
+                        const gemaakt = [...ans.children].map(t => t.dataset.w).join(' ');
+                        this.beoordeel(this.norm(gemaakt) === this.norm(s.woorden.join(' ')), s.zin, s);
+                    };
+                } else if (s.type === 'match') {
+                    b.innerHTML = `<div class="session-card"><span class="ses-tag">Koppel de paren</span><div class="lf-match"><div class="lf-match-col" id="lfML">${this.shuffle(s.paren).map(p => `<button class="lf-match-item" data-k="${p.w.replace(/"/g, '&quot;')}">${p.w}</button>`).join('')}</div><div class="lf-match-col" id="lfMR">${this.shuffle(s.paren).map(p => `<button class="lf-match-item" data-k="${p.w.replace(/"/g, '&quot;')}">${p.m}</button>`).join('')}</div></div></div>`;
+                    this.els.footer.style.display = 'none';
+                    let links = null, missers = 0, klaar = 0;
+                    const alle = b.querySelectorAll('.lf-match-item');
+                    alle.forEach(item => item.addEventListener('click', () => {
+                        if (item.classList.contains('af')) return;
+                        const isLinks = item.parentElement.id === 'lfML';
+                        if (isLinks) { alle.forEach(x => x.classList.remove('gekozen')); item.classList.add('gekozen'); links = item; LeerSounds.tik(); return; }
+                        if (!links) return;
+                        if (links.dataset.k === item.dataset.k) {
+                            links.classList.add('af'); item.classList.add('af'); links.classList.remove('gekozen');
+                            LeerSounds.goed(); links = null; klaar++;
+                            if (klaar >= s.paren.length) this.beoordeel(missers === 0, null, s, missers === 0 ? 'Alle paren in één keer!' : `Gelukt, met ${missers} misser${missers > 1 ? 's' : ''}`);
+                        } else {
+                            missers++; item.classList.add('mis'); links.classList.add('mis'); LeerSounds.fout();
+                            setTimeout(() => alle.forEach(x => x.classList.remove('mis')), 400);
+                        }
+                    }));
+                }
+            },
+            wireInput(antwoord, stap, toonAntwoord) {
+                const inp = document.getElementById('lfInput');
+                const check = this.els.check;
+                inp.addEventListener('input', () => { check.disabled = !inp.value.trim(); });
+                inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !check.disabled) { e.preventDefault(); check.onclick(); } });
+                check.onclick = () => this.beoordeel(this.klopt(inp.value, antwoord), toonAntwoord || antwoord, stap);
+                setTimeout(() => inp.focus(), 60);
+            },
+            beoordeel(ok, juisteAntwoord, stap, eigenTekst) {
+                if (ok) {
+                    this.goedCount++;
+                    this.combo++; this.maxCombo = Math.max(this.maxCombo, this.combo);
+                    this.xp += Math.round(5 * this.multiplier());
+                    if (this.combo === 3 || this.combo === 6) LeerSounds.combo(); else LeerSounds.goed();
+                    try { if (typeof dcQuestEvent === 'function') dcQuestEvent('goed'); } catch(e) {}
+                } else {
+                    this.foutCount++;
+                    this.combo = 0;
+                    LeerSounds.fout();
+                    // fout? de stap komt (één keer) terug aan het einde
+                    if (stap && !stap._terug) { const kopie = Object.assign({}, stap, { _terug: true }); this.steps.push(kopie); }
+                }
+                this.updateCombo();
+                const fb = this.els.feedback;
+                const titels = ['¡Muy bien!', 'Bravo!', 'Très bien !', 'Goed zo!', 'Lekker bezig!'];
+                fb.className = 'session-feedback ' + (ok ? 'correct' : 'wrong');
+                fb.innerHTML = ok
+                    ? `<div class="fb-title">✅ ${eigenTekst || titels[Math.floor(Math.random() * titels.length)]}${this.combo >= 3 ? ` <span class="lf-combo-badge">🔥 combo ×${this.multiplier()}</span>` : ''}</div>
+                       <button class="ses-btn" id="lfNextBtn">Volgende</button>`
+                    : `<div class="fb-title">❌ ${eigenTekst || 'Niet helemaal'}</div>
+                       ${juisteAntwoord ? `<div class="fb-answer">Juist antwoord: <strong>${juisteAntwoord}</strong></div>` : ''}
+                       <div id="lfUitlegSlot"></div>
+                       <button class="ses-btn" id="lfNextBtn">Ga door</button>`;
+                this.els.footer.style.display = 'none';
+                requestAnimationFrame(() => fb.classList.add('visible'));
+                this._fbActive = true;
+                const n = document.getElementById('lfNextBtn');
+                n.addEventListener('click', () => { this.idx++; this.render(); });
+                setTimeout(() => { try { n.focus(); } catch(e) {} }, 30);
+            },
+            hideFb() { this.els.feedback.classList.remove('visible'); this._fbActive = false; },
+            finish() {
+                this.els.fill.style.width = '100%';
+                this.hideFb();
+                this.els.footer.style.display = 'none';
+                const beantwoord = this.goedCount + this.foutCount;
+                const pct = beantwoord ? Math.round((this.goedCount / beantwoord) * 100) : 100;
+                const sec = Math.max(1, Math.round((Date.now() - this.startTime) / 1000));
+                const xpTotaal = Math.max(15, this.xp + (pct >= 90 ? 15 : 0));
+                const emoji = pct >= 95 ? '🏆' : pct >= 75 ? '🎉' : pct >= 50 ? '💪' : '🌱';
+                const maxDag = getAllDays().length;
+                const wasNieuw = !completedDays.has(this.day);
+                this.els.body.innerHTML = `
+                    <div class="session-result">
+                        <div class="ses-result-emoji">${emoji}</div>
+                        <h2>Les ${this.day} voltooid!</h2>
+                        <div class="result-stats">
+                            <div class="result-stat"><div class="label">Goed</div><div class="value">${pct}%</div></div>
+                            <div class="result-stat"><div class="label">XP</div><div class="value">+${xpTotaal}</div></div>
+                            <div class="result-stat"><div class="label">Beste combo</div><div class="value">🔥${this.maxCombo}</div></div>
+                            <div class="result-stat"><div class="label">Tijd</div><div class="value">${sec}s</div></div>
+                        </div>
+                        <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;justify-content:center;">
+                            ${this.day < maxDag ? `<button class="ses-btn lf-eind-btn primair" id="lfVolgendeLes">Volgende les →</button>` : ''}
+                            <button class="ses-btn lf-eind-btn" id="lfNogEens">Nog een keer</button>
+                            <button class="ses-btn lf-eind-btn" id="lfBoek">📖 Theorie</button>
+                            <button class="ses-btn lf-eind-btn" id="lfKlaar">Klaar</button>
+                        </div>
+                    </div>`;
+                LeerSounds.fanfare();
+                try { awardXP(xpTotaal, 'Les ' + this.day + ' geleerd'); } catch(e) {}
+                try {
+                    if (wasNieuw) { completedDays.add(this.day); saveProgress(); updateProgressBar(); renderLessonPath(); }
+                    if (typeof dcQuestEvent === 'function') dcQuestEvent('les');
+                } catch(e) {}
+                try { if (typeof launchConfetti === 'function' && (pct >= 90 || this.maxCombo >= 6)) launchConfetti(); } catch(e) {}
+                const dag = this.day;
+                const q = id => document.getElementById(id);
+                if (q('lfVolgendeLes')) q('lfVolgendeLes').addEventListener('click', () => { currentDay = dag + 1; try { renderLessonPath(); } catch(e) {} this.start(dag + 1); });
+                q('lfNogEens').addEventListener('click', () => this.start(dag));
+                q('lfBoek').addEventListener('click', () => this.openBoek());
+                q('lfKlaar').addEventListener('click', () => this.exit());
+            }
+        };
+        // Stijlen voor de LeerFlow (één keer injecteren)
+        (function() {
+            const css = document.createElement('style');
+            css.textContent = `
+        .session-tool-btn { background:none; border:none; font-size:1.25rem; cursor:pointer; opacity:0.75; padding:0.2rem 0.35rem; }
+        .session-tool-btn:hover { opacity:1; }
+        .lf-combo { font-weight:800; font-family:system-ui; font-size:1.05rem; }
+        .lf-combo.hot { animation: dcPop 0.4s ease; }
+        .lf-combo.koud { opacity:0.5; }
+        .lf-combo small { font-size:0.7rem; opacity:0.8; }
+        .lf-combo-badge { font-size:0.85rem; background:rgba(255,255,255,0.25); padding:0.15rem 0.5rem; border-radius:99px; margin-left:0.4rem; }
+        .lf-theorie-inhoud { text-align:left; max-height:52vh; overflow-y:auto; margin-top:0.6rem; }
+        .lf-theorie-inhoud .grammar-box, .lf-theorie-inhoud .example-box { margin:0.6rem 0; }
+        .lf-theorie-inhoud table { width:100%; font-size:0.92rem; }
+        .lf-groot { font-size:1.45rem; font-weight:700; }
+        .lf-mc { display:grid; gap:0.6rem; margin-top:1rem; }
+        .lf-mc-opt { padding:0.85rem 1rem; border:2px solid var(--ochre,#d9a441); background:var(--warm-white,#fff); border-radius:12px; font-size:1.05rem; font-family:inherit; cursor:pointer; text-align:left; transition: transform .1s; }
+        .lf-mc-opt:hover:not(:disabled) { transform: translateY(-2px); }
+        .lf-mc-opt.goed { background:#d9f2d9; border-color:#2d7a3a; animation: dcPop .35s ease; }
+        .lf-mc-opt.fout { background:#fde3e0; border-color:#c0392b; animation: dcShake .4s ease; }
+        [data-theme="dark"] .lf-mc-opt { background:#2a2218; color:#f5ecd9; }
+        .lf-speel { font-size:2.6rem; background:var(--terracotta,#c0392b); color:#fff; border:none; border-radius:50%; width:86px; height:86px; cursor:pointer; margin:0.8rem auto; display:block; box-shadow:0 5px 0 #8b271c; }
+        .lf-speel:active { transform: translateY(3px); box-shadow:0 2px 0 #8b271c; }
+        .lf-wb-antwoord { min-height:52px; border-bottom:2px dashed var(--ochre,#d9a441); margin:1rem 0 0.8rem; display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.4rem 0; }
+        .lf-wb-antwoord:empty::after { content:'Tik de woorden in de juiste volgorde…'; opacity:0.35; font-style:italic; padding:0.4rem; }
+        .lf-wb-tegels { display:flex; flex-wrap:wrap; gap:0.45rem; }
+        .lf-match { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-top:1rem; }
+        .lf-match-col { display:flex; flex-direction:column; gap:0.55rem; }
+        .lf-match-item { padding:0.75rem 0.6rem; border:2px solid var(--ochre,#d9a441); background:var(--warm-white,#fff); border-radius:12px; font-size:0.98rem; font-family:inherit; cursor:pointer; }
+        .lf-match-item.gekozen { border-color:var(--terracotta,#c0392b); background:rgba(192,57,43,0.08); }
+        .lf-match-item.af { opacity:0.35; pointer-events:none; background:#d9f2d9; border-color:#2d7a3a; }
+        .lf-match-item.mis { animation: dcShake .35s ease; border-color:#c0392b; }
+        [data-theme="dark"] .lf-match-item, [data-theme="dark"] .lf-wb-antwoord { color:#f5ecd9; }
+        [data-theme="dark"] .lf-match-item { background:#2a2218; }
+        .lf-eind-btn { background:var(--ochre,#d9a441); color:#fff; padding:0.85rem 1.2rem; border:none; border-radius:12px; font-weight:700; cursor:pointer; box-shadow:0 4px 0 #b3631c; font-family:inherit; }
+        .lf-eind-btn.primair { background:var(--terracotta,#c0392b); box-shadow:0 4px 0 #8b271c; font-size:1.05rem; }
+        .lf-eind-btn:active { transform:translateY(3px); box-shadow:none; }`;
+            document.head.appendChild(css);
+        })();
 
         // =====================================================
         // INLINE INVUL-OEFENINGEN (verweven met de theorie)
@@ -15945,6 +16348,8 @@ ONDERWERP: ${gesprekTopic}`;
         <div class="session-header">
             <button class="session-close" id="sessionClose" aria-label="Sluit sessie">×</button>
             <div class="session-progress-track"><div class="session-progress-fill" id="sessionProgressFill"></div></div>
+            <button class="session-tool-btn" id="sesBoekBtn" title="Lees de theorie" aria-label="Theorie">📖</button>
+            <button class="session-tool-btn" id="sesSoundBtn" title="Geluid aan/uit" aria-label="Geluid">🔊</button>
             <div class="session-hearts" id="sessionHearts">❤️❤️❤️</div>
         </div>
         <div class="session-body" id="sessionBody"></div>
