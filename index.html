@@ -1630,6 +1630,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="questStrip"></div>
                 <h2>Jouw leerpad</h2>
                 <div class="lesson-path" id="lessonPath"></div>
                 <!-- Legacy day-selector kept for compatibility but hidden -->
@@ -12044,6 +12045,7 @@ ONDERWERP: ${gesprekTopic}`;
             const result = checkAnswer(userAnswer, kaart.answer);
             inp.readOnly = true; // niet disabled: zo blijft de focus (en het toetsenbord) staan
             fcTodaySeen++;
+            try { if (typeof dcQuestEvent === 'function') dcQuestEvent('fc'); } catch(e) {}
 
             const back = document.getElementById('fcBack');
             const card = document.getElementById('fcCard');
@@ -15617,6 +15619,89 @@ ONDERWERP: ${gesprekTopic}`;
             tik()     { if (this.muted) return; this._toon(500, 0, 0.05, 0.05, 'triangle'); }
         };
 
+        // ============================================================
+        // === DAGELIJKSE QUESTS — 3 missies per dag, +20 XP elk ======
+        // ============================================================
+        const QUEST_POOL = [
+            { id: 'les1',   tekst: 'Voltooi 1 les',              icoon: '🎯', doel: 1,  event: 'les' },
+            { id: 'les2',   tekst: 'Voltooi 2 lessen',           icoon: '🚀', doel: 2,  event: 'les' },
+            { id: 'goed15', tekst: 'Geef 15 goede antwoorden',   icoon: '✅', doel: 15, event: 'goed' },
+            { id: 'goed30', tekst: 'Geef 30 goede antwoorden',   icoon: '💪', doel: 30, event: 'goed' },
+            { id: 'combo5', tekst: 'Haal een combo van 5',       icoon: '🔥', doel: 5,  event: 'combo' },
+            { id: 'fc10',   tekst: 'Oefen 10 flashcards',        icoon: '🃏', doel: 10, event: 'fc' }
+        ];
+        function _questVandaagKey() { return 'dc_quests_' + new Date().toISOString().slice(0, 10); }
+        function _questState() {
+            try {
+                const raw = localStorage.getItem(_questVandaagKey());
+                if (raw) return JSON.parse(raw);
+            } catch(e) {}
+            // kies deterministisch 3 quests op basis van de datum
+            const seed = new Date().toISOString().slice(0, 10).split('-').reduce((a, b) => a + parseInt(b), 0);
+            const picks = [];
+            for (let i = 0; picks.length < 3 && i < QUEST_POOL.length; i++) {
+                const idx = (seed + i * 2) % QUEST_POOL.length;
+                const q = QUEST_POOL[idx];
+                if (!picks.includes(q.id) && !picks.some(p => QUEST_POOL.find(x => x.id === p).event === q.event)) picks.push(q.id);
+            }
+            while (picks.length < 3) { const q = QUEST_POOL.find(x => !picks.includes(x.id)); if (!q) break; picks.push(q.id); }
+            const state = { picks, progress: {}, klaar: {} };
+            try { localStorage.setItem(_questVandaagKey(), JSON.stringify(state)); } catch(e) {}
+            return state;
+        }
+        function _questSave(state) { try { localStorage.setItem(_questVandaagKey(), JSON.stringify(state)); } catch(e) {} }
+        function dcQuestEvent(event, waarde) {
+            const state = _questState();
+            let veranderd = false;
+            state.picks.forEach(id => {
+                const q = QUEST_POOL.find(x => x.id === id);
+                if (!q || q.event !== event || state.klaar[id]) return;
+                if (event === 'combo') state.progress[id] = Math.max(state.progress[id] || 0, waarde || 0);
+                else state.progress[id] = (state.progress[id] || 0) + 1;
+                if (state.progress[id] >= q.doel) {
+                    state.klaar[id] = true;
+                    try { awardXP(20, 'Missie: ' + q.tekst); } catch(e) {}
+                    try { LeerSounds.combo(); } catch(e) {}
+                }
+                veranderd = true;
+            });
+            if (veranderd) { _questSave(state); try { renderQuests(); } catch(e) {} }
+        }
+        function renderQuests() {
+            const el = document.getElementById('questStrip');
+            if (!el) return;
+            const state = _questState();
+            el.innerHTML = `<div class="quest-strip">` + state.picks.map(id => {
+                const q = QUEST_POOL.find(x => x.id === id);
+                if (!q) return '';
+                const nu = Math.min(state.progress[id] || 0, q.doel);
+                const af = !!state.klaar[id];
+                return `<div class="quest-chip ${af ? 'af' : ''}">
+                    <span class="quest-icoon">${af ? '✓' : q.icoon}</span>
+                    <span class="quest-tekst">${q.tekst}</span>
+                    <span class="quest-teller">${af ? '+20 XP' : nu + '/' + q.doel}</span>
+                    <div class="quest-balk"><div class="quest-balk-vul" style="width:${Math.round((nu / q.doel) * 100)}%"></div></div>
+                </div>`;
+            }).join('') + `</div>`;
+        }
+        (function() {
+            const css = document.createElement('style');
+            css.textContent = `
+        .quest-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:0.6rem; margin:0.8rem 0 1rem; }
+        .quest-chip { position:relative; background:rgba(217,164,65,0.09); border:1.5px solid rgba(217,164,65,0.45); border-radius:12px; padding:0.55rem 0.7rem 0.8rem; font-family:system-ui,sans-serif; overflow:hidden; }
+        .quest-chip.af { background:rgba(45,122,58,0.1); border-color:#2d7a3a; }
+        .quest-icoon { font-size:1.05rem; margin-right:0.3rem; }
+        .quest-tekst { font-size:0.82rem; font-weight:600; }
+        .quest-teller { float:right; font-size:0.78rem; font-weight:700; opacity:0.75; }
+        .quest-chip.af .quest-teller { color:#2d7a3a; opacity:1; }
+        .quest-balk { position:absolute; left:0; right:0; bottom:0; height:4px; background:rgba(0,0,0,0.08); }
+        .quest-balk-vul { height:100%; background:linear-gradient(90deg,var(--ochre,#d9a441),var(--terracotta,#c0392b)); transition:width .4s ease; }
+        .quest-chip.af .quest-balk-vul { background:#2d7a3a; }`;
+            document.head.appendChild(css);
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderQuests);
+            else setTimeout(renderQuests, 0);
+        })();
+
         // ---- AI-hulp: verse oefenzinnen + uitleg bij fouten (alleen ingelogd) ----
         const LeerAI = {
             ENDPOINT: 'https://spaans-app.vercel.app/api/ai',
@@ -15960,7 +16045,7 @@ ONDERWERP: ${gesprekTopic}`;
                     this.combo++; this.maxCombo = Math.max(this.maxCombo, this.combo);
                     this.xp += Math.round(5 * this.multiplier());
                     if (this.combo === 3 || this.combo === 6) LeerSounds.combo(); else LeerSounds.goed();
-                    try { if (typeof dcQuestEvent === 'function') dcQuestEvent('goed'); } catch(e) {}
+                    try { if (typeof dcQuestEvent === 'function') { dcQuestEvent('goed'); dcQuestEvent('combo', this.combo); } } catch(e) {}
                 } else {
                     this.foutCount++;
                     this.combo = 0;
