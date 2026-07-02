@@ -9987,18 +9987,27 @@
                 banner.className = 'path-section-banner' + (isOpen ? ' open' : '');
                 banner.setAttribute('role', 'button');
                 banner.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                const afgerond = completedInSection === total;
                 banner.innerHTML = `
                     <div>
                         <span class="section-label">${section.label}</span>
                         <span class="section-title">${section.title}</span>
                     </div>
-                    <span class="section-progress">${completedInSection === total ? '✓ ' : ''}${completedInSection}/${total} <span class="section-chev">▸</span></span>
+                    <span class="section-progress">${afgerond ? '✓ ' : ''}${completedInSection}/${total} <span class="section-chev">▸</span></span>
                 `;
                 banner.onclick = () => {
                     _pathSectionToggles[sIdx] = !isOpen;
                     renderLessonPath();
                 };
                 path.appendChild(banner);
+                // Eigen tempo: haal de checkpoint-toets en de hele sectie is voltooid
+                if (!afgerond) {
+                    const testBtn = document.createElement('button');
+                    testBtn.className = 'section-test-btn';
+                    testBtn.innerHTML = '⚡ Toets vooruit — sla deze sectie over';
+                    testBtn.onclick = (e) => { e.stopPropagation(); try { LeerFlow.startCheckpoint(sIdx); } catch(err) { console.warn(err); } };
+                    path.appendChild(testBtn);
+                }
                 const nodesWrap = document.createElement('div');
                 nodesWrap.className = 'path-section-nodes' + (isOpen ? '' : ' collapsed');
                 path.appendChild(nodesWrap);
@@ -15752,8 +15761,28 @@ ONDERWERP: ${gesprekTopic}`;
             start(day) {
                 if (!this.init()) return;
                 this.day = day;
+                this.checkpoint = null;
                 this.steps = this.buildSteps(day);
                 if (!this.steps.length) { alert('Deze les heeft nog geen oefeningen.'); return; }
+                this._begin();
+            },
+            // Checkpoint: 10 gemixte vragen uit de hele sectie; ≥8 goed = sectie voltooid.
+            startCheckpoint(sIdx) {
+                if (!this.init()) return;
+                const sec = COURSE_SECTIONS[sIdx];
+                if (!sec) return;
+                const [from, to] = sec.range;
+                let pool = [];
+                for (let d = from; d <= to; d++) {
+                    pool = pool.concat(this.buildSteps(d).filter(s => s.type !== 'theorie' && s.type !== 'match'));
+                }
+                if (pool.length < 6) { alert('Deze sectie heeft nog te weinig oefenmateriaal voor een toets.'); return; }
+                this.day = from;
+                this.checkpoint = { sIdx, label: sec.label, titel: sec.title, from, to, nodig: 8, totaal: 10 };
+                this.steps = this.shuffle(pool).slice(0, 10).map(s => Object.assign({}, s, { _terug: true })); // geen re-queue in een toets
+                this._begin();
+            },
+            _begin() {
                 this.idx = 0; this.goedCount = 0; this.foutCount = 0;
                 this.combo = 0; this.maxCombo = 0; this.xp = 0;
                 this.startTime = Date.now();
@@ -15894,6 +15923,7 @@ ONDERWERP: ${gesprekTopic}`;
             },
             hideFb() { this.els.feedback.classList.remove('visible'); this._fbActive = false; },
             finish() {
+                if (this.checkpoint) { this.finishCheckpoint(); return; }
                 this.els.fill.style.width = '100%';
                 this.hideFb();
                 this.els.footer.style.display = 'none';
@@ -15934,6 +15964,43 @@ ONDERWERP: ${gesprekTopic}`;
                 q('lfNogEens').addEventListener('click', () => this.start(dag));
                 q('lfBoek').addEventListener('click', () => this.openBoek());
                 q('lfKlaar').addEventListener('click', () => this.exit());
+            },
+            finishCheckpoint() {
+                this.els.fill.style.width = '100%';
+                this.hideFb();
+                this.els.footer.style.display = 'none';
+                const cp = this.checkpoint;
+                const geslaagd = this.goedCount >= cp.nodig;
+                const sIdx = cp.sIdx;
+                if (geslaagd) {
+                    LeerSounds.fanfare();
+                    for (let d = cp.from; d <= cp.to; d++) completedDays.add(d);
+                    currentDay = Math.min(cp.to + 1, getAllDays().length);
+                    try { saveProgress(); updateProgressBar(); renderLessonPath(); } catch(e) {}
+                    try { awardXP(60, 'Checkpoint ' + cp.label + ' gehaald'); } catch(e) {}
+                    try { if (typeof launchConfetti === 'function') launchConfetti(); } catch(e) {}
+                } else {
+                    LeerSounds.fout();
+                }
+                this.els.body.innerHTML = `
+                    <div class="session-result">
+                        <div class="ses-result-emoji">${geslaagd ? '⚡🏆' : '📚'}</div>
+                        <h2>${geslaagd ? cp.label + ' gehaald!' : 'Nog nét niet'}</h2>
+                        <p style="opacity:0.85;margin:0.3rem 0 0.6rem;">${geslaagd
+                            ? `Je hebt <strong>${cp.titel}</strong> overgeslagen — alle ${cp.to - cp.from + 1} lessen zijn voltooid. +60 XP!`
+                            : `Je had ${this.goedCount}/${cp.totaal} goed; je hebt er ${cp.nodig} nodig. Doe een paar lessen uit deze sectie en probeer het opnieuw.`}</p>
+                        <div class="result-stats">
+                            <div class="result-stat"><div class="label">Score</div><div class="value">${this.goedCount}/${cp.totaal}</div></div>
+                            <div class="result-stat"><div class="label">Beste combo</div><div class="value">🔥${this.maxCombo}</div></div>
+                        </div>
+                        <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;justify-content:center;">
+                            ${geslaagd ? '' : `<button class="ses-btn lf-eind-btn primair" id="lfCpOpnieuw">Probeer opnieuw</button>`}
+                            <button class="ses-btn lf-eind-btn" id="lfKlaar">${geslaagd ? 'Verder leren →' : 'Terug naar het pad'}</button>
+                        </div>
+                    </div>`;
+                const op = document.getElementById('lfCpOpnieuw');
+                if (op) op.addEventListener('click', () => this.startCheckpoint(sIdx));
+                document.getElementById('lfKlaar').addEventListener('click', () => this.exit());
             }
         };
         // Stijlen voor de LeerFlow (één keer injecteren)
@@ -15972,7 +16039,10 @@ ONDERWERP: ${gesprekTopic}`;
         [data-theme="dark"] .lf-match-item { background:#2a2218; }
         .lf-eind-btn { background:var(--ochre,#d9a441); color:#fff; padding:0.85rem 1.2rem; border:none; border-radius:12px; font-weight:700; cursor:pointer; box-shadow:0 4px 0 #b3631c; font-family:inherit; }
         .lf-eind-btn.primair { background:var(--terracotta,#c0392b); box-shadow:0 4px 0 #8b271c; font-size:1.05rem; }
-        .lf-eind-btn:active { transform:translateY(3px); box-shadow:none; }`;
+        .lf-eind-btn:active { transform:translateY(3px); box-shadow:none; }
+        .section-test-btn { display:block; margin:0 auto 0.4rem; background:none; border:2px dashed var(--ochre,#d9a441); color:var(--deep-blue,#5a4632); border-radius:99px; padding:0.4rem 1rem; font-family:inherit; font-size:0.85rem; font-weight:700; cursor:pointer; opacity:0.85; transition:all .15s; }
+        .section-test-btn:hover { opacity:1; background:rgba(217,164,65,0.12); transform:translateY(-1px); }
+        [data-theme="dark"] .section-test-btn { color:#f5ecd9; }`;
             document.head.appendChild(css);
         })();
 
