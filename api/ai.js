@@ -62,7 +62,7 @@ module.exports = async function handler(req, res) {
       const vraag = String(body.vraag || '').slice(0, 200);
       const antwoord = String(body.antwoord || '').slice(0, 200);
       const juist = String(body.juist || '').slice(0, 200);
-      const system = 'Je bent een vriendelijke ' + taal + '-docent voor Nederlanders. Leg in maximaal 3 korte zinnen in het Nederlands uit. Wees bemoedigend en concreet.';
+      const system = 'Je bent een vriendelijke ' + taal + '-docent voor Nederlanders. Leg in maximaal 3 korte zinnen in het Nederlands uit. Wees bemoedigend en concreet. Gebruik platte tekst zonder markdown, kopjes of sterretjes.';
       const user = 'Opgave: "' + vraag + '". De student antwoordde: "' + antwoord + '". Het juiste antwoord is: "' + juist + '". Leg kort uit waarom het juiste antwoord klopt en wat het verschil is met het antwoord van de student.';
       const tekst = await vraagClaude(system, user, 250);
       res.status(200).json({ tekst: tekst.trim() });

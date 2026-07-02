@@ -15790,19 +15790,23 @@ ONDERWERP: ${gesprekTopic}`;
                 });
                 // invul-stappen
                 this.shuffle(d.blanks).slice(0, 3).forEach(b => oef.push({ type: 'invul', prompt: b.prompt, antwoord: b.answer, hint: b.hint }));
-                // 🤖 AI: verse zinnen uit de cache mixen (max 2, alleen als eerder opgehaald)
+                // 🤖 AI: verse zinnen uit de cache mixen — vroeg invoegen zodat ze
+                // binnen de stappen-limiet vallen
                 try {
                     const ai = LeerAI.cache(day);
                     if (ai && ai.length) {
+                        const aiStappen = [];
                         this.shuffle(ai).slice(0, 2).forEach((z, i) => {
                             const woorden = z.doel.replace(/[.!?—;:]/g, '').split(/\s+/).filter(Boolean);
                             if (i === 0 && woorden.length >= 2 && woorden.length <= 9) {
                                 const afleiders = this.shuffle(d.zinnen.flatMap(x => x.doel.replace(/[.!?—;:]/g, '').split(/\s+/))).slice(0, 2);
-                                oef.push({ type: 'woordbank', nl: z.nl, woorden, tegels: this.shuffle([...woorden, ...afleiders]), zin: z.doel, ai: true });
+                                aiStappen.push({ type: 'woordbank', nl: z.nl, woorden, tegels: this.shuffle([...woorden, ...afleiders]), zin: z.doel, ai: true });
                             } else {
-                                oef.push({ type: 'typen', vraag: z.nl, antwoord: z.doel, tag: '🤖 Verse zin — vertaal', ai: true });
+                                aiStappen.push({ type: 'typen', vraag: z.nl, antwoord: z.doel, tag: '🤖 Verse zin — vertaal', ai: true });
                             }
                         });
+                        if (aiStappen[0]) oef.splice(Math.min(3, oef.length), 0, aiStappen[0]);
+                        if (aiStappen[1]) oef.splice(Math.min(8, oef.length), 0, aiStappen[1]);
                     }
                 } catch(e) {}
                 // theorie-kaarten verweven: kaart → 3-4 oefeningen → kaart → ...
@@ -15991,7 +15995,9 @@ ONDERWERP: ${gesprekTopic}`;
                             e.stopPropagation();
                             slot.innerHTML = '<div class="lf-uitleg-tekst">🤖 Even denken…</div>';
                             try {
-                                const t = await LeerAI.legUit(vraagTekst, gebruikersAntwoord || '(leeg)', juisteAntwoord);
+                                let t = await LeerAI.legUit(vraagTekst, gebruikersAntwoord || '(leeg)', juisteAntwoord);
+                                // lichte markdown → HTML (vet) en kopjes/sterretjes opruimen
+                                t = t.replace(/^#+\s*/gm, '').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n{2,}/g, '<br>').replace(/\n/g, ' ');
                                 slot.innerHTML = '<div class="lf-uitleg-tekst">🤖 ' + t + '</div>';
                             } catch(err) {
                                 slot.innerHTML = '<div class="lf-uitleg-tekst">De uitleg is even niet beschikbaar.</div>';
