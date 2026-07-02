@@ -15617,6 +15617,50 @@ ONDERWERP: ${gesprekTopic}`;
             tik()     { if (this.muted) return; this._toon(500, 0, 0.05, 0.05, 'triangle'); }
         };
 
+        // ---- AI-hulp: verse oefenzinnen + uitleg bij fouten (alleen ingelogd) ----
+        const LeerAI = {
+            ENDPOINT: 'https://spaans-app.vercel.app/api/ai',
+            _key(day) { return 'dc_ai_' + (typeof activeLangCode !== 'undefined' ? activeLangCode : 'es') + '_' + day; },
+            cache(day) {
+                try {
+                    const raw = localStorage.getItem(this._key(day));
+                    if (!raw) return null;
+                    const d = JSON.parse(raw);
+                    if (!d.t || Date.now() - d.t > 7 * 24 * 3600 * 1000) return null; // 7 dagen vers
+                    return d.zinnen || null;
+                } catch(e) { return null; }
+            },
+            async refresh(day) {
+                // Haalt op de achtergrond verse zinnen voor een volgende sessie.
+                if (typeof currentUser === 'undefined' || !currentUser) return;
+                if (this.cache(day) || this['_bezig' + day]) return;
+                this['_bezig' + day] = true;
+                try {
+                    const idToken = await currentUser.getIdToken();
+                    const vocabSample = parseVocabFromDays([day]).slice(0, 6).map(v => v.spanish).join(', ');
+                    const r = await fetch(this.ENDPOINT, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ idToken, mode: 'zinnen', taal: getActiveLanguage().name, onderwerp: lessonTitles[day] || '', woorden: vocabSample })
+                    });
+                    const d = await r.json();
+                    if (r.ok && d.zinnen && d.zinnen.length) {
+                        localStorage.setItem(this._key(day), JSON.stringify({ t: Date.now(), zinnen: d.zinnen }));
+                    }
+                } catch(e) {} finally { this['_bezig' + day] = false; }
+            },
+            async legUit(vraag, antwoord, juist) {
+                if (typeof currentUser === 'undefined' || !currentUser) throw new Error('Niet ingelogd');
+                const idToken = await currentUser.getIdToken();
+                const r = await fetch(this.ENDPOINT, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idToken, mode: 'uitleg', taal: getActiveLanguage().name, vraag, antwoord, juist })
+                });
+                const d = await r.json();
+                if (!r.ok) throw new Error(d.error || 'AI-fout');
+                return d.tekst;
+            }
+        };
+
         const LeerFlow = {
             day: null, steps: [], idx: 0, goedCount: 0, foutCount: 0,
             combo: 0, maxCombo: 0, xp: 0, startTime: 0, _active: false, _fbActive: false,
@@ -15746,6 +15790,21 @@ ONDERWERP: ${gesprekTopic}`;
                 });
                 // invul-stappen
                 this.shuffle(d.blanks).slice(0, 3).forEach(b => oef.push({ type: 'invul', prompt: b.prompt, antwoord: b.answer, hint: b.hint }));
+                // 🤖 AI: verse zinnen uit de cache mixen (max 2, alleen als eerder opgehaald)
+                try {
+                    const ai = LeerAI.cache(day);
+                    if (ai && ai.length) {
+                        this.shuffle(ai).slice(0, 2).forEach((z, i) => {
+                            const woorden = z.doel.replace(/[.!?—;:]/g, '').split(/\s+/).filter(Boolean);
+                            if (i === 0 && woorden.length >= 2 && woorden.length <= 9) {
+                                const afleiders = this.shuffle(d.zinnen.flatMap(x => x.doel.replace(/[.!?—;:]/g, '').split(/\s+/))).slice(0, 2);
+                                oef.push({ type: 'woordbank', nl: z.nl, woorden, tegels: this.shuffle([...woorden, ...afleiders]), zin: z.doel, ai: true });
+                            } else {
+                                oef.push({ type: 'typen', vraag: z.nl, antwoord: z.doel, tag: '🤖 Verse zin — vertaal', ai: true });
+                            }
+                        });
+                    }
+                } catch(e) {}
                 // theorie-kaarten verweven: kaart → 3-4 oefeningen → kaart → ...
                 const stappen = [];
                 const oefPerBlok = Math.max(2, Math.ceil(oef.length / Math.max(1, d.theorie.length)));
@@ -15764,6 +15823,8 @@ ONDERWERP: ${gesprekTopic}`;
                 this.checkpoint = null;
                 this.steps = this.buildSteps(day);
                 if (!this.steps.length) { alert('Deze les heeft nog geen oefeningen.'); return; }
+                // Op de achtergrond verse AI-zinnen ophalen voor deze en de volgende les
+                try { LeerAI.refresh(day); if (day < getAllDays().length) LeerAI.refresh(day + 1); } catch(e) {}
                 this._begin();
             },
             // Checkpoint: 10 gemixte vragen uit de hele sectie; ≥8 goed = sectie voltooid.
@@ -15833,7 +15894,7 @@ ONDERWERP: ${gesprekTopic}`;
                         b.querySelectorAll('.lf-mc-opt').forEach(x => x.disabled = true);
                         const ok = this.klopt(btn.dataset.v, s.juist);
                         btn.classList.add(ok ? 'goed' : 'fout');
-                        this.beoordeel(ok, s.juist, s);
+                        this.beoordeel(ok, s.juist, s, null, btn.dataset.v);
                     }));
                 } else if (s.type === 'typen') {
                     b.innerHTML = `<div class="session-card"><span class="ses-tag">${s.tag}</span><p class="ses-prompt lf-groot">${s.vraag}</p><input type="text" class="ses-input" id="lfInput" placeholder="Typ je antwoord…" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="ses-hint">Accenten zijn niet verplicht</div></div>`;
@@ -15858,7 +15919,7 @@ ONDERWERP: ${gesprekTopic}`;
                     }));
                     check.onclick = () => {
                         const gemaakt = [...ans.children].map(t => t.dataset.w).join(' ');
-                        this.beoordeel(this.norm(gemaakt) === this.norm(s.woorden.join(' ')), s.zin, s);
+                        this.beoordeel(this.norm(gemaakt) === this.norm(s.woorden.join(' ')), s.zin, s, null, gemaakt);
                     };
                 } else if (s.type === 'match') {
                     b.innerHTML = `<div class="session-card"><span class="ses-tag">Koppel de paren</span><div class="lf-match"><div class="lf-match-col" id="lfML">${this.shuffle(s.paren).map(p => `<button class="lf-match-item" data-k="${p.w.replace(/"/g, '&quot;')}">${p.w}</button>`).join('')}</div><div class="lf-match-col" id="lfMR">${this.shuffle(s.paren).map(p => `<button class="lf-match-item" data-k="${p.w.replace(/"/g, '&quot;')}">${p.m}</button>`).join('')}</div></div></div>`;
@@ -15886,10 +15947,10 @@ ONDERWERP: ${gesprekTopic}`;
                 const check = this.els.check;
                 inp.addEventListener('input', () => { check.disabled = !inp.value.trim(); });
                 inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !check.disabled) { e.preventDefault(); check.onclick(); } });
-                check.onclick = () => this.beoordeel(this.klopt(inp.value, antwoord), toonAntwoord || antwoord, stap);
+                check.onclick = () => this.beoordeel(this.klopt(inp.value, antwoord), toonAntwoord || antwoord, stap, null, inp.value);
                 setTimeout(() => inp.focus(), 60);
             },
-            beoordeel(ok, juisteAntwoord, stap, eigenTekst) {
+            beoordeel(ok, juisteAntwoord, stap, eigenTekst, gebruikersAntwoord) {
                 if (ok) {
                     this.goedCount++;
                     this.combo++; this.maxCombo = Math.max(this.maxCombo, this.combo);
@@ -15920,6 +15981,24 @@ ONDERWERP: ${gesprekTopic}`;
                 const n = document.getElementById('lfNextBtn');
                 n.addEventListener('click', () => { this.idx++; this.render(); });
                 setTimeout(() => { try { n.focus(); } catch(e) {} }, 30);
+                // 🤖 "Leg uit" bij een fout antwoord — alleen voor ingelogde gebruikers
+                if (!ok && juisteAntwoord && typeof currentUser !== 'undefined' && currentUser) {
+                    const slot = document.getElementById('lfUitlegSlot');
+                    if (slot) {
+                        slot.innerHTML = '<button class="lf-uitleg-btn" id="lfUitlegBtn">🤖 Leg uit waarom</button>';
+                        const vraagTekst = (stap && (stap.nl || stap.vraag || stap.prompt || stap.woord)) || '';
+                        document.getElementById('lfUitlegBtn').onclick = async (e) => {
+                            e.stopPropagation();
+                            slot.innerHTML = '<div class="lf-uitleg-tekst">🤖 Even denken…</div>';
+                            try {
+                                const t = await LeerAI.legUit(vraagTekst, gebruikersAntwoord || '(leeg)', juisteAntwoord);
+                                slot.innerHTML = '<div class="lf-uitleg-tekst">🤖 ' + t + '</div>';
+                            } catch(err) {
+                                slot.innerHTML = '<div class="lf-uitleg-tekst">De uitleg is even niet beschikbaar.</div>';
+                            }
+                        };
+                    }
+                }
             },
             hideFb() { this.els.feedback.classList.remove('visible'); this._fbActive = false; },
             finish() {
@@ -16042,7 +16121,10 @@ ONDERWERP: ${gesprekTopic}`;
         .lf-eind-btn:active { transform:translateY(3px); box-shadow:none; }
         .section-test-btn { display:block; margin:0 auto 0.4rem; background:none; border:2px dashed var(--ochre,#d9a441); color:var(--deep-blue,#5a4632); border-radius:99px; padding:0.4rem 1rem; font-family:inherit; font-size:0.85rem; font-weight:700; cursor:pointer; opacity:0.85; transition:all .15s; }
         .section-test-btn:hover { opacity:1; background:rgba(217,164,65,0.12); transform:translateY(-1px); }
-        [data-theme="dark"] .section-test-btn { color:#f5ecd9; }`;
+        [data-theme="dark"] .section-test-btn { color:#f5ecd9; }
+        .lf-uitleg-btn { background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.5); color:inherit; border-radius:99px; padding:0.35rem 0.9rem; font-family:inherit; font-size:0.88rem; cursor:pointer; margin:0.4rem 0; }
+        .lf-uitleg-btn:hover { background:rgba(255,255,255,0.35); }
+        .lf-uitleg-tekst { font-size:0.92rem; line-height:1.45; background:rgba(255,255,255,0.18); border-radius:10px; padding:0.6rem 0.8rem; margin:0.4rem 0; text-align:left; max-width:480px; }`;
             document.head.appendChild(css);
         })();
 
