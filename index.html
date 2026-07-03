@@ -1809,6 +1809,83 @@
         .flashcard-face { border-radius: 18px; box-shadow: var(--v3-schaduw); }
         .flashcard-front { border-color: var(--v3-rand); }
         .flashcard-back { background: linear-gradient(135deg, #E85D3D, #C4432A); }
+
+        /* ================================================================
+           ===  v3 THEORIE-RESTYLE — de lesinhoud zelf  ==================
+           ================================================================ */
+        #lessonContent h2 {
+            font-size: 1.5rem; font-weight: 800; color: var(--v3-ink);
+            border: none; padding-bottom: 0;
+        }
+        #lessonContent h3 {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 1.18rem; font-weight: 800; color: var(--v3-ink);
+            margin: 2.2rem 0 0.9rem; padding: 0 0 0.5rem;
+            border-bottom: 2px solid var(--v3-rand);
+        }
+        #lessonContent h4 {
+            font-size: 0.98rem; font-weight: 700; color: var(--terracotta);
+            margin: 1.6rem 0 0.6rem; letter-spacing: 0.1px;
+        }
+        #lessonContent .grammar-box {
+            position: relative;
+            background: var(--warm-white);
+            border: 1px solid var(--v3-rand);
+            border-left: 4px solid var(--ochre);
+            border-radius: 14px;
+            padding: 0.95rem 1.05rem;
+            box-shadow: 0 3px 12px rgba(64,46,32,0.05);
+            line-height: 1.55;
+        }
+        #lessonContent .grammar-box ul { margin: 0.3rem 0 0.2rem 1.1rem; }
+        #lessonContent .grammar-box li { margin-bottom: 0.25rem; }
+        #lessonContent .example-box {
+            background: var(--warm-white);
+            border: 1px solid var(--v3-rand);
+            border-left: 4px solid var(--terracotta);
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            margin: 0.55rem 0;
+            box-shadow: 0 3px 12px rgba(64,46,32,0.05);
+        }
+        #lessonContent .example-spanish {
+            font-size: 1.06rem; font-weight: 700; color: var(--terracotta);
+            font-style: normal; margin-bottom: 0.15rem;
+        }
+        #lessonContent .conjugation-table {
+            border-collapse: separate; border-spacing: 0;
+            border-radius: 14px; overflow: hidden;
+            border: 1px solid var(--v3-rand);
+            box-shadow: 0 3px 12px rgba(64,46,32,0.05);
+            width: 100%;
+        }
+        #lessonContent .conjugation-table th { background: var(--terracotta); color: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; border: none; padding: 0.55rem 0.7rem; }
+        #lessonContent .conjugation-table td { border: none; border-top: 1px solid var(--v3-rand); padding: 0.5rem 0.7rem; }
+        #lessonContent .conjugation-table tr:nth-child(even) td { background: var(--v3-zacht); }
+        #lessonContent .vocab-grid { gap: 0.55rem; }
+        #lessonContent .vocab-item {
+            background: var(--warm-white);
+            border: 1px solid var(--v3-rand);
+            border-radius: 14px;
+            padding: 0.65rem 0.8rem;
+            box-shadow: 0 2px 8px rgba(64,46,32,0.04);
+            transition: transform 0.12s, box-shadow 0.12s;
+        }
+        #lessonContent .vocab-item:hover { transform: translateY(-2px); box-shadow: var(--v3-schaduw); }
+        #lessonContent .vocab-word { color: var(--terracotta); font-weight: 700; font-size: 1rem; cursor: pointer; font-family: 'Outfit', sans-serif; }
+        #lessonContent .vocab-word:hover::after { content: ' 🔊'; font-size: 0.8rem; }
+        #lessonContent .vocab-meaning { opacity: 0.75; font-size: 0.88rem; }
+        #lessonContent .inline-oef {
+            background: linear-gradient(135deg, rgba(233,162,59,0.10), rgba(232,93,61,0.07));
+            border: 1.5px solid rgba(233,162,59,0.45);
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+            margin: 1.3rem 0;
+        }
+        #lessonContent .inline-oef-header { font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--v3-ink); }
+        #lessonContent .inline-blank, #lessonContent .inline-zin-input { border-radius: 10px; font-family: 'Outfit', sans-serif; }
+        .speak-btn, .copy-btn { opacity: 0.45; transition: opacity 0.15s, transform 0.1s; }
+        .speak-btn:hover, .copy-btn:hover { opacity: 1; transform: scale(1.12); }
     </style>
 </head>
 <body>
@@ -10331,6 +10408,22 @@
                     wrap.appendChild(tooltip);
                     nodesWrap.appendChild(wrap);
                 }
+                // 🎭 Verhaal van deze sectie (Spaans): een aparte paarse knoop
+                try {
+                    const vh = (typeof getVerhalen === 'function') ? getVerhalen().find(v => v.sectie === sIdx + 1) : null;
+                    if (vh) {
+                        const vWrap = document.createElement('div');
+                        vWrap.className = 'path-verhaal-wrap';
+                        const af = verhaalGedaan(vh.id);
+                        vWrap.innerHTML = `<button class="path-verhaal-btn" aria-label="Verhaal: ${vh.titel}">
+                            <span class="pv-emoji">${vh.emoji}</span>
+                            <span>Verhaal: ${vh.titel}</span>
+                            ${af ? '<span class="pv-af">✓ gelezen</span>' : ''}
+                        </button>`;
+                        vWrap.querySelector('button').onclick = () => { try { Verhaal.start(vh.id); } catch(e) { console.warn(e); } };
+                        nodesWrap.appendChild(vWrap);
+                    }
+                } catch(e) {}
             });
             try { renderHero(); } catch(e) {}
             // Keep legacy daySelector in sync (used by progress overview links)
@@ -15681,6 +15774,11 @@ ONDERWERP: ${gesprekTopic}`;
                 const wordEl = el.querySelector('.vocab-word');
                 if (!wordEl || el.querySelector('.star-btn')) return;
                 const word = wordEl.textContent.trim();
+                // Tik op het woord = uitspraak horen
+                if (!wordEl._spreekW) {
+                    wordEl._spreekW = 1;
+                    wordEl.addEventListener('click', () => spreekZin(word.replace(/\s*\/.*$/, '')));
+                }
                 const starBtn = document.createElement('button');
                 starBtn.className = 'star-btn' + (starredWords.has(word) ? ' starred' : '');
                 starBtn.textContent = starredWords.has(word) ? '★' : '☆';
@@ -16025,6 +16123,223 @@ ONDERWERP: ${gesprekTopic}`;
             document.head.appendChild(css);
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderQuests);
             else setTimeout(renderQuests, 0);
+        })();
+
+        // ============================================================
+        // === VERHALEN — interactieve Spaanse dialogen per sectie ====
+        // === (Duolingo Stories-stijl: regel voor regel, met TTS,  ===
+        // ===  tikbare woorden en begripsvragen tussendoor)        ===
+        // ============================================================
+        const VERHALEN_es = [{"id":"verhaal-s1","sectie":1,"titel":"La profesora nueva","emoji":"☕","intro":"Tom, een Nederlandse student, zoekt een plekje in een druk café in Madrid en raakt aan de praat met Lucía.","regels":[{"spreker":"Lucía","es":"¡Hola! ¿Cómo estás?","nl":"Hoi! Hoe gaat het?"},{"spreker":"Tom","es":"Bien, gracias. Soy Tom. ¿Y tú?","nl":"Goed, dank je. Ik ben Tom. En jij?"},{"spreker":"Lucía","es":"Soy Lucía. ¿Eres inglés?","nl":"Ik ben Lucía. Ben je Engels?"},{"spreker":"Tom","es":"No, soy holandés. Soy de Ámsterdam.","nl":"Nee, ik ben Nederlander. Ik kom uit Amsterdam."},{"spreker":"Lucía","es":"¡Qué bien! ¿Hablas español?","nl":"Wat leuk! Spreek je Spaans?"},{"spreker":"Tom","es":"Hablo un poco. Estudio español aquí en Madrid.","nl":"Ik spreek een beetje. Ik studeer hier in Madrid Spaans."},{"spreker":"Lucía","es":"¿Dónde estudias? Yo estudio en la universidad.","nl":"Waar studeer je? Ik studeer aan de universiteit."},{"spreker":"Tom","es":"Estudio en la academia Sol. La profesora es muy simpática.","nl":"Ik zit op taalschool Sol. De lerares is heel aardig."},{"spreker":"Lucía","es":"¿La academia Sol? ¡Yo trabajo en la academia Sol!","nl":"Taalschool Sol? Ik wérk bij taalschool Sol!"},{"spreker":"Tom","es":"¿Trabajas allí? ¿Eres la secretaria?","nl":"Werk je daar? Ben je de secretaresse?"},{"spreker":"Lucía","es":"No, no soy la secretaria. Soy la profesora nueva.","nl":"Nee, ik ben niet de secretaresse. Ik ben de nieuwe lerares."},{"spreker":"Tom","es":"¡No! ¿Tú eres mi profesora? ¡Qué vergüenza!","nl":"Nee toch! Ben jíj mijn lerares? Wat gênant!"},{"spreker":"Lucía","es":"Sí. Tu español es bueno, Tom. Bueno... más o menos.","nl":"Ja. Je Spaans is goed, Tom. Nou ja... redelijk goed."},{"spreker":"Tom","es":"El mundo es pequeño. ¿La primera clase es aquí, hoy?","nl":"Wat is de wereld klein. Is de eerste les hier, vandaag?"}],"vragen":[{"na":3,"vraag":"Waar komt Tom vandaan?","opties":["Uit Amsterdam","Uit Londen","Uit Madrid"],"juist":"Uit Amsterdam"},{"na":5,"vraag":"Wat doet Tom in Madrid?","opties":["Hij studeert er Spaans","Hij werkt er in een café","Hij is er op vakantie"],"juist":"Hij studeert er Spaans"},{"na":8,"vraag":"Waarom reageert Lucía verrast als Tom over taalschool Sol vertelt?","opties":["Zij werkt daar zelf","Zij studeert daar ook","Zij woont naast de school"],"juist":"Zij werkt daar zelf"},{"na":10,"vraag":"Wie blijkt Lucía te zijn?","opties":["De nieuwe lerares van de taalschool","De secretaresse van de taalschool","Een studente van Toms klas"],"juist":"De nieuwe lerares van de taalschool"},{"na":13,"vraag":"Wat vraagt Tom aan het einde?","opties":["Of de eerste les vandaag hier in het café is","Of Lucía een koffie wil drinken","Of hij terug moet naar Amsterdam"],"juist":"Of de eerste les vandaag hier in het café is"}],"glossarium":[{"es":"holandés","nl":"Nederlands / Nederlander"},{"es":"un poco","nl":"een beetje"},{"es":"aquí","nl":"hier"},{"es":"allí","nl":"daar"},{"es":"la academia","nl":"de taalschool"},{"es":"la profesora","nl":"de lerares"},{"es":"la secretaria","nl":"de secretaresse"},{"es":"simpática","nl":"aardig, sympathiek"},{"es":"¡qué vergüenza!","nl":"wat gênant!"},{"es":"más o menos","nl":"min of meer, redelijk"},{"es":"el mundo","nl":"de wereld"},{"es":"¡qué bien!","nl":"wat leuk!"}]},{"id":"verhaal-s2","sectie":2,"titel":"Jamón para la fiesta","emoji":"🛒","intro":"Carmen neemt haar Nederlandse vriend Daan mee naar de beroemde markt La Boquería in Barcelona om eten te kopen voor een feestje.","regels":[{"spreker":"Carmen","es":"Daan, este es el famoso mercado de La Boquería.","nl":"Daan, dit is de beroemde markt La Boquería."},{"spreker":"Daan","es":"¡Qué bonito! Hay muchas frutas y muchos colores.","nl":"Wat mooi! Er is hier zoveel fruit en er zijn zoveel kleuren!"},{"spreker":"Carmen","es":"Necesitamos jamón, queso y fruta para la fiesta.","nl":"We hebben ham, kaas en fruit nodig voor het feestje."},{"spreker":"Daan","es":"Yo prefiero el queso. ¿A ti te gusta el jamón?","nl":"Ik heb liever kaas. Hou jij van ham?"},{"spreker":"Carmen","es":"Me encanta el jamón. Es muy típico de España.","nl":"Ik ben dol op ham. Het is echt typisch Spaans."},{"spreker":"Daan","es":"Vale. ¿Cuánto dinero tenemos para todo?","nl":"Oké. Hoeveel geld hebben we voor alles?"},{"spreker":"Carmen","es":"¡Ay, no! No tengo mi cartera. Está en casa.","nl":"O nee! Ik heb mijn portemonnee niet bij me. Die ligt thuis."},{"spreker":"Daan","es":"Tranquila, yo tengo veinte euros en el bolsillo.","nl":"Rustig maar, ik heb twintig euro op zak."},{"spreker":"Carmen","es":"¿Veinte euros? El jamón bueno es muy caro aquí.","nl":"Twintig euro? Goede ham is hier hartstikke duur."},{"spreker":"Daan","es":"¿Puedo comprar solo queso? El queso es más barato.","nl":"Kan ik dan alleen kaas kopen? Kaas is goedkoper."},{"spreker":"Carmen","es":"Hay otra solución: conozco al señor del jamón.","nl":"Er is nog een oplossing: ik ken de hamverkoper."},{"spreker":"Daan","es":"¿Y él hace descuentos para los amigos?","nl":"En geeft hij korting aan vrienden?"},{"spreker":"Carmen","es":"¡Claro! Es amigo de mi madre. Siempre hace buenos precios.","nl":"Zeker! Hij is een vriend van mijn moeder en geeft altijd een goede prijs."},{"spreker":"Daan","es":"Me encanta este país: problemas pequeños, jamón grande.","nl":"Ik ben dol op dit land: kleine problemen, grote ham."}],"vragen":[{"na":2,"vraag":"Waarom zijn Carmen en Daan op de markt?","opties":["Ze kopen eten voor een feestje","Ze zoeken een cadeau voor Carmens moeder","Ze willen er samen ontbijten"],"juist":"Ze kopen eten voor een feestje"},{"na":6,"vraag":"Welk probleem ontdekt Carmen?","opties":["Haar portemonnee ligt thuis","De markt gaat bijna sluiten","De ham is uitverkocht"],"juist":"Haar portemonnee ligt thuis"},{"na":9,"vraag":"Wat stelt Daan voor als oplossing?","opties":["Alleen kaas kopen, want dat is goedkoper","Naar huis gaan om de portemonnee te halen","Geld lenen van de hamverkoper"],"juist":"Alleen kaas kopen, want dat is goedkoper"},{"na":12,"vraag":"Waarom krijgt Carmen toch een goede prijs voor de ham?","opties":["De verkoper is een vriend van haar moeder","Er is vandaag uitverkoop op de markt","Daan onderhandelt heel goed"],"juist":"De verkoper is een vriend van haar moeder"},{"na":13,"vraag":"Hoe voelt Daan zich aan het einde van het verhaal?","opties":["Blij, hij is enthousiast over Spanje","Boos, omdat de ham zo duur is","Verdrietig, hij mist Nederland"],"juist":"Blij, hij is enthousiast over Spanje"}],"glossarium":[{"es":"el mercado","nl":"de markt"},{"es":"hay","nl":"er is / er zijn"},{"es":"el jamón","nl":"de ham"},{"es":"la cartera","nl":"de portemonnee"},{"es":"el bolsillo","nl":"de (broek)zak"},{"es":"caro","nl":"duur"},{"es":"barato","nl":"goedkoop"},{"es":"conozco","nl":"ik ken"},{"es":"el descuento","nl":"de korting"},{"es":"me encanta","nl":"ik ben er dol op"},{"es":"tranquila","nl":"rustig maar (tegen een vrouw)"},{"es":"la fiesta","nl":"het feest(je)"}]},{"id":"verhaal-s3","sectie":3,"titel":"Un viaje secreto","emoji":"🤫","intro":"Mark wil zijn vriendin verrassen met een reis naar Sevilla en vraagt zijn collega Sofía om hulp bij de cadeaus en de route.","regels":[{"spreker":"Mark","es":"Sofía, quiero planear un viaje sorpresa para mi novia.","nl":"Sofía, ik wil een verrassingsreis plannen voor mijn vriendin."},{"spreker":"Sofía","es":"¡Qué romántico! ¿Adónde la quieres llevar?","nl":"Wat romantisch! Waar wil je haar mee naartoe nemen?"},{"spreker":"Mark","es":"A Sevilla. Ella siempre habla de esa ciudad.","nl":"Naar Sevilla. Ze heeft het altijd over die stad."},{"spreker":"Sofía","es":"Perfecto. ¿Cuándo se lo vas a decir?","nl":"Perfect. Wanneer ga je het haar vertellen?"},{"spreker":"Mark","es":"No se lo voy a decir. Es una sorpresa total.","nl":"Ik ga het haar niet vertellen. Het is een totale verrassing."},{"spreker":"Sofía","es":"¿Y su maleta? Alguien la tiene que preparar.","nl":"En haar koffer dan? Iemand moet die inpakken."},{"spreker":"Mark","es":"¡Uy, es verdad! No pienso en esos detalles.","nl":"Oei, dat is waar! Aan zulke details denk ik niet."},{"spreker":"Sofía","es":"Tranquilo, yo hablo con su hermana. Ella nos puede ayudar.","nl":"Rustig maar, ik praat wel met haar zus. Zij kan ons helpen."},{"spreker":"Mark","es":"Gracias. También quiero comprarle un regalo. ¿Flores o chocolate?","nl":"Bedankt. Ik wil ook een cadeau voor haar kopen. Bloemen of chocola?"},{"spreker":"Sofía","es":"Chocolate no, por favor. Ella trabaja en una chocolatería.","nl":"Geen chocola, alsjeblieft. Ze werkt nota bene in een chocolaterie."},{"spreker":"Mark","es":"Claro... Entonces le compro un abanico español.","nl":"O ja... Dan koop ik een Spaanse waaier voor haar."},{"spreker":"Sofía","es":"¡Perfecto para el calor de Sevilla! ¿Cómo van a viajar?","nl":"Perfect voor de hitte in Sevilla! Hoe gaan jullie reizen?"},{"spreker":"Mark","es":"En tren, por la mañana. Es rápido y cómodo.","nl":"Met de trein, 's ochtends. Lekker snel en comfortabel."},{"spreker":"Sofía","es":"¡Buena idea! Pero yo también quiero algo: ¡chocolate de su tienda!","nl":"Goed idee! Maar ik wil ook iets: chocola uit haar winkel!"}],"vragen":[{"na":2,"vraag":"Waarom kiest Mark juist Sevilla als bestemming?","opties":["Zijn vriendin praat er altijd over","Hij heeft er familie wonen","De tickets zijn er goedkoop"],"juist":"Zijn vriendin praat er altijd over"},{"na":5,"vraag":"Welk probleem ziet Sofía bij de verrassing?","opties":["Iemand moet de koffer van zijn vriendin inpakken","Zijn vriendin houdt niet van reizen","Het hotel in Sevilla is al vol"],"juist":"Iemand moet de koffer van zijn vriendin inpakken"},{"na":9,"vraag":"Waarom vindt Sofía chocola geen goed cadeau?","opties":["Zijn vriendin werkt zelf in een chocolaterie","Zijn vriendin is allergisch voor chocola","Chocola smelt in de hitte van Sevilla"],"juist":"Zijn vriendin werkt zelf in een chocolaterie"},{"na":12,"vraag":"Hoe gaan Mark en zijn vriendin naar Sevilla reizen?","opties":["Met de trein in de ochtend","Met het vliegtuig in de avond","Met de auto van haar zus"],"juist":"Met de trein in de ochtend"},{"na":13,"vraag":"Wat wil Sofía als bedankje voor haar hulp?","opties":["Chocola uit de winkel van Marks vriendin","Een Spaanse waaier uit Sevilla","Een treinkaartje naar Sevilla"],"juist":"Chocola uit de winkel van Marks vriendin"}],"glossarium":[{"es":"el viaje sorpresa","nl":"de verrassingsreis"},{"es":"la novia","nl":"de vriendin (geliefde)"},{"es":"llevar","nl":"meenemen, brengen"},{"es":"se lo vas a decir","nl":"je gaat het haar vertellen"},{"es":"la maleta","nl":"de koffer"},{"es":"los detalles","nl":"de details"},{"es":"el regalo","nl":"het cadeau"},{"es":"comprarle","nl":"voor haar/hem kopen"},{"es":"el abanico","nl":"de waaier"},{"es":"el calor","nl":"de hitte, de warmte"},{"es":"por la mañana","nl":"'s ochtends"},{"es":"cómodo","nl":"comfortabel"}]},{"id":"verhaal-s4","sectie":4,"titel":"El error maravilloso","emoji":"☀️","intro":"Elena vertelt haar buurman Pablo over haar chaotische maar prachtige zomervakantie in Andalusië.","regels":[{"spreker":"Pablo","es":"¡Hola, Elena! ¿Qué tal tus vacaciones en Andalucía?","nl":"Hoi Elena! Hoe was je vakantie in Andalusië?"},{"spreker":"Elena","es":"Fueron increíbles, pero también un poco caóticas.","nl":"Geweldig, maar ook een tikje chaotisch."},{"spreker":"Pablo","es":"¿Caóticas? Cuéntame, ¿qué pasó?","nl":"Chaotisch? Vertel, wat is er gebeurd?"},{"spreker":"Elena","es":"Llegamos a Sevilla y hacía muchísimo calor.","nl":"We kwamen aan in Sevilla en het was bloedheet."},{"spreker":"Pablo","es":"Claro, en agosto Sevilla es más calurosa que el desierto.","nl":"Logisch, in augustus is Sevilla heter dan de woestijn."},{"spreker":"Elena","es":"Además, el hotel perdió nuestra reserva. Estaba completamente lleno.","nl":"Bovendien was het hotel onze reservering kwijt. Het zat helemaal vol."},{"spreker":"Pablo","es":"¡Qué desastre! ¿Y qué hicisteis?","nl":"Wat een ramp! En wat deden jullie toen?"},{"spreker":"Elena","es":"Un camarero simpático nos ofreció la casa de su abuela.","nl":"Een vriendelijke ober bood ons het huis van zijn oma aan."},{"spreker":"Pablo","es":"¿En serio? ¿Y cómo era la casa?","nl":"Serieus? En hoe was dat huis?"},{"spreker":"Elena","es":"Era pequeña pero preciosa, con un patio lleno de flores.","nl":"Klein maar schitterend, met een binnenplaats vol bloemen."},{"spreker":"Pablo","es":"Suena mejor que un hotel normal.","nl":"Dat klinkt beter dan een gewoon hotel."},{"spreker":"Elena","es":"Su comida era buenísima. Comí el mejor gazpacho de mi vida.","nl":"Haar eten was overheerlijk. Ik at er de beste gazpacho van mijn leven."},{"spreker":"Pablo","es":"Entonces, ¿el problema fue realmente una suerte?","nl":"Dus dat probleem was eigenlijk een geluk bij een ongeluk?"},{"spreker":"Elena","es":"Exactamente. Fue el error más maravilloso del verano.","nl":"Precies. Het was de mooiste vergissing van de zomer."}],"vragen":[{"na":3,"vraag":"Hoe was het weer toen Elena in Sevilla aankwam?","opties":["Het was bloedheet","Het regende de hele dag","Het was fris en winderig"],"juist":"Het was bloedheet"},{"na":5,"vraag":"Welk probleem was er met het hotel?","opties":["Het hotel was hun reservering kwijt en zat vol","Het hotel was veel te duur geworden","Het hotel lag te ver van het centrum"],"juist":"Het hotel was hun reservering kwijt en zat vol"},{"na":7,"vraag":"Wie hielp Elena aan een slaapplek?","opties":["Een vriendelijke ober","De manager van het hotel","Een taxichauffeur"],"juist":"Een vriendelijke ober"},{"na":11,"vraag":"Wat vond Elena van het eten bij de oma?","opties":["Ze at er de beste gazpacho van haar leven","Ze vond het eten te zout","Ze miste het eten van het hotel"],"juist":"Ze at er de beste gazpacho van haar leven"},{"na":13,"vraag":"Hoe kijkt Elena terug op het hotelprobleem?","opties":["Als een vergissing die geweldig uitpakte","Als de ergste ervaring van de zomer","Als een reden om nooit meer terug te gaan"],"juist":"Als een vergissing die geweldig uitpakte"}],"glossarium":[{"es":"las vacaciones","nl":"de vakantie"},{"es":"caótico/caótica","nl":"chaotisch"},{"es":"caluroso/calurosa","nl":"heet (klimaat)"},{"es":"el desierto","nl":"de woestijn"},{"es":"la reserva","nl":"de reservering"},{"es":"el camarero","nl":"de ober"},{"es":"ofrecer (ofreció)","nl":"aanbieden (bood aan)"},{"es":"el patio","nl":"de binnenplaats"},{"es":"lleno de","nl":"vol met"},{"es":"buenísimo/buenísima","nl":"superlekker, ontzettend goed"},{"es":"la suerte","nl":"het geluk"},{"es":"maravilloso","nl":"prachtig, geweldig"}]},{"id":"verhaal-s5","sectie":5,"titel":"Sueña en grande","emoji":"✈️","intro":"Miguel heeft een baan aangeboden gekregen in Canada, maar hij twijfelt — gelukkig zit oma Rosa klaar met wijze raad en een verrassende onthulling.","regels":[{"spreker":"Miguel","es":"Abuela, he recibido una oferta de trabajo en Canadá.","nl":"Oma, ik heb een baanaanbod uit Canada gekregen."},{"spreker":"Rosa","es":"¡Qué bien! ¿Y por qué pones cara de funeral?","nl":"Wat goed! En waarom zet je dan zo'n begrafenisgezicht op?"},{"spreker":"Miguel","es":"Es que tengo miedo. No conozco a nadie allí.","nl":"Ik ben gewoon bang. Ik ken daar helemaal niemand."},{"spreker":"Rosa","es":"Escucha, hijo. No tengas miedo de lo desconocido.","nl":"Luister, jongen. Wees niet bang voor het onbekende."},{"spreker":"Miguel","es":"No sé, abuela. Allí me sentiría muy solo.","nl":"Ik weet het niet, oma. Ik zou me daar heel eenzaam voelen."},{"spreker":"Rosa","es":"Si no lo intentas, te arrepentirás toda la vida.","nl":"Als je het niet probeert, heb je er je hele leven spijt van."},{"spreker":"Miguel","es":"Me gustaría aceptar, pero ¿quién cuidará tus plantas?","nl":"Ik zou graag ja zeggen, maar wie zorgt er dan voor jouw planten?"},{"spreker":"Rosa","es":"¿Mis plantas? Hijo, esas plantas son de plástico.","nl":"Mijn planten? Jongen, die planten zijn van plastic."},{"spreker":"Miguel","es":"¡¿De plástico?! ¡Las he regado cada domingo durante años!","nl":"Van plastic?! Ik heb ze jarenlang elke zondag water gegeven!"},{"spreker":"Rosa","es":"Lo sé. Por eso brillan tanto, cariño.","nl":"Weet ik. Daarom glanzen ze zo mooi, lieverd."},{"spreker":"Miguel","es":"Vale, voy a aceptar el trabajo. ¿Vendrás a visitarme?","nl":"Oké, ik ga de baan aannemen. Kom je me opzoeken?"},{"spreker":"Rosa","es":"Claro. Quiero que me enseñes todo Canadá.","nl":"Natuurlijk. Ik wil dat je me heel Canada laat zien."},{"spreker":"Miguel","es":"Espero que no haga demasiado frío para ti.","nl":"Ik hoop dat het daar niet te koud voor je is."},{"spreker":"Rosa","es":"Es importante que sueñes en grande. Yo llevaré guantes.","nl":"Het is belangrijk dat je groot droomt. Ik neem wel handschoenen mee."}],"vragen":[{"na":1,"vraag":"Hoe reageert oma Rosa op het nieuws van Miguel?","opties":["Ze plaagt hem omdat hij zo somber kijkt bij goed nieuws","Ze wordt boos dat hij wil vertrekken","Ze begint te huilen van blijdschap"],"juist":"Ze plaagt hem omdat hij zo somber kijkt bij goed nieuws"},{"na":5,"vraag":"Welk advies geeft Rosa aan Miguel?","opties":["Als hij het niet probeert, krijgt hij er zijn hele leven spijt van","Hij moet eerst meer geld sparen voordat hij vertrekt","Hij kan beter dicht bij zijn familie blijven"],"juist":"Als hij het niet probeert, krijgt hij er zijn hele leven spijt van"},{"na":9,"vraag":"Wat is de verrassing over de planten van oma Rosa?","opties":["Ze zijn van plastic, dus Miguels water geven was voor niets","Ze zijn allemaal doodgegaan omdat niemand ze verzorgde","Rosa heeft ze stiekem aan de buren gegeven"],"juist":"Ze zijn van plastic, dus Miguels water geven was voor niets"},{"na":10,"vraag":"Wat besluit Miguel uiteindelijk?","opties":["Hij gaat de baan in Canada aannemen","Hij blijft toch bij zijn oma in de buurt wonen","Hij vraagt om meer bedenktijd"],"juist":"Hij gaat de baan in Canada aannemen"},{"na":13,"vraag":"Hoe eindigt het gesprek tussen Miguel en Rosa?","opties":["Rosa belooft op bezoek te komen en neemt handschoenen mee","Rosa besluit met Miguel mee te verhuizen naar Canada","Miguel twijfelt toch weer en zegt de baan af"],"juist":"Rosa belooft op bezoek te komen en neemt handschoenen mee"}],"glossarium":[{"es":"una oferta de trabajo","nl":"een baanaanbod"},{"es":"cara de funeral","nl":"begrafenisgezicht (heel somber kijken)"},{"es":"lo desconocido","nl":"het onbekende"},{"es":"arrepentirse","nl":"spijt krijgen"},{"es":"cuidar","nl":"zorgen voor"},{"es":"regar","nl":"water geven (aan planten)"},{"es":"brillar","nl":"glanzen, schitteren"},{"es":"cariño","nl":"lieverd, schat"},{"es":"enseñar","nl":"laten zien"},{"es":"soñar en grande","nl":"groots dromen"},{"es":"los guantes","nl":"de handschoenen"}]}];
+        function getVerhalen() { return (typeof activeLangCode === 'undefined' || activeLangCode === 'es') ? VERHALEN_es : []; }
+        function verhaalGedaan(id) { try { return localStorage.getItem('dc_verhaal_' + id) === '1'; } catch(e) { return false; } }
+
+        const Verhaal = {
+            data: null, regelIdx: -1, fouten: 0, _active: false, _klaar: false,
+            ensureOverlay() {
+                if (document.getElementById('verhaalOverlay')) return;
+                const ov = document.createElement('div');
+                ov.id = 'verhaalOverlay';
+                ov.innerHTML = `
+                    <div class="vh-kop">
+                        <button class="vh-sluit" id="vhSluit" aria-label="Sluiten">×</button>
+                        <div class="vh-balk"><div class="vh-balk-vul" id="vhBalk"></div></div>
+                        <span class="vh-titel" id="vhTitel"></span>
+                    </div>
+                    <div class="vh-chat" id="vhChat"></div>
+                    <div class="vh-tip" id="vhTip" style="display:none;"></div>
+                    <div class="vh-voet"><button class="vh-verder" id="vhVerder">Verder</button></div>`;
+                document.body.appendChild(ov);
+                document.getElementById('vhSluit').addEventListener('click', () => this.exit());
+                document.getElementById('vhVerder').addEventListener('click', () => this.volgende());
+                document.addEventListener('keydown', (e) => {
+                    if (!this._active || e.key !== 'Enter') return;
+                    const v = document.getElementById('vhVerder');
+                    if (v && v.style.display !== 'none' && !v.disabled) { e.preventDefault(); v.click(); }
+                });
+            },
+            start(id) {
+                const vh = getVerhalen().find(v => v.id === id);
+                if (!vh) return;
+                this.ensureOverlay();
+                this.data = vh; this.regelIdx = -1; this.fouten = 0; this._active = true; this._klaar = false;
+                vh.vragen.forEach(q => { delete q._af; }); // vragen resetten bij herlezen
+                // glossarium-zoekstructuur (langste frase eerst)
+                this._gloss = [...vh.glossarium].sort((a, b) => b.es.split(' ').length - a.es.split(' ').length);
+                document.getElementById('vhTitel').textContent = vh.emoji + ' ' + vh.titel;
+                const chat = document.getElementById('vhChat');
+                chat.innerHTML = `<div class="vh-intro">${vh.intro}</div>`;
+                document.getElementById('vhBalk').style.width = '0%';
+                document.getElementById('verhaalOverlay').classList.add('open');
+                document.body.style.overflow = 'hidden';
+                this.toonVerder('Start ▶');
+                LeerSounds.tik();
+            },
+            exit() {
+                this._active = false;
+                const ov = document.getElementById('verhaalOverlay');
+                if (ov) ov.classList.remove('open');
+                document.body.style.overflow = '';
+                try { speechSynthesis.cancel(); } catch(e) {}
+            },
+            toonVerder(tekst) {
+                const v = document.getElementById('vhVerder');
+                v.style.display = ''; v.disabled = false; v.textContent = tekst || 'Verder';
+            },
+            verbergVerder() { document.getElementById('vhVerder').style.display = 'none'; },
+            norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[¿¡!?.,;:"'()]/g, '').trim(); },
+            // Spaanse tekst → spans, met glossariumwoorden tikbaar (langste frase wint)
+            maakTikbaar(zin) {
+                const tokens = zin.split(' ');
+                const html = [];
+                for (let i = 0; i < tokens.length; i++) {
+                    let match = null, lengte = 0;
+                    for (const g of this._gloss) {
+                        const n = g.es.split(' ').length;
+                        if (i + n > tokens.length) continue;
+                        const frase = tokens.slice(i, i + n).join(' ');
+                        if (this.norm(frase) === this.norm(g.es)) { match = g; lengte = n; break; }
+                    }
+                    if (match) {
+                        const frase = tokens.slice(i, i + lengte).join(' ');
+                        html.push(`<span class="vh-woord" data-nl="${match.nl.replace(/"/g, '&quot;')}">${frase}</span>`);
+                        i += lengte - 1;
+                    } else {
+                        html.push(tokens[i]);
+                    }
+                }
+                return html.join(' ');
+            },
+            volgende() {
+                // staat er nog een vraag klaar na de huidige regel?
+                const vraag = this.data.vragen.find(v => v.na === this.regelIdx && !v._af);
+                if (vraag) { this.toonVraag(vraag); return; }
+                this.regelIdx++;
+                if (this.regelIdx >= this.data.regels.length) { this.finish(); return; }
+                const r = this.data.regels[this.regelIdx];
+                const chat = document.getElementById('vhChat');
+                const kant = this.regelIdx % 2 === 0 ? 'links' : 'rechts';
+                const bubbel = document.createElement('div');
+                bubbel.className = 'vh-bubbel ' + kant;
+                bubbel.innerHTML = `
+                    <div class="vh-spreker">${r.spreker} <button class="vh-luister" title="Nog eens horen">🔊</button></div>
+                    <div class="vh-es">${this.maakTikbaar(r.es)}</div>
+                    <div class="vh-nl">${r.nl}</div>`;
+                chat.appendChild(bubbel);
+                bubbel.querySelector('.vh-luister').addEventListener('click', () => spreekZin(r.es));
+                bubbel.querySelectorAll('.vh-woord').forEach(w => w.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toonTip(w.textContent, w.dataset.nl);
+                }));
+                chat.scrollTop = chat.scrollHeight;
+                document.getElementById('vhBalk').style.width = Math.round(((this.regelIdx + 1) / this.data.regels.length) * 100) + '%';
+                try { spreekZin(r.es); } catch(e) {}
+                this.toonVerder('Verder');
+            },
+            toonTip(woord, nl) {
+                const tip = document.getElementById('vhTip');
+                tip.innerHTML = `<strong>${woord}</strong> = ${nl}`;
+                tip.style.display = '';
+                clearTimeout(this._tipT);
+                this._tipT = setTimeout(() => { tip.style.display = 'none'; }, 3500);
+                LeerSounds.tik();
+            },
+            toonVraag(vraag) {
+                this.verbergVerder();
+                const chat = document.getElementById('vhChat');
+                const kaart = document.createElement('div');
+                kaart.className = 'vh-vraag';
+                kaart.innerHTML = `
+                    <div class="vh-vraag-kop">❓ ${vraag.vraag}</div>
+                    <div class="vh-opties">${LeerFlow.shuffle(vraag.opties).map(o => `<button class="vh-optie" data-v="${o.replace(/"/g, '&quot;')}">${o}</button>`).join('')}</div>`;
+                chat.appendChild(kaart);
+                chat.scrollTop = chat.scrollHeight;
+                kaart.querySelectorAll('.vh-optie').forEach(b => b.addEventListener('click', () => {
+                    if (b.dataset.v === vraag.juist) {
+                        vraag._af = true;
+                        b.classList.add('goed');
+                        kaart.querySelectorAll('.vh-optie').forEach(x => x.disabled = true);
+                        LeerSounds.goed();
+                        setTimeout(() => this.volgende(), 550);
+                    } else {
+                        b.classList.add('fout'); b.disabled = true;
+                        this.fouten++;
+                        LeerSounds.fout();
+                    }
+                }));
+            },
+            finish() {
+                this._klaar = true;
+                this.verbergVerder();
+                const nieuw = !verhaalGedaan(this.data.id);
+                const xp = (this.fouten === 0 ? 35 : 25);
+                try { localStorage.setItem('dc_verhaal_' + this.data.id, '1'); } catch(e) {}
+                const chat = document.getElementById('vhChat');
+                const eind = document.createElement('div');
+                eind.className = 'vh-einde';
+                eind.innerHTML = `
+                    <div class="vh-einde-emoji">${this.fouten === 0 ? '🏆' : '🎉'}</div>
+                    <h3>Verhaal uitgelezen!</h3>
+                    <p>${this.fouten === 0 ? 'Alle vragen in één keer goed — foutloos!' : 'Goed gedaan — ' + this.fouten + ' misser' + (this.fouten > 1 ? 's' : '') + ' onderweg.'}</p>
+                    <div class="vh-einde-xp">+${xp} XP</div>
+                    <button class="vh-verder" id="vhEindKlaar">Klaar</button>`;
+                chat.appendChild(eind);
+                chat.scrollTop = chat.scrollHeight;
+                document.getElementById('vhBalk').style.width = '100%';
+                LeerSounds.fanfare();
+                try { awardXP(xp, 'Verhaal: ' + this.data.titel); } catch(e) {}
+                try { if (nieuw && typeof launchConfetti === 'function') launchConfetti(); } catch(e) {}
+                try { renderLessonPath(); } catch(e) {}
+                document.getElementById('vhEindKlaar').addEventListener('click', () => this.exit());
+            }
+        };
+        (function() {
+            const css = document.createElement('style');
+            css.textContent = `
+        #verhaalOverlay { position:fixed; inset:0; z-index:220; background:var(--cream,#FDF8F1); display:none; flex-direction:column; opacity:0; transition:opacity .25s; }
+        #verhaalOverlay.open { display:flex; opacity:1; }
+        .vh-kop { display:flex; align-items:center; gap:0.7rem; padding:0.7rem 1rem; }
+        .vh-sluit { background:none; border:none; font-size:1.6rem; cursor:pointer; opacity:0.6; line-height:1; }
+        .vh-sluit:hover { opacity:1; }
+        .vh-balk { flex:1; height:12px; background:rgba(0,0,0,0.08); border-radius:99px; overflow:hidden; }
+        .vh-balk-vul { height:100%; width:0%; background:linear-gradient(90deg,#E9A23B,#E85D3D); border-radius:99px; transition:width .4s ease; }
+        .vh-titel { font-family:'Outfit',sans-serif; font-weight:700; font-size:0.9rem; white-space:nowrap; }
+        .vh-chat { flex:1; overflow-y:auto; padding:1rem; max-width:640px; width:100%; margin:0 auto; }
+        .vh-intro { text-align:center; font-style:italic; opacity:0.7; margin:0.5rem 0 1.2rem; font-size:0.95rem; }
+        .vh-bubbel { max-width:85%; margin-bottom:0.9rem; padding:0.7rem 0.95rem; border-radius:16px; background:var(--warm-white,#fff); border:1px solid var(--v3-rand,#F0E4D4); box-shadow:0 3px 12px rgba(64,46,32,0.06); animation:vhIn .3s ease; }
+        .vh-bubbel.links { margin-right:auto; border-bottom-left-radius:4px; }
+        .vh-bubbel.rechts { margin-left:auto; border-bottom-right-radius:4px; background:var(--v3-zacht,#F8EFE2); }
+        @keyframes vhIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .vh-spreker { font-family:'Outfit',sans-serif; font-weight:700; font-size:0.78rem; color:var(--terracotta,#E85D3D); margin-bottom:0.2rem; }
+        .vh-luister { background:none; border:none; cursor:pointer; font-size:0.85rem; opacity:0.5; }
+        .vh-luister:hover { opacity:1; }
+        .vh-es { font-family:'Outfit',sans-serif; font-weight:600; font-size:1.08rem; line-height:1.45; }
+        .vh-nl { font-size:0.85rem; opacity:0.6; margin-top:0.2rem; }
+        .vh-woord { border-bottom:2px dotted var(--ochre,#E9A23B); cursor:pointer; border-radius:2px; }
+        .vh-woord:hover { background:rgba(233,162,59,0.18); }
+        .vh-tip { position:absolute; bottom:5.2rem; left:50%; transform:translateX(-50%); background:#3B3028; color:#fff; padding:0.55rem 1rem; border-radius:12px; font-size:0.92rem; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:5; max-width:90%; }
+        .vh-vraag { background:var(--warm-white,#fff); border:2px solid var(--ochre,#E9A23B); border-radius:16px; padding:0.9rem 1rem; margin:0.4rem 0 1rem; animation:vhIn .3s ease; }
+        .vh-vraag-kop { font-family:'Outfit',sans-serif; font-weight:700; margin-bottom:0.6rem; }
+        .vh-opties { display:grid; gap:0.5rem; }
+        .vh-optie { text-align:left; padding:0.65rem 0.85rem; border:2px solid var(--v3-rand,#F0E4D4); background:var(--warm-white,#fff); border-radius:12px; font-family:'Outfit',sans-serif; font-size:0.95rem; cursor:pointer; }
+        .vh-optie:hover:not(:disabled) { border-color:var(--ochre,#E9A23B); }
+        .vh-optie.goed { background:#d9f2d9; border-color:#2FA968; animation:dcPop .35s ease; }
+        .vh-optie.fout { background:#fde3e0; border-color:#E85D3D; animation:dcShake .4s ease; opacity:0.6; }
+        .vh-voet { padding:0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom)); max-width:640px; width:100%; margin:0 auto; }
+        .vh-verder { width:100%; background:var(--verde,#2FA968); color:#fff; border:none; border-radius:14px; padding:0.9rem; font-family:'Outfit',sans-serif; font-weight:800; font-size:1.05rem; cursor:pointer; box-shadow:0 4px 0 #23824F; }
+        .vh-verder:active { transform:translateY(3px); box-shadow:none; }
+        .vh-einde { text-align:center; padding:1.5rem 1rem; }
+        .vh-einde-emoji { font-size:3rem; }
+        .vh-einde-xp { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.4rem; color:var(--ochre,#E9A23B); margin:0.6rem 0 1rem; }
+        .vh-einde .vh-verder { max-width:280px; }
+        .path-verhaal-wrap { display:flex; justify-content:center; padding:0.5rem 0 0.8rem; }
+        .path-verhaal-btn { display:flex; align-items:center; gap:0.6rem; background:linear-gradient(135deg,#7C5CBF,#5B3FA0); color:#fff; border:none; border-radius:16px; padding:0.65rem 1.1rem; font-family:'Outfit',sans-serif; font-weight:700; font-size:0.92rem; cursor:pointer; box-shadow:0 5px 0 #47317E, 0 8px 20px rgba(124,92,191,0.35); transition:transform .1s; }
+        .path-verhaal-btn:hover { transform:translateY(-2px); }
+        .path-verhaal-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #47317E; }
+        .path-verhaal-btn .pv-emoji { font-size:1.25rem; }
+        .path-verhaal-btn .pv-af { background:rgba(255,255,255,0.25); border-radius:99px; padding:0.1rem 0.5rem; font-size:0.78rem; }
+        [data-theme="dark"] .vh-tip { background:#EDE3D2; color:#221C16; }`;
+            document.head.appendChild(css);
         })();
 
         // ---- AI-hulp: verse oefenzinnen + uitleg bij fouten (alleen ingelogd) ----
@@ -16685,7 +17000,7 @@ ONDERWERP: ${gesprekTopic}`;
         const FIREBASE_READY = !!(firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf('PLAK_HIER') === -1);
 
         const SYNC_KEYS_EXACT = ['spanish_app_state_v1','completed_days','current_day','xp_total','duocoengo_daily_goal','streak_count','streak_best','streak_last_date','starred_words','daily_lesson_date','uitdaging_done_date','duocoengo_active_lang'];
-        const SYNC_KEY_PREFIXES = ['dc-inline-','xp_day_','completed_days_','current_day_'];
+        const SYNC_KEY_PREFIXES = ['dc-inline-','xp_day_','completed_days_','current_day_','dc_verhaal_'];
         function _isSyncKey(k){ return SYNC_KEYS_EXACT.includes(k) || SYNC_KEY_PREFIXES.some(p => k.startsWith(p)); }
 
         // Bewaar de originele setItem en koppel auto-sync aan elke app-schrijfactie.
