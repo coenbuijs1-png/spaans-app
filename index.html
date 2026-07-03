@@ -16,7 +16,7 @@
     <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -1554,6 +1554,261 @@
             /* Paginering */
             @page { margin: 1.5cm; }
         }
+        /* ================================================================
+           ===  DUOCOENGO v3 — nieuwe visuele laag  =======================
+           ===  Modern, warm en speels: Outfit, zachte kaarten, diepe   ===
+           ===  schaduwen, app-achtige navigatie. Overschrijft de       ===
+           ===  belangrijkste componenten van de oude stylesheet.       ===
+           ================================================================ */
+        :root {
+            --terracotta: #E85D3D;
+            --ochre: #E9A23B;
+            --verde: #2FA968;
+            --deep-blue: #35434E;
+            --cream: #FDF8F1;
+            --warm-white: #FFFFFF;
+            --shadow: rgba(64, 46, 32, 0.10);
+            --v3-ink: #3B3028;
+            --v3-rand: #F0E4D4;
+            --v3-zacht: #F8EFE2;
+            --v3-schaduw: 0 10px 30px rgba(64,46,32,0.09), 0 2px 6px rgba(64,46,32,0.05);
+        }
+        [data-theme="dark"] {
+            --cream: #17130F;
+            --warm-white: #221C16;
+            --deep-blue: #E8DCC8;
+            --v3-ink: #EDE3D2;
+            --v3-rand: #372D24;
+            --v3-zacht: #2A231C;
+            --v3-schaduw: 0 10px 30px rgba(0,0,0,0.45);
+            --shadow: rgba(0,0,0,0.4);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Outfit', system-ui, sans-serif;
+            background: var(--cream);
+            color: var(--v3-ink);
+            letter-spacing: 0.1px;
+        }
+        h1, h2, h3, h4, .fc-word, .fc-meaning, .ses-prompt, .hero-titel {
+            font-family: 'Outfit', system-ui, sans-serif !important;
+            letter-spacing: -0.3px;
+        }
+        .container { max-width: 760px; padding-bottom: 5.5rem; }
+
+        /* --- Compacte app-header ------------------------------------- */
+        header {
+            background: linear-gradient(135deg, #E85D3D 0%, #D14A2E 55%, #B8422C 100%);
+            border: none !important;
+            border-radius: 22px;
+            padding: 1.1rem 1.2rem 1.15rem !important;
+            margin-bottom: 1rem;
+            box-shadow: var(--v3-schaduw);
+        }
+        header::before { display: none; }
+        header h1 {
+            font-size: 1.7rem !important;
+            font-weight: 800;
+            color: #fff !important;
+            text-shadow: none;
+            margin: 0.4rem 0 0.1rem;
+        }
+        .subtitle { font-size: 0.86rem !important; color: rgba(255,248,238,0.85) !important; margin-bottom: 0.6rem !important; }
+        .header-flag-wrap { display: none; }
+        header .progress-bar { display: none; } /* alleen in de header; elders (oefeningen) blijft hij */
+        .progress-fill { background: linear-gradient(90deg, var(--ochre), var(--terracotta)); border-radius: 99px; }
+        .xp-bar-wrap { color: rgba(255,248,238,0.95); font-size: 0.8rem; }
+        .xp-bar { background: rgba(0,0,0,0.25); border-radius: 99px; height: 8px; }
+        .xp-fill { background: linear-gradient(90deg, #FFD66B, #F2A93B); border-radius: 99px; }
+        @media (max-width: 768px) {
+            header { padding-top: 2.9rem !important; } /* ruimte voor taal-/thema-/accountknoppen */
+            header h1 { font-size: 1.45rem !important; margin-top: 1.5rem !important; }
+        }
+        .lang-toggle { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.35); color: #fff; border-radius: 99px; backdrop-filter: blur(4px); }
+        .lang-toggle:hover { background: rgba(255,255,255,0.28); }
+        .dark-toggle, .account-toggle { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
+
+        /* --- Tab-navigatie: pill-bar, mobiel onderin als app-bar ------ */
+        .nav-tabs {
+            background: var(--warm-white);
+            border: 1px solid var(--v3-rand);
+            border-radius: 18px;
+            padding: 0.35rem;
+            gap: 0.25rem;
+            box-shadow: var(--v3-schaduw);
+        }
+        .tab {
+            border: none !important;
+            border-radius: 13px !important;
+            background: transparent !important;
+            color: var(--v3-ink) !important;
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 600;
+            box-shadow: none !important;
+            transition: background 0.15s, color 0.15s, transform 0.1s;
+        }
+        .tab:hover { transform: none; background: var(--v3-zacht) !important; }
+        .tab.active {
+            background: var(--terracotta) !important;
+            color: #fff !important;
+            box-shadow: 0 3px 10px rgba(232,93,61,0.35) !important;
+        }
+        @media (max-width: 768px) {
+            .nav-tabs {
+                position: fixed; bottom: 0.6rem; left: 0.6rem; right: 0.6rem; z-index: 90;
+                backdrop-filter: blur(14px);
+                background: color-mix(in srgb, var(--warm-white) 88%, transparent);
+                border-radius: 20px;
+                box-shadow: 0 8px 30px rgba(64,46,32,0.22);
+            }
+            .kb-hint { display: none; }
+        }
+
+        /* --- Kaarten --------------------------------------------------- */
+        .lesson-card {
+            background: var(--warm-white);
+            border: 1px solid var(--v3-rand) !important;
+            border-radius: 20px !important;
+            box-shadow: var(--v3-schaduw) !important;
+            transition: box-shadow 0.2s ease;
+        }
+        .lesson-card:hover { transform: none; box-shadow: var(--v3-schaduw) !important; }
+        .grammar-box { background: var(--v3-zacht); border-left: 4px solid var(--ochre); border-radius: 12px; }
+        .example-box { border-radius: 12px; }
+        .conjugation-table th { background: var(--terracotta); }
+        .conjugation-table tr:nth-child(even) { background: var(--v3-zacht); }
+
+        /* --- Knoppen ---------------------------------------------------- */
+        .btn {
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 700;
+            border-radius: 14px !important;
+            border: none !important;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.18) !important;
+            transition: transform 0.08s, box-shadow 0.08s, filter 0.15s;
+        }
+        .btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.18) !important; }
+        input.typ-input, .ses-input, #accountModal .am-field {
+            font-family: 'Outfit', sans-serif !important;
+            border-radius: 14px !important;
+            border-width: 2px !important;
+        }
+
+        /* --- Hero 'Ga verder' ------------------------------------------ */
+        .hero-verder {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            background: linear-gradient(135deg, #2FA968, #23824F);
+            color: #fff; border-radius: 18px;
+            padding: 1rem 1.15rem; margin-bottom: 0.9rem;
+            box-shadow: 0 8px 24px rgba(47,169,104,0.35);
+        }
+        .hero-kop { min-width: 0; flex: 1; }
+        .hero-kicker { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.85; font-weight: 700; }
+        .hero-titel { margin: 0.15rem 0 0.5rem; font-size: 1.12rem; line-height: 1.25; color: #fff; }
+        .hero-balk { height: 7px; background: rgba(0,0,0,0.25); border-radius: 99px; overflow: hidden; }
+        .hero-balk-vul { height: 100%; background: #FFD66B; border-radius: 99px; transition: width 0.5s ease; }
+        .hero-acties { display: flex; flex-direction: column; gap: 0.45rem; align-items: stretch; }
+        .hero-start {
+            background: #fff; color: #1F7547; border: none; border-radius: 13px;
+            font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1rem;
+            padding: 0.7rem 1.15rem; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.22);
+            white-space: nowrap;
+        }
+        .hero-start:active { transform: translateY(3px); box-shadow: none; }
+        .hero-lees {
+            background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 11px; padding: 0.35rem; font-size: 1rem; cursor: pointer;
+        }
+        @media (max-width: 560px) {
+            .hero-verder { flex-direction: column; align-items: stretch; }
+            .hero-acties { flex-direction: row; }
+            .hero-start { flex: 1; }
+        }
+
+        /* --- Oefen-CTA op de dagpagina ---------------------------------- */
+        .les-cta {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            background: linear-gradient(135deg, #E85D3D, #C4432A);
+            color: #fff; border-radius: 16px;
+            padding: 0.95rem 1.1rem; margin: 0.9rem 0 1.2rem;
+            box-shadow: 0 8px 22px rgba(232,93,61,0.35);
+        }
+        .les-cta.klaar { background: linear-gradient(135deg, #2FA968, #23824F); box-shadow: 0 8px 22px rgba(47,169,104,0.3); }
+        .les-cta-tekst { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+        .les-cta-tekst strong { font-family: 'Outfit', sans-serif; font-size: 1.02rem; }
+        .les-cta-tekst span { font-size: 0.8rem; opacity: 0.85; }
+        .les-cta-knop {
+            background: #fff; color: #B8422C; border: none; border-radius: 13px;
+            font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.98rem;
+            padding: 0.65rem 1.1rem; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.22); white-space: nowrap;
+        }
+        .les-cta.klaar .les-cta-knop { color: #1F7547; }
+        .les-cta-knop:active { transform: translateY(3px); box-shadow: none; }
+        @media (max-width: 480px) { .les-cta { flex-direction: column; align-items: stretch; text-align: center; } }
+
+        /* --- Leerpad-polish --------------------------------------------- */
+        .path-section-banner {
+            background: var(--warm-white);
+            color: var(--v3-ink);
+            border: 1px solid var(--v3-rand);
+            border-radius: 16px;
+            box-shadow: var(--v3-schaduw);
+        }
+        .path-section-banner .section-label { color: var(--terracotta); opacity: 1; }
+        .path-section-banner .section-progress { opacity: 0.75; }
+        .path-node-button { font-family: 'Outfit', sans-serif; }
+        .path-node-button.current { background: var(--terracotta); box-shadow: 0 6px 0 #B8422C; }
+        .path-node-button.current:active { box-shadow: 0 3px 0 #B8422C; }
+        .path-node-button.completed { background: var(--verde); box-shadow: 0 6px 0 #23824F; }
+        .path-node-button.completed:active { box-shadow: 0 3px 0 #23824F; }
+        .section-test-btn { border-radius: 14px; border-style: solid; background: var(--warm-white); box-shadow: var(--v3-schaduw); }
+
+        /* --- Quests ------------------------------------------------------ */
+        .quest-chip { background: var(--warm-white); border: 1px solid var(--v3-rand); box-shadow: var(--v3-schaduw); border-radius: 14px; font-family: 'Outfit', sans-serif; }
+        .quest-chip.af { background: rgba(47,169,104,0.1); border-color: rgba(47,169,104,0.5); }
+
+        /* --- Oefenen-tab: chips + Slim oefenen --------------------------- */
+        .oefen-kaart { padding: 1.1rem 1.2rem !important; }
+        .oefen-klein { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.2rem; }
+        .oefen-chip {
+            background: var(--v3-zacht); border: 1px solid var(--v3-rand); color: var(--v3-ink);
+            border-radius: 99px; padding: 0.5rem 0.95rem; font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+        }
+        .oefen-chip:hover { background: var(--warm-white); transform: translateY(-1px); box-shadow: var(--v3-schaduw); }
+        .oefen-chip b { color: var(--terracotta); }
+        .slim-kaart { margin-top: 1rem !important; }
+        .slim-kop { display: flex; gap: 0.9rem; align-items: flex-start; margin-bottom: 0.9rem; }
+        .slim-icoon {
+            font-size: 1.7rem; background: linear-gradient(135deg, #E85D3D, #C4432A);
+            border-radius: 16px; width: 58px; height: 58px; flex: 0 0 58px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 16px rgba(232,93,61,0.35);
+        }
+        .slim-sub { font-size: 0.9rem; opacity: 0.75; margin: 0.25rem 0 0; line-height: 1.45; }
+        .slim-due { background: rgba(233,162,59,0.14); border: 1px solid rgba(233,162,59,0.5); border-radius: 12px; padding: 0.55rem 0.8rem; font-size: 0.88rem; margin-bottom: 0.9rem; }
+        .slim-veld { margin-bottom: 0.9rem; }
+        .slim-veld > label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.6; margin-bottom: 0.4rem; }
+        .slim-chips { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+        .slim-chips button {
+            background: var(--v3-zacht); border: 2px solid var(--v3-rand); color: var(--v3-ink);
+            border-radius: 12px; padding: 0.5rem 0.9rem; font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.12s;
+        }
+        .slim-chips button.aan { background: var(--terracotta); border-color: var(--terracotta); color: #fff; box-shadow: 0 3px 10px rgba(232,93,61,0.35); }
+        .slim-dagen { margin: 0.4rem 0 1rem; font-size: 0.9rem; }
+        .slim-dagen summary { cursor: pointer; opacity: 0.8; }
+        .slim-start { width: 100%; font-size: 1.05rem; padding: 0.85rem !important; margin-top: 0 !important; }
+
+        /* --- Sessie-overlay polish --------------------------------------- */
+        .session-overlay { background: var(--cream); }
+        .ses-btn { font-family: 'Outfit', sans-serif !important; border-radius: 14px; }
+        .session-feedback.correct { background: #2FA968; }
+        .session-feedback.wrong { background: #E85D3D; }
+        .flashcard-face { border-radius: 18px; box-shadow: var(--v3-schaduw); }
+        .flashcard-front { border-color: var(--v3-rand); }
+        .flashcard-back { background: linear-gradient(135deg, #E85D3D, #C4432A); }
     </style>
 </head>
 <body>
@@ -1630,6 +1885,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="heroVerder"></div>
                 <div id="questStrip"></div>
                 <h2>Jouw leerpad</h2>
                 <div class="lesson-path" id="lessonPath"></div>
@@ -9971,6 +10227,33 @@
                               : COURSE_SECTIONS_es;
         // Position pattern for the winding path (repeats)
         const PATH_POSITIONS = ['center','right','far-right','right','center','left','far-left','left'];
+        // Hero bovenaan de Leren-tab: ga in één tik verder waar je was.
+        function renderHero() {
+            const el = document.getElementById('heroVerder');
+            if (!el) return;
+            const max = getAllDays().length;
+            // "verder" = eerste onvoltooide dag vanaf het begin, of je huidige dag
+            let dag = currentDay || 1;
+            if (completedDays.has(dag)) {
+                let d = 1; while (d <= max && completedDays.has(d)) d++;
+                dag = Math.min(d, max);
+            }
+            const titel = lessonTitles[dag] || '';
+            const sectie = COURSE_SECTIONS.find(s => dag >= s.range[0] && dag <= s.range[1]);
+            const pct = Math.round((completedDays.size / max) * 100);
+            el.innerHTML = `
+                <div class="hero-verder">
+                    <div class="hero-kop">
+                        <span class="hero-kicker">${sectie ? sectie.label : ''} · les ${dag} van ${max}</span>
+                        <h3 class="hero-titel">${titel}</h3>
+                        <div class="hero-balk"><div class="hero-balk-vul" style="width:${pct}%"></div></div>
+                    </div>
+                    <div class="hero-acties">
+                        <button class="hero-start" onclick="currentDay=${dag};startLessonSession(${dag})">▶&nbsp; Ga verder</button>
+                        <button class="hero-lees" onclick="currentDay=${dag};renderLessonPath();loadLesson(${dag});setTimeout(()=>{const l=document.getElementById('lessonContent');if(l)l.scrollIntoView({behavior:'smooth'})},60)">📖</button>
+                    </div>
+                </div>`;
+        }
         // Handmatige open/dicht-keuzes per sectie (index → true/false); standaard is
         // alleen de sectie met de huidige les open, zodat het pad compact blijft.
         let _pathSectionToggles = {};
@@ -10033,12 +10316,12 @@
                     btn.onclick = () => {
                         currentDay = i;
                         renderLessonPath();
-                        loadLesson(i); // theoriepagina alvast klaarzetten (voor de 📖-knop)
-                        // Start direct de interactieve les-flow
-                        try { LeerFlow.start(i); } catch(e) {
+                        // Eerst de dag zelf tonen; de oefening start je via de grote CTA-knop
+                        loadLesson(i);
+                        setTimeout(() => {
                             const lc = document.getElementById('lessonContent');
                             if (lc) lc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
+                        }, 60);
                     };
                     const tooltip = document.createElement('div');
                     tooltip.className = 'path-node-tooltip';
@@ -10049,6 +10332,7 @@
                     nodesWrap.appendChild(wrap);
                 }
             });
+            try { renderHero(); } catch(e) {}
             // Keep legacy daySelector in sync (used by progress overview links)
             const legacy = document.getElementById('daySelector');
             if (legacy) {
@@ -10084,19 +10368,17 @@
         function displayLesson(day) {
             const content = document.getElementById('lessonContent');
 
-            // lesInvulOef/lesZinOef/lesMiniOef zijn Spaanse data — alleen tonen in de Spaanse cursus
-            const isEsCourse = (typeof activeLangCode === 'undefined' || activeLangCode === 'es');
-            const hasCards = isEsCourse && ((typeof lesInvulOef !== 'undefined' && lesInvulOef[day] && lesInvulOef[day].length)
-                          || (typeof lesZinOef   !== 'undefined' && lesZinOef[day]   && lesZinOef[day].length));
-            const ctaHTML = hasCards ? `
-                <div class="session-cta">
-                    <div class="cta-icon">🎯</div>
-                    <div class="cta-text">
-                        <h3>Klaar voor de oefensessie?</h3>
-                        <p>Eén oefening per scherm — verdien XP en houd je streak.</p>
+            // Elke les (elke taal) krijgt bovenaan één duidelijke oefen-CTA:
+            // eerst lezen mag, maar oefenen is altijd één tik weg.
+            const klaar = completedDays.has(day);
+            const ctaHTML = `
+                <div class="les-cta ${klaar ? 'klaar' : ''}">
+                    <div class="les-cta-tekst">
+                        <strong>${klaar ? 'Nog een keer oefenen?' : 'Klaar om te oefenen?'}</strong>
+                        <span>±5 min · theorie-kaartjes en oefeningen door elkaar</span>
                     </div>
-                    <button class="cta-btn" onclick="startLessonSession(${day})">Start sessie</button>
-                </div>` : '';
+                    <button class="les-cta-knop" onclick="startLessonSession(${day})">▶&nbsp; Start oefening</button>
+                </div>`;
             const html = `
                 <div class="lesson-card">
                     <h2>Dag ${day}: ${lessonTitles[day]}</h2>
@@ -10582,54 +10864,22 @@
 
         function loadOefelenMenu() {
             const el = document.getElementById('oefelenContent');
-            const herhalenInfo = getHerhalenInfo();
-            // Voor Italiaans/Frans tonen we alleen flashcards + woordenlijst (+ foutenlijst);
-            // geen typ/quiz/gespreksmodus.
-            const isIt = (typeof activeLangCode !== 'undefined' && activeLangCode !== 'es');
+            // v3: één topmodus (Slim oefenen) + twee lichte hulplijsten.
+            // Flashcards, typ-oefening, mini-quiz en losse herhaling zijn samengesmolten.
+            const isEs = (typeof activeLangCode === 'undefined' || activeLangCode === 'es');
             el.innerHTML = `
-                <div class="lesson-card">
-                    <h2>Oefenen</h2>
-                    <p style="margin-bottom:1.5rem;">Kies een oefenmodus om aan de slag te gaan.</p>
-                    <div class="oef-menu">
-                        <button class="oef-mode-btn" data-modus="flashcards" onclick="startModus('flashcards')">
-                            <span class="oef-icon">🃏</span>Flashcards
-                        </button>
-                        <button class="oef-mode-btn" data-modus="woordenlijst" onclick="startModus('woordenlijst')">
-                            <span class="oef-icon">⭐</span>Mijn woordenlijst${starredWords.size > 0 ? ` <span style="font-size:0.8rem;opacity:0.7;">(${starredWords.size})</span>` : ''}
-                        </button>
-                        ${!isIt ? `
-                        <button class="oef-mode-btn" data-modus="typen" onclick="startModus('typen')">
-                            <span class="oef-icon">⌨️</span>Typ oefening
-                        </button>
-                        <button class="oef-mode-btn" data-modus="quiz" onclick="startModus('quiz')">
-                            <span class="oef-icon">🎯</span>Mini quiz
-                        </button>
-                        <button class="oef-mode-btn" data-modus="gesprek" onclick="startModus('gesprek')">
-                            <span class="oef-icon">💬</span>Gespreksmodus
-                        </button>` : ''}
-                        <button class="oef-mode-btn" data-modus="foutenlijst" onclick="startModus('foutenlijst')">
-                            <span class="oef-icon">📋</span>Foutenlijst${getErrorLog().length > 0 ? ` <span style="font-size:0.8rem;opacity:0.7;">(${getErrorLog().length})</span>` : ''}
-                        </button>
-                    </div>
-                    <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:2px solid var(--ochre);">
-                        <h3 style="margin-top:0;">🔁 Vandaag herhalen</h3>
-                        <p style="opacity:0.8; margin-bottom:0.8rem;">${herhalenInfo.uitleg}</p>
-                        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
-                            <label style="font-size:0.95rem;">Aantal woorden:
-                                <select id="herhalenAantal" style="margin-left:0.4rem; padding:0.3rem 0.6rem; border:1px solid var(--ochre); border-radius:4px; background:var(--cream); font-family:inherit; color:var(--deep-blue);">
-                                    <option value="10">10</option>
-                                    <option value="15" selected>15</option>
-                                    <option value="25">25</option>
-                                </select>
-                            </label>
-                            <button class="btn" onclick="startHerhalen()" style="margin-top:0;">
-                                🔁 Start herhaling
-                            </button>
-                        </div>
+                <div class="lesson-card oefen-kaart">
+                    <h2 style="margin-top:0;">Oefenen</h2>
+                    <div class="oefen-klein">
+                        <button class="oefen-chip" onclick="startModus('woordenlijst')">⭐ Woordenlijst${starredWords.size > 0 ? ` <b>${starredWords.size}</b>` : ''}</button>
+                        <button class="oefen-chip" onclick="startModus('foutenlijst')">📋 Foutenlijst${getErrorLog().length > 0 ? ` <b>${getErrorLog().length}</b>` : ''}</button>
+                        ${isEs ? `<button class="oefen-chip" onclick="startModus('gesprek')">💬 Gesprek</button>` : ''}
                     </div>
                 </div>
                 <div id="oef-sub"></div>
             `;
+            // Slim oefenen is de standaard: setup direct tonen, nul extra klikken
+            startModus('slim');
         }
 
         // Scroll de actieve oefening (#oef-sub) in beeld. Op mobiel staat #oef-sub
@@ -10646,19 +10896,94 @@
 
         function startModus(modus) {
             huidigeModus = modus;
-            document.querySelectorAll('.oef-mode-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.modus === modus);
-            });
             const sub = document.getElementById('oef-sub');
-            if (modus === 'flashcards') renderFlashcardSetup(sub);
-            else if (modus === 'typen') renderTypSetup(sub);
-            else if (modus === 'quiz') renderQuizSetup(sub);
-            else if (modus === 'herhalen') renderHerhalenFlashcards(sub);
+            if (modus === 'slim') renderSlimSetup(sub);
+            else if (modus === 'flashcards') renderSlimSetup(sub); // oude verwijzingen → Slim oefenen
+            else if (modus === 'typen') renderSlimSetup(sub);
+            else if (modus === 'herhalen') renderSlimSetup(sub);
             else if (modus === 'woordenlijst') renderWoordenlijst(sub);
-            else if (modus === 'dagelijkseles') renderDagelijkseLes(sub);
-            else if (modus === 'duolingo') renderDuolingoSetup(sub);
             else if (modus === 'gesprek') renderGesprekSetup(sub);
             else if (modus === 'foutenlijst') renderFoutenOverzicht(sub);
+            if (modus !== 'slim') scrollOefIntoView();
+        }
+
+        // =====================================================
+        // SLIM OEFENEN — flashcards + typen + slimme herhaling in één
+        // =====================================================
+        function renderSlimSetup(container) {
+            const state = getAppState();
+            const nu = new Date();
+            const due = Object.values(state.wordStats).filter(ws => ws.nextReviewISO && new Date(ws.nextReviewISO) <= nu).length;
+            const taal = getActiveLanguage().name;
+            const richting = localStorage.getItem('dc_slim_richting') || 'mix';
+            const aantal = localStorage.getItem('dc_slim_aantal') || '15';
+            container.innerHTML = `
+                <div class="lesson-card slim-kaart">
+                    <div class="slim-kop">
+                        <div class="slim-icoon">🧠</div>
+                        <div>
+                            <h3 style="margin:0;">Slim oefenen</h3>
+                            <p class="slim-sub">Kaarten met typen én slimme herhaling: wat je fout doet of dreigt te vergeten, komt vaker terug.</p>
+                        </div>
+                    </div>
+                    ${due > 0 ? `<div class="slim-due">🔔 <strong>${due}</strong> woorden zijn klaar voor herhaling — die krijg je eerst</div>` : ''}
+                    <div class="slim-veld">
+                        <label>Richting</label>
+                        <div class="slim-chips" id="slimRicht">
+                            <button type="button" data-r="mix" class="${richting === 'mix' ? 'aan' : ''}">🔀 Mix</button>
+                            <button type="button" data-r="nl-doel" class="${richting === 'nl-doel' ? 'aan' : ''}">🇳🇱 → ${taal}</button>
+                            <button type="button" data-r="doel-nl" class="${richting === 'doel-nl' ? 'aan' : ''}">${taal} → 🇳🇱</button>
+                        </div>
+                    </div>
+                    <div class="slim-veld">
+                        <label>Aantal kaarten</label>
+                        <div class="slim-chips" id="slimAantal">
+                            ${['10','15','25'].map(n => `<button type="button" data-n="${n}" class="${aantal === n ? 'aan' : ''}">${n}</button>`).join('')}
+                        </div>
+                    </div>
+                    <details class="slim-dagen">
+                        <summary>Dagen zelf kiezen <span style="opacity:0.6;">(standaard: alles t/m je huidige les)</span></summary>
+                        ${buildDagFilterHTML('slim')}
+                    </details>
+                    <button class="btn slim-start" onclick="startSlim()">▶&nbsp; Start</button>
+                </div>`;
+            container.querySelectorAll('#slimRicht button').forEach(b => b.addEventListener('click', () => {
+                localStorage.setItem('dc_slim_richting', b.dataset.r);
+                container.querySelectorAll('#slimRicht button').forEach(x => x.classList.toggle('aan', x === b));
+            }));
+            container.querySelectorAll('#slimAantal button').forEach(b => b.addEventListener('click', () => {
+                localStorage.setItem('dc_slim_aantal', b.dataset.n);
+                container.querySelectorAll('#slimAantal button').forEach(x => x.classList.toggle('aan', x === b));
+            }));
+        }
+
+        function startSlim() {
+            // Dagen: handmatige keuze, anders automatisch alles t/m de huidige les
+            let dagen = getGekozenDagen('slim');
+            if (!dagen.length) {
+                const verst = Math.max(currentDay || 1, ...(completedDays.size ? [...completedDays] : [1]));
+                dagen = Array.from({ length: Math.min(verst, getAllDays().length) }, (_, i) => i + 1);
+            }
+            let raw = parseVocabFromDays(dagen);
+            if (!raw.length) {
+                document.getElementById('oef-sub').innerHTML = `<div class="lesson-card"><div class="empty-state"><span class="empty-icon">📭</span>Geen woorden gevonden — doe eerst een les.</div></div>`;
+                return;
+            }
+            const richting = localStorage.getItem('dc_slim_richting') || 'mix';
+            const aantal = parseInt(localStorage.getItem('dc_slim_aantal') || '15');
+            // SRS: hoogste prioriteit eerst (due > zwak > nieuw > gekend)
+            const state = getAppState();
+            const nu = new Date();
+            raw.sort((a, b) => srsCardScore(state.wordStats[b.spanish.toLowerCase()], nu) - srsCardScore(state.wordStats[a.spanish.toLowerCase()], nu));
+            raw = raw.slice(0, aantal);
+            fcDeck = raw.map((v, i) => {
+                const dir = richting === 'mix' ? (i % 2 ? 'nl-es' : 'es-nl') : (richting === 'nl-doel' ? 'nl-es' : 'es-nl');
+                return dir === 'es-nl'
+                    ? { ...v, direction: 'es-nl', prompt: v.spanish, answer: v.meaning }
+                    : { ...v, direction: 'nl-es', prompt: v.meaning, answer: v.spanish };
+            });
+            fcIndex = 0; fcTodayCorrect = 0; fcTodaySeen = 0; fcChecked = false;
+            renderFlashcard();
             scrollOefIntoView();
         }
 
