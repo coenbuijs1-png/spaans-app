@@ -3,7 +3,9 @@
 // NOOIT in de browser. Toegang is beveiligd met een Firebase ID-token, zodat
 // alleen ingelogde gebruikers de (betaalde) AI kunnen aanroepen.
 const FIREBASE_API_KEY = "AIzaSyBdvFBunJqnFDN-MlNfe51Z_rqMoAd2xEs"; // publieke Firebase web-key (mag publiek zijn)
-const CHAT_MODEL = process.env.CHAT_MODEL || "claude-sonnet-4-20250514";
+// Haiku 4.5: snel, goedkoop en bewezen werkend op deze key (zelfde als /api/ai).
+// Via de env-var CHAT_MODEL is een zwaarder model in te stellen zonder code-wijziging.
+const CHAT_MODEL = process.env.CHAT_MODEL || "claude-haiku-4-5-20251001";
 
 module.exports = async function handler(req, res) {
   // CORS — de app kan draaien vanaf Vercel, GitHub Pages of als geïnstalleerde PWA.

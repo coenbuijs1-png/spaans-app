@@ -16342,6 +16342,137 @@ ONDERWERP: ${gesprekTopic}`;
             document.head.appendChild(css);
         })();
 
+        // ============================================================
+        // === VRAAGBAAK — zwevende AI-chat, altijd in beeld ==========
+        // === Snel iets vertalen of een grammaticavraag stellen ======
+        // ============================================================
+        const Vraagbaak = {
+            log: [], _bezig: false,
+            laadLog() { try { this.log = JSON.parse(localStorage.getItem('dc_vraagbaak_log') || '[]'); } catch(e) { this.log = []; } },
+            saveLog() { try { localStorage.setItem('dc_vraagbaak_log', JSON.stringify(this.log.slice(-20))); } catch(e) {} },
+            ensure() {
+                if (document.getElementById('vbFab')) return;
+                this.laadLog();
+                const fab = document.createElement('button');
+                fab.id = 'vbFab'; fab.title = 'Vraag het de AI-hulp';
+                fab.innerHTML = '💬';
+                fab.addEventListener('click', () => this.toggle());
+                document.body.appendChild(fab);
+                const p = document.createElement('div');
+                p.id = 'vbPaneel';
+                p.innerHTML = `
+                    <div class="vb-kop"><span>🤖 Vraagbaak</span><button class="vb-sluit" id="vbSluit" aria-label="Sluiten">×</button></div>
+                    <div class="vb-berichten" id="vbBerichten"></div>
+                    <div class="vb-invoer">
+                        <input type="text" id="vbInput" placeholder="Vraag iets… bv. 'hoe zeg ik: tot morgen?'" autocomplete="off">
+                        <button id="vbStuur" aria-label="Versturen">➤</button>
+                    </div>`;
+                document.body.appendChild(p);
+                document.getElementById('vbSluit').addEventListener('click', () => this.toggle(false));
+                document.getElementById('vbStuur').addEventListener('click', () => this.stuur());
+                document.getElementById('vbInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); this.stuur(); } });
+                this.renderBerichten();
+            },
+            toggle(open) {
+                this.ensure();
+                const p = document.getElementById('vbPaneel');
+                const wil = (typeof open === 'boolean') ? open : !p.classList.contains('open');
+                p.classList.toggle('open', wil);
+                if (wil) { this.renderBerichten(); setTimeout(() => { try { document.getElementById('vbInput').focus(); } catch(e) {} }, 150); }
+            },
+            renderBerichten() {
+                const box = document.getElementById('vbBerichten');
+                if (!box) return;
+                const ingelogd = (typeof currentUser !== 'undefined' && currentUser);
+                if (!ingelogd) {
+                    box.innerHTML = `<div class="vb-leeg">🔒 Log in om de vraagbaak te gebruiken — dan kan ik vertalen, uitleggen en meedenken.<br><button class="btn" style="margin-top:0.7rem;" onclick="openAccountModal()">Inloggen</button></div>`;
+                    return;
+                }
+                if (!this.log.length) {
+                    const taal = getActiveLanguage().name;
+                    box.innerHTML = `<div class="vb-leeg">Stel me alles over het ${taal} — ik antwoord kort en duidelijk.</div>
+                        <div class="vb-suggesties">
+                            <button onclick="Vraagbaak.snel('Vertaal naar het ${taal}: ')">🔄 Vertaal…</button>
+                            <button onclick="Vraagbaak.snel('Wat is het verschil tussen ')">🤔 Verschil tussen…</button>
+                            <button onclick="Vraagbaak.snel('Geef 3 voorbeeldzinnen met ')">✏️ Voorbeelden met…</button>
+                        </div>`;
+                    return;
+                }
+                box.innerHTML = this.log.map(m => `<div class="vb-msg ${m.role === 'user' ? 'ik' : 'ai'}">${m.html || m.content}</div>`).join('');
+                if (this._bezig) box.innerHTML += '<div class="vb-msg ai vb-typt">…</div>';
+                box.scrollTop = box.scrollHeight;
+            },
+            snel(voorzet) {
+                const inp = document.getElementById('vbInput');
+                inp.value = voorzet; inp.focus();
+                try { inp.setSelectionRange(voorzet.length, voorzet.length); } catch(e) {}
+            },
+            async stuur() {
+                const inp = document.getElementById('vbInput');
+                const tekst = (inp.value || '').trim();
+                if (!tekst || this._bezig) return;
+                if (typeof currentUser === 'undefined' || !currentUser) { this.renderBerichten(); return; }
+                inp.value = '';
+                this.log.push({ role: 'user', content: tekst });
+                this._bezig = true;
+                this.renderBerichten();
+                try {
+                    const taal = getActiveLanguage().name;
+                    const les = lessonTitles[currentDay] ? `De gebruiker werkt aan les ${currentDay}: "${lessonTitles[currentDay]}".` : '';
+                    const idToken = await currentUser.getIdToken();
+                    const r = await fetch(CHAT_ENDPOINT, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            idToken,
+                            system: `Je bent de ingebouwde AI-hulp van DuoCoengo, een Nederlandstalige app om ${taal} te leren. Beantwoord vragen kort en concreet in het Nederlands (max ±4 zinnen): vertalingen, grammatica, "hoe zeg ik...". Geef bij vertalingen ook de uitspraaktip of een mini-voorbeeld als dat helpt. Gebruik platte tekst, geen markdown-koppen. ${les}`,
+                            messages: this.log.slice(-12).map(m => ({ role: m.role, content: m.content }))
+                        })
+                    });
+                    const d = await r.json();
+                    if (!r.ok) throw new Error(d.error || 'AI-fout');
+                    let t = (d.text || '').trim();
+                    const html = t.replace(/^#+\s*/gm, '').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    this.log.push({ role: 'assistant', content: t, html });
+                } catch(e) {
+                    this.log.push({ role: 'assistant', content: 'Sorry, dat lukte even niet — probeer het zo opnieuw.', html: '⚠️ Sorry, dat lukte even niet — probeer het zo opnieuw.' });
+                }
+                this._bezig = false;
+                this.saveLog();
+                this.renderBerichten();
+            }
+        };
+        (function() {
+            const css = document.createElement('style');
+            css.textContent = `
+        #vbFab { position:fixed; right:1.1rem; bottom:1.1rem; z-index:150; width:56px; height:56px; border-radius:50%; border:none; cursor:pointer; font-size:1.5rem; background:linear-gradient(135deg,#E85D3D,#C4432A); color:#fff; box-shadow:0 6px 20px rgba(232,93,61,0.45), 0 3px 0 #8b271c; transition:transform .12s; }
+        #vbFab:hover { transform:scale(1.07); }
+        #vbFab:active { transform:translateY(2px); }
+        @media (max-width:768px) { #vbFab { bottom:5.4rem; right:0.9rem; width:52px; height:52px; } }
+        #vbPaneel { position:fixed; right:1.1rem; bottom:calc(1.1rem + 66px); z-index:151; width:min(380px, calc(100vw - 1.8rem)); max-height:min(560px, 70vh); display:none; flex-direction:column; background:var(--warm-white,#fff); border:1px solid var(--v3-rand,#F0E4D4); border-radius:18px; box-shadow:0 18px 50px rgba(64,46,32,0.28); overflow:hidden; }
+        #vbPaneel.open { display:flex; animation:vhIn .22s ease; }
+        @media (max-width:768px) { #vbPaneel { bottom:calc(5.4rem + 62px); } }
+        .vb-kop { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0.95rem; background:linear-gradient(135deg,#E85D3D,#C4432A); color:#fff; font-family:'Outfit',sans-serif; font-weight:800; }
+        .vb-sluit { background:none; border:none; color:#fff; font-size:1.35rem; cursor:pointer; line-height:1; opacity:0.85; }
+        .vb-sluit:hover { opacity:1; }
+        .vb-berichten { flex:1; overflow-y:auto; padding:0.8rem; min-height:180px; display:flex; flex-direction:column; gap:0.5rem; }
+        .vb-msg { max-width:88%; padding:0.55rem 0.8rem; border-radius:14px; font-size:0.92rem; line-height:1.45; }
+        .vb-msg.ik { align-self:flex-end; background:var(--terracotta,#E85D3D); color:#fff; border-bottom-right-radius:4px; }
+        .vb-msg.ai { align-self:flex-start; background:var(--v3-zacht,#F8EFE2); border-bottom-left-radius:4px; }
+        .vb-typt { opacity:0.6; font-weight:700; letter-spacing:2px; }
+        .vb-leeg { text-align:center; opacity:0.75; font-size:0.9rem; padding:1rem 0.6rem 0.4rem; }
+        .vb-suggesties { display:flex; flex-direction:column; gap:0.45rem; padding:0.4rem 0.8rem 0.6rem; }
+        .vb-suggesties button { background:var(--v3-zacht,#F8EFE2); border:1px solid var(--v3-rand,#F0E4D4); border-radius:12px; padding:0.5rem 0.75rem; font-family:'Outfit',sans-serif; font-size:0.88rem; cursor:pointer; text-align:left; }
+        .vb-suggesties button:hover { border-color:var(--ochre,#E9A23B); }
+        .vb-invoer { display:flex; gap:0.5rem; padding:0.6rem; border-top:1px solid var(--v3-rand,#F0E4D4); }
+        .vb-invoer input { flex:1; border:2px solid var(--v3-rand,#F0E4D4); border-radius:12px; padding:0.55rem 0.8rem; font-family:'Outfit',sans-serif; font-size:0.92rem; background:var(--warm-white,#fff); color:inherit; }
+        .vb-invoer input:focus { outline:none; border-color:var(--ochre,#E9A23B); }
+        .vb-invoer button { background:var(--verde,#2FA968); color:#fff; border:none; border-radius:12px; width:44px; font-size:1.05rem; cursor:pointer; box-shadow:0 3px 0 #23824F; }
+        .vb-invoer button:active { transform:translateY(2px); box-shadow:none; }`;
+            document.head.appendChild(css);
+            const init = () => { try { Vraagbaak.ensure(); } catch(e) {} };
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 0);
+        })();
+
         // ---- AI-hulp: verse oefenzinnen + uitleg bij fouten (alleen ingelogd) ----
         const LeerAI = {
             ENDPOINT: 'https://spaans-app.vercel.app/api/ai',
