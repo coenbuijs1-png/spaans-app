@@ -1648,7 +1648,7 @@
             transition: background 0.15s, color 0.15s, transform 0.1s;
         }
         .tab:hover { transform: none; background: var(--v3-zacht) !important; }
-        .tab.active {
+        .nav-tabs .tab.active {
             background: var(--terracotta) !important;
             color: #fff !important;
             box-shadow: 0 3px 10px rgba(232,93,61,0.35) !important;
@@ -1886,6 +1886,16 @@
         #lessonContent .inline-blank, #lessonContent .inline-zin-input { border-radius: 10px; font-family: 'Outfit', sans-serif; }
         .speak-btn, .copy-btn { opacity: 0.45; transition: opacity 0.15s, transform 0.1s; }
         .speak-btn:hover, .copy-btn:hover { opacity: 1; transform: scale(1.12); }
+
+        /* --- v3 dark-mode consistentie: houd de nieuwe look ook in donkere modus --- */
+        [data-theme="dark"] header { background: linear-gradient(135deg, #C4432A 0%, #A23724 55%, #7E2C1B 100%) !important; }
+        [data-theme="dark"] .nav-tabs { background: var(--warm-white); border-top-color: var(--v3-rand); }
+        [data-theme="dark"] .nav-tabs .tab { color: var(--v3-ink); }
+        [data-theme="dark"] .nav-tabs .tab.active { background: var(--terracotta) !important; color: #fff !important; box-shadow: 0 3px 10px rgba(232,93,61,0.4) !important; }
+        [data-theme="dark"] .path-section-banner { background: var(--warm-white); color: var(--v3-ink); }
+        [data-theme="dark"] .path-section-banner .section-label { color: var(--ochre); }
+        [data-theme="dark"] .oefen-chip { background: var(--v3-zacht); color: var(--v3-ink); }
+        [data-theme="dark"] .slim-chips button { color: var(--v3-ink); }
     </style>
 </head>
 <body>
@@ -17183,10 +17193,10 @@ ONDERWERP: The conversation is about ${gesprekTopic}.`;
         #vbFab { position:fixed; right:1.1rem; bottom:1.1rem; z-index:150; width:56px; height:56px; border-radius:50%; border:none; cursor:pointer; font-size:1.5rem; background:linear-gradient(135deg,#E85D3D,#C4432A); color:#fff; box-shadow:0 6px 20px rgba(232,93,61,0.45), 0 3px 0 #8b271c; transition:transform .12s; }
         #vbFab:hover { transform:scale(1.07); }
         #vbFab:active { transform:translateY(2px); }
-        @media (max-width:768px) { #vbFab { bottom:5.4rem; right:0.9rem; width:52px; height:52px; } }
+        @media (max-width:768px) { #vbFab { bottom:6.6rem; right:0.9rem; width:52px; height:52px; } }
         #vbPaneel { position:fixed; right:1.1rem; bottom:calc(1.1rem + 66px); z-index:151; width:min(380px, calc(100vw - 1.8rem)); max-height:min(560px, 70vh); display:none; flex-direction:column; background:var(--warm-white,#fff); border:1px solid var(--v3-rand,#F0E4D4); border-radius:18px; box-shadow:0 18px 50px rgba(64,46,32,0.28); overflow:hidden; }
         #vbPaneel.open { display:flex; animation:vhIn .22s ease; }
-        @media (max-width:768px) { #vbPaneel { bottom:calc(5.4rem + 62px); } }
+        @media (max-width:768px) { #vbPaneel { bottom:calc(6.6rem + 62px); } }
         .vb-kop { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0.95rem; background:linear-gradient(135deg,#E85D3D,#C4432A); color:#fff; font-family:'Outfit',sans-serif; font-weight:800; }
         .vb-sluit { background:none; border:none; color:#fff; font-size:1.35rem; cursor:pointer; line-height:1; opacity:0.85; }
         .vb-sluit:hover { opacity:1; }
